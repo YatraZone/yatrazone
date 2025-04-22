@@ -1,0 +1,125 @@
+'use client'
+
+import { Handshake, Phone, Send } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from "react"
+import { Card, CardContent, CardFooter } from "../ui/card"
+import Image from "next/image"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
+import toast from "react-hot-toast"
+
+const Footer = () => {
+    const pathName = usePathname()
+    const [pages, setPages] = useState([])
+
+    useEffect(() => {
+        const fetchPages = async () => {
+            try {
+                const response = await fetch("/api/getAllPages")
+                const data = await response.json()
+                setPages(data.pages)
+            } catch (error) {
+                console.error("Error fetching pages:", error)
+            }
+        }
+        fetchPages()
+    }, [])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const email = e.target.elements.email.value.trim(); // Get the input value
+        if (!email) {
+            return toast.error("Please Enter Your Email", { style: { borderRadius: "10px", border: "2px solid red" } });
+        }
+        toast.success("Thank you for Subscribing!", { style: { borderRadius: "10px", border: "2px solid green" } });
+        e.target.reset(); // Reset the form
+    };
+
+
+    return (
+        <footer className={`print:hidden ${pathName.includes('admin') && 'hidden'} ${pathName.includes('package') && 'block'} ${pathName.includes('customEnquiry') && 'block'} ${pathName.includes('checkout') && 'block'}  ${pathName.includes('category') && 'block'} ${pathName.includes('sign-up') && 'hidden'} ${pathName.includes('sign-in') && 'hidden'}  bg-black text-white py-8`}>
+             <div className="flex flex-wrap lg:justify-between justify-evenly md:gap-20 lg:gap-0 gap-12 max-w-[22rem] md:max-w-[45rem] lg:max-w-[60rem] xl:max-w-6xl mx-auto">
+                <div className="flex flex-col gap-2">
+                    <h1 className="font-semibold text-xl my-4">Main Menu</h1>
+                    {pages.filter(page => !page?.link?.includes('policy')).map(page => (
+                        <Link key={page._id} href={page.url} className="block text-gray-400 font-barlow hover:text-blue-500">
+                            {page.title}
+                        </Link>
+                    ))}
+                    <Link href={'/contact'} className="block text-gray-400 font-barlow hover:text-blue-500">Contact</Link>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                    <h1 className="font-semibold text-xl my-4">Our Policy</h1>
+                    {pages.filter(page => page?.link?.includes('policy')).map(page => (
+                        <Link key={page._id} href={page.url} className="block text-gray-400 font-barlow hover:text-blue-500">
+                            {page.title}
+                        </Link>
+                    ))}
+                </div>
+
+                <div className="flex flex-col gap-8">
+                    <div>
+                        <h1 className="font-semibold text-xl flex items-center gap-2"><Phone className="text-blue-600" /> More Inquiry</h1>
+                        <Link href={'tel:+918006000325'} className="my-2 block rounded-full px-2 py-1 font-barlow text-gray-400  hover:text-blue-500">
+                            +91 8006000325
+                        </Link>
+                    </div>
+                    <div>
+                        <h1 className="font-semibold text-xl flex items-center gap-2"><Send className="text-blue-600" /> Send Mail</h1>
+                        <Link href={'mailto:info@yatrazone.com'} className="my-2 block rounded-full px-2 py-1 font-barlow text-gray-400  hover:text-blue-500">
+                            info@yatrazone.com
+                        </Link>
+                    </div>
+                </div>
+                <div className="flex flex-col items-center lg:items-start gap-8">
+                    <div>
+                        <h1 className="font-semibold text-xl flex justify-center lg:justify-normal items-center gap-2">We Are Here</h1>
+                        <p className="my-2 font-barlow max-w-72 text-justify text-gray-400">
+                            YatraZone is more than just a travel company; we are facilitators of spiritual exploration and cultural immersion tailored for Indian pilgrims and global adventurers.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <Card className="my-12 px-2 py-8 max-w-xl lg:max-w-4xl xl:max-w-7xl mx-auto">
+                <CardContent className="flex flex-col lg:flex-row items-start md:items-center justify-between">
+                    <div className="text-justify">
+                        <Image src="/logo.png" width={200} height={100} alt="footer" />
+                        <p className="text-gray-500 text-sm lg:w-[40vw] xl:w-[35vw] font-barlow mt-6">By accessing, using, browsing or booking through our Web Site(s) or Directly or Indirectly through YatraZone or its representative(s), you agree that you have read, understood and agree to be bound by these terms and conditions & cancellation policy and you agree to comply with all applicable laws, rules and regulations.</p>
+                        <p className="text-gray-500 text-sm lg:w-[40vw] xl:w-[35vw] font-barlow mt-6">By accepting our booking terms & conditions, user is also agreeing to terms & conditions of the Hotels, aviation services, Airlines, and other associate service providers and vendors.</p>
+                    </div>
+                    <div className="font-barlow mt-10 lg:mt-0">
+                        <h1 className="font-semibold text-xl ">Subscribe to our newsletter</h1>
+                        <form onSubmit={handleSubmit} className="mt-4 flex items-center px-2 rounded-lg py-1 bg-gray-200">
+                            <Input id="email" name="email" type="email" placeholder="Enter your email" className="border-0 focus-visible:ring-0 focus-active:ring-0" />
+                            <Button type="submit" className="text-base" variant="contained" size="small" sx={{ ml: 1, mt: 1 }}>Subscribe</Button>
+                        </form>
+                        <p className="text-gray-500 text-sm lg:w-[30vw] xl:w-[20vw]  mt-6">Stay Informed. Stay Ahead.</p>
+                        <p className="text-gray-500 text-sm lg:w-[30vw] xl:w-[23vw]">Subscribe to our newsletter to get the latest updates.</p>
+                    </div>
+                </CardContent>
+                <CardFooter className="mt-8 flex flex-col items-start md:w-fit">
+                    <div className="w-full h-[1px] bg-gray-400" />
+                    <div className="flex items-center justify-between font-barlow">
+                        <div className="flex flex-col md:flex-row items-start  md:items-center gap-2">
+                            <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">Terms of Use</Link>
+                            <p className="text-gray-400 md:block hidden">|</p>
+                            <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">Privacy and Cookies Policy</Link>
+                            <p className="text-gray-400 md:block hidden">|</p>
+                            <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">FAQ Char Dham Yatra</Link>
+                        </div>
+                    </div>
+                </CardFooter>
+            </Card>
+            <div className="flex flex-col lg:flex-row items-center justify-center max-w-[25rem] md:max-w-[60rem] xl:max-w-6xl mx-auto font-barlow">
+                <p className="text-gray-300 text-center my-4">
+                    &copy; {new Date().getFullYear()} <Link href={'/'} className="hover:text-blue-600 font-bold">YatraZone</Link>. All rights reserved
+                </p>
+            </div>
+        </footer >
+    )
+}
+
+export default Footer
