@@ -152,9 +152,7 @@ const AboutUsSection = () => {
 
     return (
         <section className="relative py-1 ">
-            {/* <div className="relative">
-                <img className="absolute -top-32 left-0 -z-10 lg:scale-[1]" src="/bg-custom-2.jpg" alt="background gradient shape" />
-            </div> */}
+    
             <div
                 className="absolute -z-10 w-full h-[130%]  bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145"
             />

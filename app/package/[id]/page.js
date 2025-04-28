@@ -1,4 +1,3 @@
-
 import Image from "next/image"
 import {
     MapPin,
@@ -232,7 +231,16 @@ const PackageDetailsPage = async ({ params }) => {
                         </div>
 
                         {/* Package Content */}
-                        <div className="p-6">
+                        <div className="brightness-145"
+                            style={{
+                                backgroundImage: 'url(/bg-custom-1.jpg)',
+                                backgroundRepeat: 'repeat',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                width: '100%',
+                                
+                            }}
+                        >
                             <Tabs defaultValue="overview">
                                 <TabsList className="grid grid-cols-2 bg-transparent md:grid-cols-3 lg:grid-cols-6 mb-6 w-full">
                                     <TabsTrigger
