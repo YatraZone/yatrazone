@@ -107,8 +107,6 @@ const Footer = () => {
                             <Link href={'/'} className="hover:text-blue-600 !text-sm font-semibold">Terms of Use</Link>
                             <p className="text-gray-400 md:block hidden">|</p>
                             <Link href={'/'} className="hover:text-blue-600 !text-sm font-semibold">Privacy and Cookies Policy</Link>
-                            <p className="text-gray-400 md:block hidden">|</p>
-                            <Link href={'/'} className="hover:text-blue-600 !text-sm font-semibold">FAQ Char Dham Yatra</Link>
                         </div>
                     </div>
                 </CardFooter>

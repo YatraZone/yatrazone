@@ -40,10 +40,10 @@ export function AppSidebar({ className, menuItems, fixedMenuItems, policy }) {
   const { open } = useSidebar()
   return (
     <Sidebar collapsible="icon" className={className}>
-      <SidebarHeader className="bg-blue-600 !p-0 h-32 flex items-center justify-center">
-        <Link href="/"><img src="/logo.png" alt="logo" className={` ${open ? "w-[10rem]" : "-rotate-90"}`} /></Link>
+      <SidebarHeader className="pt-3 h-16 flex items-center justify-start">
+        <Link href="/"><img src="/logo.png" alt="logo" className={` ${open ? "w-[12rem]" : "-rotate-10"}`} /></Link>
       </SidebarHeader>
-      <SidebarContent className="lg:mt-12 items-center font-barlow">
+      <SidebarContent className="lg:mt-2 items-center font-barlow">
         <NavMain items={menuItems} fixedItems={fixedMenuItems} />
         <NavProjects projects={data.projects} />
         <NavPolicy policy={policy} />

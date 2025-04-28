@@ -47,11 +47,9 @@ const RandomTourPackageSection = () => {
                 <div className="bg-[url('/bg-custom.webp')] w-full h-full bg-blue-100">
                     <div className="max-w-[22rem] md:max-w-[40rem] lg:max-w-[60rem] xl:max-w-[80rem] mx-auto py-10">
                         <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
-                            <ChevronsRight className="size-4 lg:size-6 text-blue-500" />
-                            Escape to Uttrakhand's Serenitysdfasdfas
-                            <ChevronsLeft className="size-4 lg:size-6 text-blue-500" />
+                       
                         </h2>
-                        <h1 className="font-bold text-xl md:text-3xl lg:text-4xl uppercase ">Soulful Spiritual Significance</h1>
+                        <h1 className="font-bold text-xl md:text-3xl lg:text-4xl uppercase "> Trending Packages: The Best, Today</h1>
                         <Carousel className="w-[75%] md:w-[95%] drop-shadow-xl mx-auto xl:w-full my-6 md:my-12">
                             <CarouselContent className="-ml-1">
                                 {[...Array(4)].map((_, index) => (
@@ -97,11 +95,9 @@ const RandomTourPackageSection = () => {
             <div className="bg-[url('/bg-custom-2.jpg')] w-full h-full ">
                 <div className="max-w-[22rem] md:max-w-[40rem] lg:max-w-[60rem] xl:max-w-[80rem] mx-auto py-10">
                     <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
-                        <ChevronsRight className="size-4 lg:size-6 text-blue-500" />
-                        Escape to Uttrakhand's Serenity
-                        <ChevronsLeft className="size-4 lg:size-6 text-blue-500" />
+                        
                     </h2>
-                    <h1 className="font-black text-xl md:text-3xl lg:text-4xl uppercase ">Soulful Spiritual Significance</h1>
+                    <h1 className="font-black text-xl md:text-3xl lg:text-4xl uppercase ">Trending Packages: The Best, Today</h1>
                     <Carousel className={`w-[75%] md:w-[85%] drop-shadow-xl mx-auto my-6 md:my-12 ${packages.length > 0 ? "block" : "hidden"}`}>
                         <CarouselContent className="-ml-1 w-full">
                             {packages.length > 0 && packages.map((item, index) => (

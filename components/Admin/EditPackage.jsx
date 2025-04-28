@@ -12,7 +12,216 @@ import { X } from "lucide-react"
 import Image from "next/image"
 import { Textarea } from "../ui/textarea"
 import toast from "react-hot-toast"
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Underline from '@tiptap/extension-underline'
+import TextAlign from '@tiptap/extension-text-align'
+import Link from '@tiptap/extension-link'
+import { Color } from '@tiptap/extension-color'
+import ListItem from '@tiptap/extension-list-item'
+import TextStyle from '@tiptap/extension-text-style'
+import { 
+  Bold, 
+  Italic, 
+  Underline as UnderlineIcon, 
+  AlignLeft, 
+  AlignCenter, 
+  AlignRight, 
+  Link as LinkIcon,
+  List,
+  ListOrdered,
+  Quote,
+  Undo,
+  Redo,
+  Strikethrough,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  PilcrowSquare, // For paragraph
+} from 'lucide-react'
 
+const MenuBar = ({ editor }) => {
+  if (!editor) {
+    return null
+  }
+
+  return (
+    <div className="border-b border-gray-200 p-2 flex flex-wrap gap-2">
+      {/* Text Style Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('paragraph') ? 'bg-gray-200' : ''}`}
+          title="Paragraph"
+        >
+          <PilcrowSquare className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 1 }) ? 'bg-gray-200' : ''}`}
+          title="Heading 1"
+        >
+          <Heading1 className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`}
+          title="Heading 2"
+        >
+          <Heading2 className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''}`}
+          title="Heading 3"
+        >
+          <Heading3 className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Basic Formatting Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('bold') ? 'bg-gray-200' : ''}`}
+          title="Bold"
+        >
+          <Bold className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('italic') ? 'bg-gray-200' : ''}`}
+          title="Italic"
+        >
+          <Italic className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('underline') ? 'bg-gray-200' : ''}`}
+          title="Underline"
+        >
+          <UnderlineIcon className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('strike') ? 'bg-gray-200' : ''}`}
+          title="Strikethrough"
+        >
+          <Strikethrough className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Alignment Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''}`}
+          title="Align Left"
+        >
+          <AlignLeft className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''}`}
+          title="Align Center"
+        >
+          <AlignCenter className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''}`}
+          title="Align Right"
+        >
+          <AlignRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Lists Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('bulletList') ? 'bg-gray-200' : ''}`}
+          title="Bullet List"
+        >
+          <List className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('orderedList') ? 'bg-gray-200' : ''}`}
+          title="Numbered List"
+        >
+          <ListOrdered className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Special Formatting Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('blockquote') ? 'bg-gray-200' : ''}`}
+          title="Quote"
+        >
+          <Quote className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleCode().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('code') ? 'bg-gray-200' : ''}`}
+          title="Code"
+        >
+          <Code className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Color Picker */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <input
+          type="color"
+          onInput={event => editor.chain().focus().setColor(event.target.value).run()}
+          value={editor.getAttributes('textStyle').color || '#000000'}
+          className="w-8 h-8 p-1 rounded cursor-pointer"
+          title="Text Color"
+        />
+      </div>
+
+      {/* Links Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          onClick={() => {
+            const url = window.prompt('Enter URL')
+            if (url) {
+              editor.chain().focus().setLink({ href: url }).run()
+            }
+          }}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('link') ? 'bg-gray-200' : ''}`}
+          title="Add Link"
+        >
+          <LinkIcon className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* History Group */}
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().undo()}
+          className="p-2 rounded hover:bg-gray-100 disabled:opacity-50"
+          title="Undo"
+        >
+          <Undo className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().redo()}
+          className="p-2 rounded hover:bg-gray-100 disabled:opacity-50"
+          title="Redo"
+        >
+          <Redo className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  )
+}
 
 const EditPackage = () => {
   const { handleSubmit, register, getValues, setValue, reset, watch } = useForm()
@@ -25,6 +234,26 @@ const EditPackage = () => {
   const [thumbnailKey, setThumbnailKey] = useState(null)
 
   let packages = usePackage()
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Link.configure({
+        openOnClick: false,
+      }),
+      TextStyle,
+      Color,
+      ListItem,
+    ],
+    content: packages?.basicDetails?.fullDesc || '',
+    onUpdate: ({ editor }) => {
+      setValue('basicDetails.fullDesc', editor.getHTML())
+    },
+  })
 
   useEffect(() => {
     if (packages) {
@@ -216,9 +445,15 @@ const EditPackage = () => {
             <label htmlFor="smallDesc" className="font-semibold">Small Description</label>
             <Textarea name="smallDesc" rows={4} className="border-2 font-bold border-blue-600 focus:border-dashed focus:border-blue-500 focus:outline-none focus-visible:ring-0" onChange={(e) => setValue('basicDetails.smallDesc', e.target.value)} {...register('basicDetails.smallDesc')} />
           </div>
-          <div className="flex flex-col gap-2 col-span-2 xl:col-span-4">
+          <div className="flex flex-col gap-2 col-span-2 xl:col-span-4 w-full">
             <label htmlFor="fullDesc" className="font-semibold">Full Description</label>
-            <Textarea name="fullDesc" rows={8} className="border-2 font-bold border-blue-600 focus:border-dashed focus:border-blue-500 focus:outline-none focus-visible:ring-0" onChange={(e) => setValue('basicDetails.fullDesc', e.target.value)} {...register('basicDetails.fullDesc')} />
+            <div className="rounded-lg border-2 border-blue-600 focus-within:border-dashed focus-within:border-blue-500">
+              <MenuBar editor={editor} />
+              <EditorContent 
+                editor={editor} 
+                className="min-h-[200px] p-2 prose max-w-none bg-transparent" 
+              />
+            </div>
           </div>
         </div>
 
