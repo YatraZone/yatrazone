@@ -44,7 +44,7 @@ const RandomTourPackageSection = () => {
     if (isLoading) {
         return (
             <section className="">
-                <div className="bg-[url('/bg-custom.webp')] w-full h-full bg-blue-100">
+                <div className="bg-[url('/bg-custom.webp')] w-full h-full">
                     <div className="max-w-[22rem] md:max-w-[40rem] lg:max-w-[60rem] xl:max-w-[80rem] mx-auto py-10">
                         <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
                        
@@ -91,7 +91,7 @@ const RandomTourPackageSection = () => {
     const formatNumeric = (num) => { return new Intl.NumberFormat('en-IN').format(num) };
 
     return (
-        <section className="md:mt-28">
+        <section className="md:mt-19">
             <div className="bg-[url('/bg-custom-1.jpg')] w-full h-full ">
                 <div className="max-w-[22rem] md:max-w-[40rem] lg:max-w-[60rem] xl:max-w-[80rem] mx-auto py-10">
                     <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">

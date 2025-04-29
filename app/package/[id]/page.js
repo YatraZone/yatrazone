@@ -118,129 +118,130 @@ const PackageDetailsPage = async ({ params }) => {
 
     return (
         <SidebarInset>
-            <div className="min-h-screen mb-20 font-barlow">
-                {/* Banner */}
-                <div className="relative h-[300px] md:h-[300px] overflow-hidden w-full">
-                    <Image
-                        src={packageDetails.basicDetails?.imageBanner?.url || "https://dummyimage.com/600x400/000/fff"}
-                        alt={packageDetails.packageName}
-                        fill
-                        className="object-cover md:object-fill"
-                        priority
-                    />
-                </div>
+            {/* Package Content */}
+            <div className="brightness-145"
+                style={{
+                    backgroundImage: 'url(/bg-custom-1.jpg)',
+                    backgroundRepeat: 'repeat',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    width: '100%',
 
-                {/* Package Details */}
-                <div className="md:w-full w-[22rem] mx-auto md:px-4 py-8">
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                        {/* Package Header */}
-                        <div className="lg:p-6 p-2 border-b">
-                            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                                <div className="flex md:flex-row flex-col items-center gap-4">
-                                    <Image
-                                        src={packageDetails.basicDetails?.thumbnail?.url || "https://dummyimage.com/600x400/000/fff"}
-                                        alt={packageDetails.packageName}
-                                        width={300}
-                                        height={300}
-                                        className="object-cover w-full lg:w-96 rounded-xl aspect-video"
-                                    />
-                                    <div className="flex flex-col gap-2 lg:w-[50rem]">
-                                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                                            <Tag className="h-4 w-4" />
-                                            <span className="font-medium">Package Code: <span className="font-bold tracking-wider text-black">{packageDetails.packageCode}</span></span>
-                                        </div>
-                                        <h2 className="text-2xl lg:text-4xl font-gilda font-bold w-full">{packageDetails.packageName}</h2>
-                                        <div className="flex flex-wrap gap-4">
-                                            <div className="flex items-center text-gray-600">
-                                                <MapPin className="h-4 w-4 mr-1" />
-                                                <span>Location: {packageDetails.basicDetails?.location}</span>
+                }}
+            >
+                <div className="min-h-screen mb-20 font-barlow">
+                    {/* Banner */}
+                    <div className="relative h-[300px] md:h-[300px] overflow-hidden w-full">
+                        <Image
+                            src={packageDetails.basicDetails?.imageBanner?.url || "https://dummyimage.com/600x400/000/fff"}
+                            alt={packageDetails.packageName}
+                            fill
+                            className="object-cover md:object-fill"
+                            priority
+                        />
+                    </div>
+
+                    {/* Package Details */}
+                    <div className="md:w-full w-[22rem] mx-auto md:px-4 py-8">
+                        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                            {/* Package Header */}
+                            <div className="lg:p-6 p-2 border-b">
+                                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                                    <div className="flex md:flex-row flex-col items-center gap-4">
+                                        <Image
+                                            src={packageDetails.basicDetails?.thumbnail?.url || "https://dummyimage.com/600x400/000/fff"}
+                                            alt={packageDetails.packageName}
+                                            width={300}
+                                            height={300}
+                                            className="object-cover w-full lg:w-96 rounded-xl aspect-video"
+                                        />
+                                        <div className="flex flex-col gap-2 lg:w-[50rem]">
+                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                <Tag className="h-4 w-4" />
+                                                <span className="font-medium">Package Code: <span className="font-bold tracking-wider text-black">{packageDetails.packageCode}</span></span>
                                             </div>
-                                            <div className="flex items-center text-gray-600">
-                                                <Calendar className="h-4 w-4 mr-1" />
-                                                <span>Duration: {packageDetails.basicDetails?.duration}</span>
-                                            </div>
-                                            <div className="flex items-center text-gray-600">
-                                                <Clock className="h-4 w-4 mr-1 " />
-                                                <span>Tour Type: {packageDetails.basicDetails?.tourType}</span>
-                                            </div>
-                                            {packageDetails?.basicDetails?.heliBooking === "Yes" && (
+                                            <h2 className="text-2xl lg:text-4xl font-gilda font-bold w-full">{packageDetails.packageName}</h2>
+                                            <div className="flex flex-wrap gap-4">
                                                 <div className="flex items-center text-gray-600">
-                                                    <Image src="/helicopter.png" alt="Helicopter" width={20} height={20} className="h-6 w-6 mr-1" />
-                                                    <span>Helicopter Tour: {packageDetails.basicDetails?.heliBooking}</span>
+                                                    <MapPin className="h-4 w-4 mr-1" />
+                                                    <span>Location: {packageDetails.basicDetails?.location}</span>
                                                 </div>
-                                            )}
+                                                <div className="flex items-center text-gray-600">
+                                                    <Calendar className="h-4 w-4 mr-1" />
+                                                    <span>Duration: {packageDetails.basicDetails?.duration}</span>
+                                                </div>
+                                                <div className="flex items-center text-gray-600">
+                                                    <Clock className="h-4 w-4 mr-1 " />
+                                                    <span>Tour Type: {packageDetails.basicDetails?.tourType}</span>
+                                                </div>
+                                                {packageDetails?.basicDetails?.heliBooking === "Yes" && (
+                                                    <div className="flex items-center text-gray-600">
+                                                        <Image src="/helicopter.png" alt="Helicopter" width={20} height={20} className="h-6 w-6 mr-1" />
+                                                        <span>Helicopter Tour: {packageDetails.basicDetails?.heliBooking}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-4 mt-4">
+                                                <Button size="icon" className="bg-white border-2 border-blue-600 !p-6 hover:bg-blue-100 rounded-lg">
+                                                    <Link href={`tel:+918006000325`}><PhoneCall className="!h-6 !w-6 text-black" /></Link>
+                                                </Button>
+                                                <Button className="bg-green-600 border-2 border-green-300 !p-6 hover:bg-green-700 !text-white rounded-lg">
+                                                    <Link
+                                                        href={`https://wa.me/918006000325?text=${encodeURIComponent(`I'm interested in your package ${packageDetails.packageName}`)}`}
+                                                        className="flex items-center gap-2 text-lg"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <MessageCircle className="!h-6 !w-6 !text-white" />
+                                                        Whatsapp
+                                                    </Link>
+                                                </Button>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-4 mt-4">
-                                            <Button size="icon" className="bg-white border-2 border-blue-600 !p-6 hover:bg-blue-100 rounded-lg">
-                                                <Link href={`tel:+918006000325`}><PhoneCall className="!h-6 !w-6 text-black" /></Link>
-                                            </Button>
-                                            <Button className="bg-green-600 border-2 border-green-300 !p-6 hover:bg-green-700 !text-white rounded-lg">
-                                                <Link
-                                                    href={`https://wa.me/918006000325?text=${encodeURIComponent(`I'm interested in your package ${packageDetails.packageName}`)}`}
-                                                    className="flex items-center gap-2 text-lg"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <MessageCircle className="!h-6 !w-6 !text-white" />
-                                                    Whatsapp
-                                                </Link>
-                                            </Button>
+                                    </div>
+                                    <div className="md:text-right w-fit">
+                                        <div className="text-2xl font-bold text-primary">₹<span className="text-4xl text-blue-600">{formatNumber(packageDetails.price)}</span></div>
+                                        <div className="text-sm text-gray-600 font-medium">{packageDetails.priceUnit}</div>
+                                        <div className="flex items-center md:justify-end mt-1">
+                                            <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                                            <span className="ml-1 text-sm font-medium">{avgRating || 0}</span>
+                                            <span className="ml-1 text-sm text-gray-500 font-medium">({reviews?.filter((review) => review.approved === true).length || 0} reviews)</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="md:text-right w-fit">
-                                    <div className="text-2xl font-bold text-primary">₹<span className="text-4xl text-blue-600">{formatNumber(packageDetails.price)}</span></div>
-                                    <div className="text-sm text-gray-600 font-medium">{packageDetails.priceUnit}</div>
-                                    <div className="flex items-center md:justify-end mt-1">
-                                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                                        <span className="ml-1 text-sm font-medium">{avgRating || 0}</span>
-                                        <span className="ml-1 text-sm text-gray-500 font-medium">({reviews?.filter((review) => review.approved === true).length || 0} reviews)</span>
-                                    </div>
+                            </div>
+
+                            {packageDetails?.basicDetails?.notice !== "" && <DismissableInfoBox packages={packageDetails} />}
+
+                            {/* Action Buttons */}
+                            <div className="p-6 bg-blue-100 border-b">
+                                <div className="flex flex-col sm:flex-row gap-3 justify-center mx-auto">
+                                    <Link href={`/checkout/${packageDetails._id}`} className="flex-1">
+                                        <button className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                                            <ShoppingCart className="mr-2 !h-6 !w-6" />
+                                            Package Checkout
+                                        </button>
+                                    </Link>
+                                    <Link href={`/customEnquiry/${packageDetails._id}`} className="flex-1">
+                                        <button className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 hover:bg-white rounded-lg" variant="outline">
+                                            <MessageSquare className="mr-2 !h-6 !w-6" />
+                                            Custom Enquiry
+                                        </button>
+                                    </Link>
+                                    {packageDetails.basicDetails?.planCalculator === 'Yes' &&
+                                        (
+                                            <Link href={`calculator/${packageDetails._id}`} className="flex-1">
+                                                <button className="w-full flex items-center justify-center bg-transparent !py-4 text-lg border-2 border-blue-600 hover:bg-white rounded-lg">
+                                                    <Calculator className="mr-2 !h-6 !w-6" />
+                                                    Package Calculator
+                                                </button>
+                                            </Link>
+                                        )
+                                    }
                                 </div>
                             </div>
-                        </div>
 
-                        {packageDetails?.basicDetails?.notice !== "" && <DismissableInfoBox packages={packageDetails} />}
 
-                        {/* Action Buttons */}
-                        <div className="p-6 bg-blue-100 border-b">
-                            <div className="flex flex-col sm:flex-row gap-3 justify-center mx-auto">
-                                <Link href={`/checkout/${packageDetails._id}`} className="flex-1">
-                                    <button className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-                                        <ShoppingCart className="mr-2 !h-6 !w-6" />
-                                        Package Checkout
-                                    </button>
-                                </Link>
-                                <Link href={`/customEnquiry/${packageDetails._id}`} className="flex-1">
-                                    <button className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 hover:bg-white rounded-lg" variant="outline">
-                                        <MessageSquare className="mr-2 !h-6 !w-6" />
-                                        Custom Enquiry
-                                    </button>
-                                </Link>
-                                {packageDetails.basicDetails?.planCalculator === 'Yes' &&
-                                    (
-                                        <Link href={`calculator/${packageDetails._id}`} className="flex-1">
-                                            <button className="w-full flex items-center justify-center bg-transparent !py-4 text-lg border-2 border-blue-600 hover:bg-white rounded-lg">
-                                                <Calculator className="mr-2 !h-6 !w-6" />
-                                                Package Calculator
-                                            </button>
-                                        </Link>
-                                    )
-                                }
-                            </div>
-                        </div>
-
-                        {/* Package Content */}
-                        <div className="brightness-145"
-                            style={{
-                                backgroundImage: 'url(/bg-custom-1.jpg)',
-                                backgroundRepeat: 'repeat',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                width: '100%',
-                                
-                            }}
-                        >
                             <Tabs defaultValue="overview">
                                 <TabsList className="grid grid-cols-2 bg-transparent md:grid-cols-3 lg:grid-cols-6 mb-6 w-full">
                                     <TabsTrigger
@@ -479,69 +480,70 @@ const PackageDetailsPage = async ({ params }) => {
                                     </div>
                                 </TabsContent>
                             </Tabs>
+
+
+                            {/* Gallery */}
+                            {packageDetails?.gallery?.length > 0 &&
+                                <div className="p-6">
+                                    <h3 className="text-2xl font-bold mb-4">• Gallery</h3>
+                                    <PackageGallery images={packageDetails.gallery} />
+                                </div>
+                            }
+
+                            {packages.length > 0 && <div className="p-6 bg-white">
+                                <h3 className="text-2xl font-bold mb-4">You Might Also Like</h3>
+                                <Carousel className="drop-shadow-xl max-w-lg lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-12 w-[80%] md:w-full">
+                                    <CarouselContent className="-ml-1 w-full">
+                                        {packages.map((item, index) => (
+                                            <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
+                                                <div className="p-1">
+                                                    <Card>
+                                                        <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between">
+                                                            <Image
+                                                                src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
+                                                                alt={item?.packageName}
+                                                                width={1280}
+                                                                height={720}
+                                                                quality={50}
+                                                                className="rounded-t-xl w-full h-full"
+                                                            />
+                                                            <div className="p-4 flex flex-col gap-2 ">
+                                                                <div className="flex xl:flex-row flex-col gap-2 xl:items-center justify-between font-barlow">
+                                                                    <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
+                                                                        <MapPin size={20} /> {item?.basicDetails?.location}
+                                                                    </p>
+                                                                    <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
+                                                                        <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
+                                                                    </p>
+                                                                </div>
+                                                                <p className="font-bold text-2xl line-clamp-2">{item?.packageName}</p>
+                                                            </div>
+                                                            <div className="h-px bg-gray-200" />
+                                                            <div className="p-4 flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow">
+                                                                <div>
+                                                                    <p className="text-sm">
+                                                                        Starting From:{" "}
+                                                                        <span className="font-bold text-blue-600">
+                                                                            ₹<span className="text-xl">{formatNumeric(item?.price)}</span>
+                                                                        </span>
+                                                                    </p>
+                                                                    <p className="text-xs font-semibold">Onwards</p>
+                                                                </div>
+                                                                <Link href={`/package/${item._id}`}>
+                                                                    <Button className="bg-blue-500 hover:bg-blue-600 uppercase rounded-sm">Learn more</Button>
+                                                                </Link>
+                                                            </div>
+                                                        </CardContent>
+                                                    </Card>
+                                                </div>
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                    <CarouselPrevious />
+                                    <CarouselNext />
+                                </Carousel>
+                            </div>}
                         </div>
-
-                        {/* Gallery */}
-                        {packageDetails?.gallery?.length > 0 &&
-                            <div className="p-6">
-                                <h3 className="text-2xl font-bold mb-4">• Gallery</h3>
-                                <PackageGallery images={packageDetails.gallery} />
-                            </div>
-                        }
-
-                        {packages.length > 0 && <div className="p-6 bg-white">
-                            <h3 className="text-2xl font-bold mb-4">You Might Also Like</h3>
-                            <Carousel className="drop-shadow-xl max-w-lg lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-12 w-[80%] md:w-full">
-                                <CarouselContent className="-ml-1 w-full">
-                                    {packages.map((item, index) => (
-                                        <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
-                                            <div className="p-1">
-                                                <Card>
-                                                    <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between">
-                                                        <Image
-                                                            src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
-                                                            alt={item?.packageName}
-                                                            width={1280}
-                                                            height={720}
-                                                            quality={50}
-                                                            className="rounded-t-xl w-full h-full"
-                                                        />
-                                                        <div className="p-4 flex flex-col gap-2 ">
-                                                            <div className="flex xl:flex-row flex-col gap-2 xl:items-center justify-between font-barlow">
-                                                                <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
-                                                                    <MapPin size={20} /> {item?.basicDetails?.location}
-                                                                </p>
-                                                                <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
-                                                                    <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
-                                                                </p>
-                                                            </div>
-                                                            <p className="font-bold text-2xl line-clamp-2">{item?.packageName}</p>
-                                                        </div>
-                                                        <div className="h-px bg-gray-200" />
-                                                        <div className="p-4 flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow">
-                                                            <div>
-                                                                <p className="text-sm">
-                                                                    Starting From:{" "}
-                                                                    <span className="font-bold text-blue-600">
-                                                                        ₹<span className="text-xl">{formatNumeric(item?.price)}</span>
-                                                                    </span>
-                                                                </p>
-                                                                <p className="text-xs font-semibold">Onwards</p>
-                                                            </div>
-                                                            <Link href={`/package/${item._id}`}>
-                                                                <Button className="bg-blue-500 hover:bg-blue-600 uppercase rounded-sm">Learn more</Button>
-                                                            </Link>
-                                                        </div>
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-                                <CarouselPrevious />
-                                <CarouselNext />
-                            </Carousel>
-                        </div>}
                     </div>
                 </div>
             </div>
