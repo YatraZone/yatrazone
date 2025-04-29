@@ -101,8 +101,8 @@ const LineHeight = Extension.create({
   addAttributes() {
     return {
       lineHeight: {
-        default: '1.5',
-        parseHTML: element => element.style.lineHeight,
+        default: '1',
+        parseHTML: element => String(element.style.lineHeight),
         renderHTML: attributes => {
           if (!attributes.lineHeight) return {}
           return {
@@ -120,7 +120,7 @@ const LineHeight = Extension.create({
         attributes: {
           lineHeight: {
             default: '1.5',
-            parseHTML: element => element.style.lineHeight,
+            parseHTML: element => String(element.style.lineHeight),
             renderHTML: attributes => {
               if (!attributes.lineHeight) return {}
               return {
@@ -136,7 +136,7 @@ const LineHeight = Extension.create({
   addCommands() {
     return {
       setLineHeight: lineHeight => ({ chain }) => {
-        return chain().setMark('textStyle', { lineHeight });
+        return chain().setMark('textStyle', { lineHeight: String(lineHeight) });
       },
     }
   }
@@ -155,7 +155,7 @@ const MenuBar = ({ editor }) => {
   ]
 
   const lineHeights = [
-    '1', '1.2', '1.5', '1.8', '2', '2.5', '3'
+    '0.5', '0.75', '1', '1.2', '1.5', '1.8', '2', '2.5', '3'
   ]
 
   const handleUrlSubmit = () => {
@@ -401,7 +401,7 @@ const MenuBar = ({ editor }) => {
           className="p-1 rounded bg-transparent border border-gray-300 hover:bg-gray-100"
           onChange={e => {
             if (e.target.value) {
-              editor.chain().focus().setLineHeight(e.target.value).run()
+              editor.chain().focus().setLineHeight(String(e.target.value)).run()
             }
           }}
           value={editor.getAttributes('textStyle').lineHeight || '1.5'}
@@ -426,29 +426,17 @@ const AddInfo = () => {
   const [editItem, setEditItem] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [editorContent, setEditorContent] = useState('');
-
-  // Filter "Day Plan" info
-  const dayPlanInfo = packages.info.filter(info => info.typeOfSelection === "Day Plan")
-  // Filter other info
-  const otherInfo = packages.info.filter(info => info.typeOfSelection !== "Day Plan")
-
-  const editor = useEditor({
+  const addEditor = useEditor({
     extensions: [
       StarterKit,
       Underline,
-      TextStyle.configure({
-        types: ['textStyle']
-      }),
+      TextStyle.configure({ types: ['textStyle'] }),
       FontSize.configure(),
       LineHeight.configure(),
       FontFamily,
       Typography,
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
-      Link.configure({
-        openOnClick: false,
-      }),
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Link.configure({ openOnClick: false }),
       Color,
       ListItem,
     ],
@@ -461,12 +449,42 @@ const AddInfo = () => {
         class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none'
       }
     }
-  })
+  });
+  const editEditor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      TextStyle.configure({ types: ['textStyle'] }),
+      FontSize.configure(),
+      LineHeight.configure(),
+      FontFamily,
+      Typography,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Link.configure({ openOnClick: false }),
+      Color,
+      ListItem,
+    ],
+    content: editorContent,
+    onUpdate: ({ editor }) => {
+      setValue('info.selectionDesc', editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none'
+      }
+    }
+  });
+
+  // Filter "Day Plan" info
+  const dayPlanInfo = packages.info.filter(info => info.typeOfSelection === "Day Plan")
+  // Filter other info
+  const otherInfo = packages.info.filter(info => info.typeOfSelection !== "Day Plan")
 
   useEffect(() => {
-    if (isOpen && !editItem) {
+    if (isOpen && !editItem&& addEditor) {
       setEditorContent('');
       setValue('info.selectionDesc', '');
+      if (addEditor) addEditor.commands.setContent('');
     }
   }, [isOpen, editItem, setValue]);
 
@@ -474,6 +492,7 @@ const AddInfo = () => {
     if (editItem) {
       setEditorContent(editItem.selectionDesc || '');
       setValue('info.selectionDesc', editItem.selectionDesc || '');
+      if (editEditor) editEditor.commands.setContent(editItem.selectionDesc || '');
     }
   }, [editItem, setValue]);
 
@@ -738,10 +757,10 @@ const AddInfo = () => {
                   </div>
                   <div className="flex flex-col gap-2 col-span-4">
                     <label htmlFor="selectionDesc" className="font-semibold">Description</label>
-                    <MenuBar editor={editor} />
+                    <MenuBar editor={addEditor} />
                     <EditorContent
-                      editor={editor}
-                      className="min-h-[100px] p-2 prose max-w-none bg-transparent border border-black rounded-2"
+                      editor={addEditor}
+                      className="h-[250px] overflow-y-auto min-h-[100px] p-2 prose max-w-none bg-transparent border border-black rounded-2"
                     />
                   </div>
                 </div>
@@ -792,13 +811,13 @@ const AddInfo = () => {
                   </div>
                   <div className="flex flex-col gap-2 col-span-4">
                     <label htmlFor="selectionDesc" className="font-semibold">Description</label>
-                    <MenuBar editor={editor} />
+                    <MenuBar editor={editEditor } />
                     <EditorContent
-                      editor={editor}
-                      className="min-h-[100px] p-2 prose max-w-none border border-black rounded-2"
+                      editor={editEditor }
+                      className="h-[250px] overflow-y-auto min-h-[100px] p-2 prose max-w-none border border-black rounded-2"
                     />
                   </div>
-                </div>
+                                  </div>
                 <div className="flex justify-end mt-4">
                   <Button className="bg-blue-600 hover:bg-blue-500" type="submit">Save</Button>
                 </div>
