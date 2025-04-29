@@ -425,12 +425,12 @@ const AddInfo = () => {
 
   const [editItem, setEditItem] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [editorContent, setEditorContent] = useState('');
 
   // Filter "Day Plan" info
   const dayPlanInfo = packages.info.filter(info => info.typeOfSelection === "Day Plan")
   // Filter other info
   const otherInfo = packages.info.filter(info => info.typeOfSelection !== "Day Plan")
-
 
   const editor = useEditor({
     extensions: [
@@ -452,9 +452,9 @@ const AddInfo = () => {
       Color,
       ListItem,
     ],
-    content: packages?.basicDetails?.fullDesc || '',
+    content: editorContent,
     onUpdate: ({ editor }) => {
-      setValue('basicDetails.fullDesc', editor.getHTML())
+      setValue('info.selectionDesc', editor.getHTML());
     },
     editorProps: {
       attributes: {
@@ -462,6 +462,20 @@ const AddInfo = () => {
       }
     }
   })
+
+  useEffect(() => {
+    if (isOpen && !editItem) {
+      setEditorContent('');
+      setValue('info.selectionDesc', '');
+    }
+  }, [isOpen, editItem, setValue]);
+
+  useEffect(() => {
+    if (editItem) {
+      setEditorContent(editItem.selectionDesc || '');
+      setValue('info.selectionDesc', editItem.selectionDesc || '');
+    }
+  }, [editItem, setValue]);
 
   const onSubmit = async (data) => {
     data.pkgId = packages._id
@@ -554,6 +568,7 @@ const AddInfo = () => {
 
   const handleEdit = (item) => {
     setEditItem(item);
+    setIsOpen(true);
     setValue("info.typeOfSelection", item.typeOfSelection);
     setValue("info.selectionTitle", item.selectionTitle);
     setValue("info.selectionDesc", item.selectionDesc);
