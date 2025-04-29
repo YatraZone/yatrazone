@@ -345,51 +345,20 @@ const PackageDetailsPage = async ({ params }) => {
                                             {/* Inclusions */}
                                             <div className="w-full overflow-x-auto">
                                                 <h3 className="text-2xl font-bold mb-4">• Inclusions</h3>
-                                                <table className="min-w-full table-auto border-collapse">
-                                                    <thead>
-                                                        <tr className="bg-gray-100">
-                                                            <th className="border px-4 py-2 text-left">#</th>
-                                                            <th className="border px-4 py-2 text-left">Description</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {packageDetails.info
-                                                            ?.filter((info) => info.typeOfSelection === "Inclusions")
-                                                            ?.map((item, index) =>
-                                                                item.selectionDesc.split("\n")?.map((line, lineIndex) => (
-                                                                    <tr key={`${index}-${lineIndex}`} className="border-t">
-                                                                        <td className="border px-4 py-2 text-left">{lineIndex + 1}</td>
-                                                                        <td className="border px-4 py-2 text-left">{line}</td>
-                                                                    </tr>
-                                                                ))
-                                                            )}
-                                                    </tbody>
-                                                </table>
+                                                {packageDetails.info
+                                                    ?.filter((info) => info.typeOfSelection === "Inclusions")
+                                                    ?.map((item, index) => (
+                                                        <div key={index} className="prose max-w-none" dangerouslySetInnerHTML={{ __html: item.selectionDesc }} />
+                                                    ))}
                                             </div>
-
                                             {/* Exclusions */}
                                             <div className="w-full overflow-x-auto">
                                                 <h3 className="text-2xl font-bold mb-4">• Exclusions</h3>
-                                                <table className="min-w-full table-auto border-collapse">
-                                                    <thead>
-                                                        <tr className="bg-gray-100">
-                                                            <th className="border px-4 py-2 text-left">#</th>
-                                                            <th className="border px-4 py-2 text-left">Description</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {packageDetails.info
-                                                            ?.filter((info) => info.typeOfSelection === "Exclusions")
-                                                            ?.map((item, index) =>
-                                                                item.selectionDesc.split("\n")?.map((line, lineIndex) => (
-                                                                    <tr key={`${index}-${lineIndex}`} className="border-t">
-                                                                        <td className="border px-4 py-2 text-left">{lineIndex + 1}</td>
-                                                                        <td className="border px-4 py-2 text-left">{line}</td>
-                                                                    </tr>
-                                                                ))
-                                                            )}
-                                                    </tbody>
-                                                </table>
+                                                {packageDetails.info
+                                                    ?.filter((info) => info.typeOfSelection === "Exclusions")
+                                                    ?.map((item, index) => (
+                                                        <div key={index} className="prose max-w-none" dangerouslySetInnerHTML={{ __html: item.selectionDesc }} />
+                                                    ))}
                                             </div>
                                         </div>
                                     )}
@@ -397,19 +366,16 @@ const PackageDetailsPage = async ({ params }) => {
 
                                 <TabsContent value="AdditionalInformation" className="space-y-8">
                                     {/* FAQs */}
-                                    {packageDetails.info?.filter((info) => info.typeOfSelection === "Frequently Asked Questions").length > 0 && <div>
-                                        <h3 className="text-2xl font-bold mb-4">• Frequently Asked Questions</h3>
-                                        <Accordion type="single" collapsible className="w-full">
-                                            {packageDetails.info?.filter((info) => info.typeOfSelection === "Frequently Asked Questions")?.map((faq, index) => (
-                                                <AccordionItem key={index} value={`faq-${index}`} className="border-black">
-                                                    <AccordionTrigger className="text-left text-lg !no-underline font-bold  px-4 rounded-xl">{faq.selectionTitle}</AccordionTrigger>
-                                                    <AccordionContent>
-                                                        <div className="py-2 px-6 text-base whitespace-pre-line" dangerouslySetInnerHTML={{ __html: faq.selectionDesc }} />
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            ))}
-                                        </Accordion>
-                                    </div>}
+                                    {packageDetails.info?.filter((info) => info.typeOfSelection === "Frequently Asked Questions").length > 0 && (
+                                        <div>
+                                            <h3 className="text-2xl font-bold mb-4">• Frequently Asked Questions</h3>
+                                            {packageDetails.info
+                                                ?.filter((info) => info.typeOfSelection === "Frequently Asked Questions")
+                                                ?.map((item, index) => (
+                                                    <div key={index} className="prose max-w-none" dangerouslySetInnerHTML={{ __html: item.selectionDesc }} />
+                                                ))}
+                                        </div>
+                                    )}
 
                                     {/* Important Information */}
                                     {packageDetails.info?.filter((info) => info.typeOfSelection === "Important Information").length > 0 && <div className="pt-12">

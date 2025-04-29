@@ -154,7 +154,7 @@ const AboutUsSection = () => {
         <section className="relative py-1 ">
     
             <div
-                className="absolute -z-10 w-full h-[130%]  bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145"
+                className="absolute -z-10 w-full h-[100%]  bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145"
             />
             {/* <img src="/bg-custom-2.jpg" className="filter brightness-110 absolute -z-10 w-full object-cover" /> */}
             <div className="max-w-[22rem] md:max-w-[45rem] lg:max-w-[60rem] xl:max-w-7xl mx-auto">
