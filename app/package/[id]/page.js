@@ -304,15 +304,10 @@ const PackageDetailsPage = async ({ params }) => {
                                     {/* Location Map - only show if location exists */}
                                     {packageDetails.info?.filter((item) => item.typeOfSelection === "Location Map")[0]?.selectionDesc && (
                                         <div className="w-full">
-                                            <h3 className="text-xl font-bold mb-4">Location</h3>
+                                            <h3 className="text-2xl font-bold mb-4 px-2">• Location</h3>
                                             <PackageMap location={packageDetails.info?.filter((item) => item.typeOfSelection === "Location Map")[0]?.selectionDesc} />
                                         </div>
                                     )}
-                                    {/* Gallery */}
-                                    {/* <div className="w-full md:w-1/2">
-                                        <h3 className="text-xl font-bold mb-4">Gallery</h3>
-                                        <PackageGallery images={packageDetails.basicDetails?.gallery || []} />
-                                    </div> */}
                                 </div>
                             </TabsContent>
 
@@ -483,15 +478,15 @@ const PackageDetailsPage = async ({ params }) => {
 
                         {/* Gallery */}
                         {packageDetails?.gallery?.length > 0 &&
-                            <div className="p-6">
+                            <div className="px-8 py-6">
                                 <h3 className="text-2xl font-bold mb-4">• Gallery</h3>
                                 <PackageGallery images={packageDetails.gallery} />
                             </div>
                         }
 
-                        {packages.length > 0 && <div className="p-6 bg-white">
-                            <h3 className="text-2xl font-bold mb-4">You Might Also Like</h3>
-                            <Carousel className="max-w-lg lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-[80%] md:w-full">
+                        {packages.length > 0 && <div className="p-4 bg-white">
+                            <h3 className="text-2xl font-bold mb-4 px-2">You Might Also Like</h3>
+                            <Carousel className="max-w-xl lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-full md:w-full">
                                 <CarouselContent className="-ml-1 w-full">
                                     {packages.map((item, index) => (
                                         <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">

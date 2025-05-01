@@ -201,7 +201,7 @@ const PackageGallery = ({ images }) => {
   const flatImages = galleryImages;
 
   return (
-    <div className="space-y-4 overflow-visible px-16 relative">
+    <div className="space-y-4 overflow-visible px-5 relative">
       <Carousel className="overflow-visible w-full">
         <CarouselContent>
           {slides.map((slide, slideIdx) => (

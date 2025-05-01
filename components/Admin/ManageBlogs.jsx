@@ -197,7 +197,7 @@ const ManageBlogs = () => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Title</TableHead>
+                        <TableHead>Titles</TableHead>
                         <TableHead>Subtitle</TableHead>
                         <TableHead>Link</TableHead>
                         <TableHead>Order</TableHead>

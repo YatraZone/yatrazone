@@ -106,12 +106,15 @@ const RandomTourPackageSection = () => {
     const [isBlogsLoading, setIsBlogsLoading] = useState(true);
     const [instagramPosts, setInstagramPosts] = useState([]);
     const [isInstaLoading, setIsInstaLoading] = useState(true);
+    const [facebookPosts, setFacebookPosts] = useState([]);
+    const [isFbLoading, setIsFbLoading] = useState(true);
 
     useEffect(() => {
         const fetchInstagramPosts = async () => {
             try {
                 const res = await fetch("/api/instagram-posts");
                 const data = await res.json();
+                console.log(data);
                 setInstagramPosts(data);
             } catch (error) {
                 setInstagramPosts([]);
@@ -120,6 +123,21 @@ const RandomTourPackageSection = () => {
             }
         };
         fetchInstagramPosts();
+    }, []);
+    useEffect(() => {
+        const fetchFacebookPosts = async () => {
+            try {
+                const res = await fetch("/api/facebook-posts");
+                const data = await res.json();
+                console.log(data);
+                setFacebookPosts(data);
+            } catch (error) {
+                setFacebookPosts([]);
+            } finally {
+                setIsFbLoading(false);
+            }
+        };
+        fetchFacebookPosts();
     }, []);
     useEffect(() => {
         const fetchPackages = async () => {
@@ -158,7 +176,7 @@ const RandomTourPackageSection = () => {
         };
 
         fetchPackages();
-        fetchBlogs();
+        // fetchBlogs();
     }, []);
 
     if (isLoading) {
@@ -209,6 +227,12 @@ const RandomTourPackageSection = () => {
     }
 
     const formatNumeric = (num) => { return new Intl.NumberFormat('en-IN').format(num) };
+
+    // Combine both Instagram and Facebook posts for the card section
+    const allPosts = [...instagramPosts, ...facebookPosts];
+
+    // Determine card width based on number of posts
+    const cardBasis = allPosts.length <= 3 ? `basis-1/${allPosts.length}` : "md:basis-1/5";
 
     return (
         <section className="bg-[url('/bg-custom-3.jpg')] md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
@@ -319,52 +343,52 @@ const RandomTourPackageSection = () => {
                     <div className="w-full flex flex-col items-center mt-12">
                         <h2 className="text-center font-semibold text-lg md:text-xl mb-4">With YatraZone</h2>
                         {/* <p className="text-center text-xs md:text-sm text-gray-500 mb-4">Phasellus lorem malesuada ligula pulvinar commodo maecenas</p> */}
-                            <Carousel>
-                                <CarouselContent>
-                                    {isInstaLoading ? (
-                                        // Show skeletons while loading
-                                        Array.from({ length: 5 }).map((_, idx) => (
-                                            <CarouselItem key={idx} className="pl-1 md:basis-1/5">
-                                                <div className="relative rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-200 animate-pulse" />
-                                            </CarouselItem>
-                                        ))
-                                    ) : instagramPosts.length > 0 ? (
-                                        instagramPosts.map((post, idx) => (
-                                            <CarouselItem key={post._id || idx} className="pl-1 md:basis-1/5">
-                                                <div className="relative group rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-100">
-                                                    <Image
-                                                        src={post.image}
-                                                        alt={`Instagram ${idx}`}
-                                                        width={400}
-                                                        height={400}
-                                                        className="object-cover w-full h-full"
-                                                    />
-                                                    <a
-                                                        href={post.link}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
-                                                    >
-                                                        <img
-                                                            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
-                                                            alt="Instagram"
-                                                            className="w-10 h-10 opacity-80"
-                                                        />
-                                                    </a>
-                                                </div>
-                                            </CarouselItem>
-                                        ))
-                                    ) : (
-                                        <div className="text-gray-500 col-span-full text-center py-8">No Instagram posts found</div>
-                                    )}
-                                </CarouselContent>
-                                <CarouselPrevious />
-                                <CarouselNext />
-                            </Carousel>
-                            <button className="mt-6 px-8 py-2 bg-black text-white font-semibold rounded transition hover:bg-gray-900">Follow Us</button>
-                        </div>
+                        <Carousel>
+                            <CarouselContent>
+                                {isInstaLoading || isFbLoading ? (
+                                    // Show skeletons while loading
+                                    Array.from({ length: 5 }).map((_, idx) => (
+                                        <CarouselItem key={idx} className="pl-1 md:basis-1/5">
+                                            <div className="relative rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-200 animate-pulse" />
+                                        </CarouselItem>
+                                    ))
+                                ) : allPosts.length > 0 ? (
+                                    allPosts.map((post, idx) => (
+                                        <CarouselItem key={post._id || idx} className={`pl-1 ${allPosts.length <= 3 ? cardBasis : 'md:basis-1/5'}`} style={allPosts.length <= 3 ? { minWidth: `calc(100%/${allPosts.length})` } : {}}>
+                                            <div className="relative group rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-100">
+                                                <Image
+                                                    src={post.image}
+                                                    alt={`${post.type === "facebook" ? "Facebook" : "Instagram"} ${idx}`}
+                                                    width={400}
+                                                    height={400}
+                                                    className="object-cover w-full h-full"
+                                                />
+                                                <a
+                                                    href={post.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
+                                                >
+                                                    {post.type === "facebook" ? (
+                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" className="w-10 h-10 opacity-80" />
+                                                    ) : (
+                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" className="w-10 h-10 opacity-80" />
+                                                    )}
+                                                </a>
+                                            </div>
+                                        </CarouselItem>
+                                    ))
+                                ) : (
+                                    <div className="text-gray-500 col-span-full text-center py-8">No posts found</div>
+                                )}
+                            </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
+                        </Carousel>
+                        <button className="mt-6 px-8 py-2 bg-black text-white font-semibold rounded transition hover:bg-gray-900">Follow Us</button>
                     </div>
                 </div>
+            </div>
         </section>
     );
 };
