@@ -33,70 +33,70 @@ const instagramImages = [
 ];
 
 const sampleBlogs = [
-  {
-    _id: "1",
-    title: "Nunc sed pretium nisi",
-    snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    date: "10th Dec 2025",
-    author: "Artist"
-  },
-  {
-    _id: "2",
-    title: "In tincidunt tellus eu elementum",
-    snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-    date: "12th Dec 2025",
-    author: "Artist"
-  },
-  {
-    _id: "3",
-    title: "Nunc sed pretium nisi",
-    snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    date: "15th Dec 2025",
-    author: "Artist"
-  },
-  {
-    _id: "4",
-    title: "In tincidunt tellus eu elementum",
-    snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-    date: "18th Dec 2025",
-    author: "Artist"
-  },
-  {
-    _id: "5",
-    title: "Nunc sed pretium nisi",
-    snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    date: "10th Dec 2025",
-    author: "Artist"
-  },
-  {
-    _id: "6",
-    title: "In tincidunt tellus eu elementum",
-    snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-    date: "12th Dec 2025",
-    author: "Artist"
-  },
-  {
-    _id: "7",
-    title: "Nunc sed pretium nisi",
-    snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    date: "15th Dec 2025",
-    author: "Artist"
-  },
-  {
-    _id: "8",
-    title: "In tincidunt tellus eu elementum",
-    snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-    date: "18th Dec 2025",
-    author: "Artist"
-  },
+    {
+        _id: "1",
+        title: "Nunc sed pretium nisi",
+        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        date: "10th Dec 2025",
+        author: "Artist"
+    },
+    {
+        _id: "2",
+        title: "In tincidunt tellus eu elementum",
+        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
+        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+        date: "12th Dec 2025",
+        author: "Artist"
+    },
+    {
+        _id: "3",
+        title: "Nunc sed pretium nisi",
+        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        date: "15th Dec 2025",
+        author: "Artist"
+    },
+    {
+        _id: "4",
+        title: "In tincidunt tellus eu elementum",
+        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
+        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+        date: "18th Dec 2025",
+        author: "Artist"
+    },
+    {
+        _id: "5",
+        title: "Nunc sed pretium nisi",
+        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        date: "10th Dec 2025",
+        author: "Artist"
+    },
+    {
+        _id: "6",
+        title: "In tincidunt tellus eu elementum",
+        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
+        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+        date: "12th Dec 2025",
+        author: "Artist"
+    },
+    {
+        _id: "7",
+        title: "Nunc sed pretium nisi",
+        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        date: "15th Dec 2025",
+        author: "Artist"
+    },
+    {
+        _id: "8",
+        title: "In tincidunt tellus eu elementum",
+        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
+        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+        date: "18th Dec 2025",
+        author: "Artist"
+    },
 ];
 
 const RandomTourPackageSection = () => {
@@ -104,7 +104,23 @@ const RandomTourPackageSection = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [blogs, setBlogs] = useState([]);
     const [isBlogsLoading, setIsBlogsLoading] = useState(true);
+    const [instagramPosts, setInstagramPosts] = useState([]);
+    const [isInstaLoading, setIsInstaLoading] = useState(true);
 
+    useEffect(() => {
+        const fetchInstagramPosts = async () => {
+            try {
+                const res = await fetch("/api/instagram-posts");
+                const data = await res.json();
+                setInstagramPosts(data);
+            } catch (error) {
+                setInstagramPosts([]);
+            } finally {
+                setIsInstaLoading(false);
+            }
+        };
+        fetchInstagramPosts();
+    }, []);
     useEffect(() => {
         const fetchPackages = async () => {
             try {
@@ -197,7 +213,7 @@ const RandomTourPackageSection = () => {
     return (
         <section className="bg-[url('/bg-custom-3.jpg')] md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
             <div className=" w-full h-full overflow-hidden max-w-screen overflow-x-hidden">
-                <div className="w-full py-10 px-14">
+                <div className="w-full py-9 px-14">
                     <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
 
                     </h2>
@@ -260,26 +276,36 @@ const RandomTourPackageSection = () => {
                     <div className="w-full flex flex-col items-center mt-12">
                         <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-2 text-left w-full">Our Blog Or Client Experience</h1>
                         {/* <p className="text-left w-full max-w-4xl mb-6">Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites are designed firm Creative & Photography business<br/>Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites are designed firm Creative & Photography business<br/>Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites with easy to use.</p> */}
-                        <Carousel>
-                            <CarouselContent>
+                        <Carousel
+                            className="w-full"
+                        >
+                            <CarouselContent
+                                className="sm:-ml-4 flex  px-1 sm:px-0"
+                            >
                                 {(isBlogsLoading ? sampleBlogs : blogs.length ? blogs : sampleBlogs).map((blog, idx) => (
-                                    <CarouselItem key={isBlogsLoading ? idx : blog._id || idx} className="pl-1 md:basis-1/4">
-                                        <div className="bg-white rounded-xl shadow p-4 flex flex-col h-full">
-                                            <div className="relative w-full h-48 mb-4">
+                                    <CarouselItem
+                                        key={isBlogsLoading ? idx : blog._id || idx}
+                                        className="basis-[85vw] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 max-w-xs sm:max-w-sm md:max-w-md flex-shrink-0"
+                                    >
+                                        <div className="bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
+                                            <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
                                                 <Image
                                                     src={isBlogsLoading
                                                         ? blog.image
                                                         : blog.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
                                                     alt={isBlogsLoading ? blog.title : blog.title}
                                                     fill
-                                                    className="object-cover rounded-lg"
+                                                    className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                                                    style={{ borderRadius: '12px' }}
                                                 />
-                                                <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">{isBlogsLoading ? blog.date : blog.date || ''}</div>
+                                                <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                                    {isBlogsLoading ? blog.date : blog.date || ''}
+                                                </div>
                                             </div>
                                             <div className="text-xs text-gray-500 mb-1">{isBlogsLoading ? blog.author : blog.author || ''}</div>
-                                            <div className="font-semibold text-md mb-2">{isBlogsLoading ? blog.title : blog.title}</div>
-                                            <div className="text-xs text-gray-600 mb-4 flex-grow">{isBlogsLoading ? blog.snippet : blog.snippet}</div>
-                                            <button className="bg-yellow-400 text-white px-4 py-2 rounded text-xs font-bold w-fit">READ MORE</button>
+                                            <div className="font-semibold text-md mb-2 line-clamp-2">{isBlogsLoading ? blog.title : blog.title}</div>
+                                            <div className="text-xs text-gray-600 mb-4 flex-grow line-clamp-3">{isBlogsLoading ? blog.snippet : blog.snippet}</div>
+                                            <button className="bg-yellow-400 text-white px-4 py-2 rounded text-xs font-bold w-fit mt-auto">READ MORE</button>
                                         </div>
                                     </CarouselItem>
                                 ))}
@@ -291,43 +317,54 @@ const RandomTourPackageSection = () => {
 
                     {/* Instagram-like Image Carousel using Carousel classes */}
                     <div className="w-full flex flex-col items-center mt-12">
-                        <h2 className="text-center font-semibold text-lg md:text-xl mb-2">With YatraZone</h2>
+                        <h2 className="text-center font-semibold text-lg md:text-xl mb-4">With YatraZone</h2>
                         {/* <p className="text-center text-xs md:text-sm text-gray-500 mb-4">Phasellus lorem malesuada ligula pulvinar commodo maecenas</p> */}
-                        <Carousel>
-                            <CarouselContent>
-                                {instagramImages.slice(0, instagramImages.length - 4).map((src, idx) => (
-                                    <CarouselItem key={src + idx} className="pl-1 md:basis-1/5">
-                                        <div className="relative group rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-100">
-                                            <Image
-                                                src='https://cdn.pixabay.com/photo/2020/04/21/22/55/balance-5074935_1280.jpg'
-                                                alt={`Instagram ${idx}`}
-                                                width={1280}
-                                                height={720}
-                                                className="object-cover w-full h-full"
-                                            />
-                                            <a
-                                                href="https://www.instagram.com"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
-                                            >
-                                                <img
-                                                    src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
-                                                    alt="Instagram"
-                                                    className="w-10 h-10 opacity-80"
-                                                />
-                                            </a>
-                                        </div>
-                                    </CarouselItem>
-                                ))}
-                            </CarouselContent>
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </Carousel>
-                        <button className="mt-6 px-8 py-2 bg-black text-white font-semibold rounded transition hover:bg-gray-900">Follow Us</button>
+                            <Carousel>
+                                <CarouselContent>
+                                    {isInstaLoading ? (
+                                        // Show skeletons while loading
+                                        Array.from({ length: 5 }).map((_, idx) => (
+                                            <CarouselItem key={idx} className="pl-1 md:basis-1/5">
+                                                <div className="relative rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-200 animate-pulse" />
+                                            </CarouselItem>
+                                        ))
+                                    ) : instagramPosts.length > 0 ? (
+                                        instagramPosts.map((post, idx) => (
+                                            <CarouselItem key={post._id || idx} className="pl-1 md:basis-1/5">
+                                                <div className="relative group rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-100">
+                                                    <Image
+                                                        src={post.image}
+                                                        alt={`Instagram ${idx}`}
+                                                        width={400}
+                                                        height={400}
+                                                        className="object-cover w-full h-full"
+                                                    />
+                                                    <a
+                                                        href={post.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
+                                                    >
+                                                        <img
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+                                                            alt="Instagram"
+                                                            className="w-10 h-10 opacity-80"
+                                                        />
+                                                    </a>
+                                                </div>
+                                            </CarouselItem>
+                                        ))
+                                    ) : (
+                                        <div className="text-gray-500 col-span-full text-center py-8">No Instagram posts found</div>
+                                    )}
+                                </CarouselContent>
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </Carousel>
+                            <button className="mt-6 px-8 py-2 bg-black text-white font-semibold rounded transition hover:bg-gray-900">Follow Us</button>
+                        </div>
                     </div>
                 </div>
-            </div>
         </section>
     );
 };

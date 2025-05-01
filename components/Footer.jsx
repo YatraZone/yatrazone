@@ -91,7 +91,7 @@ const Footer = () => {
             {/* Accordance Section */}
             <div className="w-full flex justify-center">
                 <div className="w-[84%]">
-                    <Accordion type="single" collapsible defaultValue="item-1" className="bg-[#fff] rounded-md  mb-8">
+                    <Accordion type="single" collapsible className="bg-[#fff] rounded-md  mb-8">
                         <AccordionItem value="item-1">
                             <AccordionTrigger className="text-black px-6 py-4 text-base hover:no-underline">#AGREEMENT : IMPORTANT NOTICE</AccordionTrigger>
                             <AccordionContent className="text-gray-900 px-6 pb-6 pt-1 text-sm">

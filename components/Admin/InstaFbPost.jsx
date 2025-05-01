@@ -1,97 +1,68 @@
-// import React from 'react'
-
-// const InstaFbPost = () => {
-//   return (
-//     <div>InstaFbPost</div>
-//   )
-// }
-
-// export default InstaFbPost
-
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { UploadButton } from "@/utils/uploadthing";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { deleteFileFromUploadthing } from "@/utils/Utapi";
+import { UploadButton } from "@/utils/uploadthing";
 import { PencilIcon, Trash2Icon } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const InstaFbPost = () => {
-    const [banners, setBanners] = useState([]);
-    const [editBanner, setEditBanner] = useState(null);
-    const [formData, setFormData] = useState({
-        title: "",
-        subTitle: "",
-        order: 1,
+    const [posts, setPosts] = useState([]);
+    const [editPost, setEditPost] = useState(null);
+    const [postFormData, setPostFormData] = useState({
         image: { url: "", key: "" },
         link: "",
     });
+    const [isUploading, setIsUploading] = useState(false);
 
-    // Fetch banners and determine the next order number
     useEffect(() => {
-        const fetchBanners = async () => {
+        const fetchPosts = async () => {
             try {
-                const response = await fetch("/api/addBanner");
+                const response = await fetch("/api/instagram-posts");
                 const data = await response.json();
-                setBanners(data);
-
-                // Auto-set next order number
-                if (data.length > 0) {
-                    const highestOrder = Math.max(...data.map((b) => b.order));
-                    setFormData((prev) => ({ ...prev, order: highestOrder + 1 }));
-                }
+                setPosts(data);
             } catch (error) {
-                toast.error("Failed to fetch banners");
+                toast.error("Failed to fetch Instagram posts");
             }
         };
-        fetchBanners();
+        fetchPosts();
     }, []);
 
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handlePostInputChange = (e) => {
+        setPostFormData({ ...postFormData, [e.target.name]: e.target.value });
     };
 
-    const handleImageUpload = (uploaded) => {
+    const handlePostImageUpload = (uploaded) => {
+        setIsUploading(false);
         if (uploaded.length > 0) {
-            setFormData({ ...formData, image: { url: uploaded[0].url, key: uploaded[0].key } });
+            setPostFormData({ ...postFormData, image: { url: uploaded[0].url, key: uploaded[0].key } });
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handlePostImageUploadStart = () => {
+        setIsUploading(true);
+    };
+
+    const handlePostSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.image.url || !formData.image.key) return toast.error("Please upload an image");
+        if (!postFormData.image.url) return toast.error("Please upload an image");
+        if (!postFormData.link) return toast.error("Please enter a link");
         try {
-            const method = editBanner ? "PATCH" : "POST";
-            const response = await fetch("/api/addBanner", {
+            const method = editPost ? "PATCH" : "POST";
+            const url = "/api/instagram-posts";
+            const response = await fetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...formData, id: editBanner }),
+                body: JSON.stringify({ image: postFormData.image.url, link: postFormData.link, id: editPost }),
             });
-
             const data = await response.json();
-
             if (response.ok) {
-                toast.success(`Banner ${editBanner ? "updated" : "added"} successfully`);
-                setEditBanner(null);
-
-                // Refresh banner list
-                const updatedBanners = await fetch("/api/addBanner").then((res) => res.json());
-                setBanners(updatedBanners);
-
-                // Reset form
-                setFormData({
-                    title: "",
-                    subTitle: "",
-                    order: updatedBanners.length + 1,
-                    image: { url: "", key: "" },
-                    link: "",
-                });
+                toast.success(`Instagram post ${editPost ? "updated" : "added"} successfully`);
+                setEditPost(null);
+                // Refresh posts
+                const updatedPosts = await fetch("/api/instagram-posts").then((res) => res.json());
+                setPosts(updatedPosts);
+                setPostFormData({ image: { url: "", key: "" }, link: "" });
             } else {
                 toast.error(data.error);
             }
@@ -100,36 +71,27 @@ const InstaFbPost = () => {
         }
     };
 
-    const handleEdit = (banner) => {
-        setEditBanner(banner._id);
-        console.log(banner)
-        setFormData({
-            title: banner.title,
-            subTitle: banner.subTitle,
-            order: banner.order,
-            image: banner.image,
-            link: banner.link,
+    const handlePostEdit = (post) => {
+        setEditPost(post._id);
+        setPostFormData({
+            image: { url: post.image, key: "" },
+            link: post.link,
         });
     };
 
-    const handleDelete = async (id) => {
+    const handlePostDelete = async (id) => {
         try {
-            const response = await fetch("/api/addBanner", {
+            const response = await fetch(`/api/instagram-posts`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id }),
+
             });
-
+            console.log(response)
             const data = await response.json();
-
             if (response.ok) {
-                toast.success("Banner deleted successfully");
-
-                setBanners((prev) => prev.filter((banner) => banner._id !== id));
-
-                // Update order numbers
-                const updatedBanners = await fetch("/api/addBanner").then((res) => res.json());
-                setBanners(updatedBanners);
+                toast.success("Instagram post deleted successfully");
+                setPosts((prev) => prev.filter((post) => post._id !== id));
             } else {
                 toast.error(data.error);
             }
@@ -138,82 +100,68 @@ const InstaFbPost = () => {
         }
     };
 
-    const handleDeleteImage = async (key) => {
-        if (key) {
-            await deleteFileFromUploadthing(key);
-            setFormData({ ...formData, image: { url: "", key: "" } });
-        }
+    const handlePostDeleteImage = async (key) => {
+        setPostFormData({ ...postFormData, image: { url: "", key: "" } });
     };
 
     return (
-        <div className="max-w-5xl mx-auto py-10 w-full">
-            <h2 className="text-2xl font-bold mb-6">{editBanner ? "Edit Post" : "Add New Post"}</h2>
-            <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-6 space-y-4">
-            <div>
-                    <Label>Upload Post Image</Label>
-                    {formData.image.url ? (
-                        <div className="relative">
-                            <Image src={formData.image.url} alt="Banner Preview" width={400} height={200} className="rounded-lg shadow" />
-                            <Button type="button" onClick={() => { handleDeleteImage(formData.image.key) }} className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 text-xs">Remove</Button>
-                        </div>
-                    ) : (
-                        <UploadButton endpoint="imageUploader" onClientUploadComplete={handleImageUpload} />
-                    )}
+        <div className="max-w-2xl mx-auto py-10 w-full">
+            <h2 className="text-2xl font-bold mb-6">{editPost ? "Edit Instagram Post" : "Add New Instagram Post"}</h2>
+            <form onSubmit={handlePostSubmit} className="space-y-4 mb-8">
+                <div>
+                    <label className="block font-medium mb-1">Instagram Link</label>
+                    <input
+                        name="link"
+                        type="url"
+                        value={postFormData.link}
+                        onChange={handlePostInputChange}
+                        className="w-full border rounded px-3 py-2"
+                        required
+                    />
                 </div>
                 <div>
-                    <Label>URL</Label>
-                    <Input name="link" type="url" value={formData.link} onChange={handleInputChange} />
-                </div>
-             
-                <Button type="submit" className="bg-blue-600 hover:bg-blue-500">
-                    {editBanner ? "Update Post" : "Add Post"}
-                </Button>
-            </form>
-
-            <h2 className="text-2xl font-bold mt-10 mb-4">Existing Posts</h2>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Link</TableHead>
-                        <TableHead>Image</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {banners.length > 0 ? (
-                        banners.map((banner) => (
-                            <TableRow key={banner._id}>
-                                <TableCell>{banner.link}</TableCell>
-                                <TableCell>{banner.image.url ? (
-                                    <Image src={banner.image.url} alt="Banner Preview" width={100} height={50} className="rounded-lg" />
-                                ) : (
-                                    "No Image"
-                                )}</TableCell>
-                                <TableCell>
-                                    <TooltipProvider>
-                                        <Tooltip>
-                                            <TooltipTrigger asChild>
-                                                <span className="cursor-pointer">Hover to view</span>
-                                            </TooltipTrigger>
-                                            <TooltipContent className="bg-white text-blue-600 font-medium text-base font-barlow shadow-2xl">
-                                                <p>{banner.link}</p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
-                                </TableCell>
-                                <TableCell>
-                                    <Button variant="outline" size="icon" onClick={() => handleEdit(banner)} className="mr-2 "><PencilIcon /></Button>
-                                    <Button size="icon" onClick={() => handleDelete(banner._id)} variant="destructive"><Trash2Icon /></Button>
-                                </TableCell>
-                            </TableRow>
-                        ))
+                    <label className="block font-medium mb-1">Upload Instagram Image</label>
+                    {postFormData.image.url ? (
+                        <div className="relative inline-block">
+                            <Image src={postFormData.image.url} alt="Instagram Preview" width={200} height={200} className="rounded shadow" />
+                            <button type="button" onClick={() => handlePostDeleteImage(postFormData.image.key)} className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 text-xs rounded">Remove</button>
+                        </div>
                     ) : (
-                        <TableRow>
-                            <TableCell colSpan="5" className="text-center py-4">No posts found</TableCell>
-                        </TableRow>
+                        <div>
+                            {isUploading && <div className="w-24 h-24 flex items-center justify-center bg-gray-100 rounded shadow mb-2">Uploading...</div>}
+                            <UploadButton endpoint="imageUploader" onUploadBegin={handlePostImageUploadStart} onClientUploadComplete={handlePostImageUpload} />
+                        </div>
                     )}
-                </TableBody>
-            </Table>
+                </div>
+                <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">
+                    {editPost ? "Update Post" : "Add Post"}
+                </button>
+            </form>
+            <h2 className="text-lg font-bold mb-4">Existing Instagram Posts</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {posts.length > 0 ? (
+                    posts.map((post) => (
+                        <div key={post._id} className="bg-white rounded shadow p-4 flex flex-col items-center">
+                            <div className="w-[150px] h-[150px] mb-2 flex items-center justify-center overflow-hidden rounded bg-gray-50">
+                                <Image 
+                                    src={post.image} 
+                                    alt="Instagram" 
+                                    width={150} 
+                                    height={150} 
+                                    className="object-cover w-full h-full" 
+                                />
+                            </div>
+                            <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 break-all mb-2">{post.link}</a>
+                            <div className="flex flex-row gap-2 mt-2">
+                                <button onClick={() => handlePostEdit(post)} className="bg-gray-200 px-2 py-1 rounded flex items-center justify-center"><PencilIcon size={16} /></button>
+                                <button onClick={() => handlePostDelete(post._id)} className="bg-red-600 text-white px-2 py-1 rounded flex items-center justify-center"><Trash2Icon size={16} /></button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="col-span-full text-center text-gray-500">No Instagram posts found</div>
+                )}
+            </div>
         </div>
     );
 };
