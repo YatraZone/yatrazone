@@ -303,7 +303,7 @@ const InstaFbPost = () => {
                             <input
                                 name="link"
                                 type="url"
-                                value={fbFormData.link}
+                                value={fbFormData.url}
                                 onChange={handleFbInputChange}
                                 className="w-full border rounded px-3 py-2"
                                 required
@@ -342,7 +342,7 @@ const InstaFbPost = () => {
                                             className="object-cover w-full h-full"
                                         />
                                     </div>
-                                    <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 break-all mb-2">{post.link}</a>
+                                    <a href={post.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 break-all mb-2">{post.url}</a>
                                     <div className="flex flex-row gap-2 mt-2">
                                         <span className="text-xs px-2 py-0.5 rounded-full mb-1 bg-blue-100 text-blue-700">Facebook</span>
                                         <button onClick={() => handlePostEdit(post)} className="bg-gray-200 px-2 py-1 rounded flex items-center justify-center"><PencilIcon size={16} /></button>

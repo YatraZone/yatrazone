@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CalendarClock, ChevronsLeft, ChevronsRight, MapPin } from "lucide-react";
+import { CalendarClock, MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Carousel,
@@ -32,73 +32,6 @@ const instagramImages = [
     "/RandomTourPackageImages/u7.jpg"
 ];
 
-const sampleBlogs = [
-    {
-        _id: "1",
-        title: "Nunc sed pretium nisi",
-        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-        date: "10th Dec 2025",
-        author: "Artist"
-    },
-    {
-        _id: "2",
-        title: "In tincidunt tellus eu elementum",
-        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-        date: "12th Dec 2025",
-        author: "Artist"
-    },
-    {
-        _id: "3",
-        title: "Nunc sed pretium nisi",
-        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-        date: "15th Dec 2025",
-        author: "Artist"
-    },
-    {
-        _id: "4",
-        title: "In tincidunt tellus eu elementum",
-        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-        date: "18th Dec 2025",
-        author: "Artist"
-    },
-    {
-        _id: "5",
-        title: "Nunc sed pretium nisi",
-        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-        date: "10th Dec 2025",
-        author: "Artist"
-    },
-    {
-        _id: "6",
-        title: "In tincidunt tellus eu elementum",
-        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-        date: "12th Dec 2025",
-        author: "Artist"
-    },
-    {
-        _id: "7",
-        title: "Nunc sed pretium nisi",
-        snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-        date: "15th Dec 2025",
-        author: "Artist"
-    },
-    {
-        _id: "8",
-        title: "In tincidunt tellus eu elementum",
-        snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
-        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-        date: "18th Dec 2025",
-        author: "Artist"
-    },
-];
-
 const RandomTourPackageSection = () => {
     const [packages, setPackages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -114,7 +47,7 @@ const RandomTourPackageSection = () => {
             try {
                 const res = await fetch("/api/instagram-posts");
                 const data = await res.json();
-                console.log(data);
+                // console.log(data);
                 setInstagramPosts(data);
             } catch (error) {
                 setInstagramPosts([]);
@@ -129,7 +62,7 @@ const RandomTourPackageSection = () => {
             try {
                 const res = await fetch("/api/facebook-posts");
                 const data = await res.json();
-                console.log(data);
+                // console.log(data);
                 setFacebookPosts(data);
             } catch (error) {
                 setFacebookPosts([]);
@@ -160,9 +93,12 @@ const RandomTourPackageSection = () => {
 
         const fetchBlogs = async () => {
             try {
-                const res = await fetch("/api/getBlogs");
+                const res = await fetch("/api/blogs");
                 const data = await res.json();
-                if (data.blogs && data.blogs.length > 0) {
+                console.log(data);  
+                if (Array.isArray(data)) {
+                    setBlogs(data);
+                } else if (Array.isArray(data.blogs)) {
                     setBlogs(data.blogs);
                 } else {
                     setBlogs([]);
@@ -176,7 +112,7 @@ const RandomTourPackageSection = () => {
         };
 
         fetchPackages();
-        // fetchBlogs();
+        fetchBlogs();
     }, []);
 
     if (isLoading) {
@@ -298,7 +234,7 @@ const RandomTourPackageSection = () => {
 
                     {/* Blog Carousel Section */}
                     <div className="w-full flex flex-col items-center mt-12">
-                        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-2 text-left w-full">Our Blog Or Client Experience</h1>
+                        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-2 text-left w-full">Our Blog</h1>
                         {/* <p className="text-left w-full max-w-4xl mb-6">Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites are designed firm Creative & Photography business<br/>Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites are designed firm Creative & Photography business<br/>Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites with easy to use.</p> */}
                         <Carousel
                             className="w-full"
@@ -306,30 +242,44 @@ const RandomTourPackageSection = () => {
                             <CarouselContent
                                 className="sm:-ml-4 flex  px-1 sm:px-0"
                             >
-                                {(isBlogsLoading ? sampleBlogs : blogs.length ? blogs : sampleBlogs).map((blog, idx) => (
+                                {(isBlogsLoading ? [] : blogs).map((blog, idx) => (
                                     <CarouselItem
-                                        key={isBlogsLoading ? idx : blog._id || idx}
+                                        key={blog._id || idx}
                                         className="basis-[85vw] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 max-w-xs sm:max-w-sm md:max-w-md flex-shrink-0"
                                     >
                                         <div className="bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
                                             <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
                                                 <Image
-                                                    src={isBlogsLoading
-                                                        ? blog.image
-                                                        : blog.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
-                                                    alt={isBlogsLoading ? blog.title : blog.title}
+                                                    src={blog.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
+                                                    alt={blog.title}
                                                     fill
-                                                    className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-                                                    style={{ borderRadius: '12px' }}
+                                                    className="object-cover w-full h-full"
                                                 />
                                                 <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
-                                                    {isBlogsLoading ? blog.date : blog.date || ''}
+                                                    {blog.date?.slice(0, 10) || ''}
                                                 </div>
                                             </div>
-                                            <div className="text-xs text-gray-500 mb-1">{isBlogsLoading ? blog.author : blog.author || ''}</div>
-                                            <div className="font-semibold text-md mb-2 line-clamp-2">{isBlogsLoading ? blog.title : blog.title}</div>
-                                            <div className="text-xs text-gray-600 mb-4 flex-grow line-clamp-3">{isBlogsLoading ? blog.snippet : blog.snippet}</div>
-                                            <button className="bg-yellow-400 text-white px-4 py-2 rounded text-xs font-bold w-fit mt-auto">READ MORE</button>
+                                            {/* NameCode and Role in one row, spaced between */}
+                                            <div className="flex flex-row items-center justify-between mb-1">
+                                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blog.nameCode}</span>
+                                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blog.role}</span>
+                                            </div>
+                                            {/* Title below */}
+                                            <div className="font-semibold text-md mb-1 line-clamp-2">{blog.title}</div>
+                                            {/* shortDesc limited to 18 words */}
+                                            <div className="text-xs text-gray-600 mb-2 flex-grow">
+                                                {blog.shortDesc && blog.shortDesc.split(' ').length > 18
+                                                    ? blog.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
+                                                    : blog.shortDesc}
+                                            </div>
+                                            <a
+                                                href={blog.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="bg-yellow-400 text-white px-4 py-2 rounded text-xs font-bold w-fit mt-auto"
+                                            >
+                                                READ MORE
+                                            </a>
                                         </div>
                                     </CarouselItem>
                                 ))}
