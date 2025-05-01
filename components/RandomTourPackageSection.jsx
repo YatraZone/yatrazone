@@ -187,16 +187,18 @@ const RandomTourPackageSection = () => {
                                 >
                                     <div className="p-1">
                                         <Card className="h-full">
-                                            <CardContent className="p-0 rounded-xl flex flex-col h-[400px] justify-between">
+                                            <CardContent className="p-0 rounded-xl flex flex-col h-[400px] justify-between bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
+                                            <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
                                                 <Image
                                                     src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
                                                     alt={item?.packageName}
                                                     width={1280}
                                                     height={720}
                                                     quality={50}
-                                                    className="rounded-t-xl w-full h-full"
+                                                    className="rounded-t-xl w-full h-full object-cover"
                                                 />
-                                                <div className="p-4 flex flex-col gap-2">
+                                            </div>
+                                                <div className="p-2 flex flex-col gap-2">
                                                     <div className="flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow">
                                                         <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
                                                             <MapPin size={20} /> {item?.basicDetails?.location}
@@ -205,10 +207,10 @@ const RandomTourPackageSection = () => {
                                                             <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
                                                         </p>
                                                     </div>
-                                                    <p className="font-bold text-2xl line-clamp-2">{item?.packageName}</p>
+                                                    <p className="font-bold text-xl line-clamp-2">{item?.packageName}</p>
                                                 </div>
                                                 <div className="h-px bg-gray-200" />
-                                                <div className="p-4 flex items-center justify-between gap-2 font-barlow">
+                                                <div className="p-2 flex items-center justify-between gap-2 font-barlow">
                                                     <div>
                                                         <p className="text-sm">
                                                             Starting From:{" "}
@@ -234,8 +236,7 @@ const RandomTourPackageSection = () => {
 
                     {/* Blog Carousel Section */}
                     <div className="w-full flex flex-col items-center mt-12">
-                        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-2 text-left w-full">Our Blog</h1>
-                        {/* <p className="text-left w-full max-w-4xl mb-6">Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites are designed firm Creative & Photography business<br/>Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites are designed firm Creative & Photography business<br/>Paragraph text line An intuitive WordPress theme with easy to use Editor and prebuilt websites with easy to use.</p> */}
+                        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 text-left w-full">Our Blog</h1>
                         <Carousel
                             className="w-full"
                         >

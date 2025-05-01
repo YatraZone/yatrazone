@@ -39,7 +39,7 @@ const data = {
 export function AppSidebar({ className, menuItems, fixedMenuItems, policy }) {
   const { open } = useSidebar()
   return (
-    <Sidebar collapsible="icon" className={className}>
+    <Sidebar collapsible="icon" className={`${className}`}>
       <SidebarHeader className="pt-3 h-16 flex items-center justify-start">
         <Link href="/"><img src="/logo.png" alt="logo" className={` ${open ? "w-[12rem]" : "-rotate-10"}`} /></Link>
       </SidebarHeader>

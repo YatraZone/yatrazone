@@ -127,7 +127,6 @@ const PackageDetailsPage = async ({ params }) => {
                         alt={packageDetails.packageName}
                         fill
                         className="object-cover md:object-fill"
-                        priority
                     />
                 </div>
 
@@ -200,9 +199,10 @@ const PackageDetailsPage = async ({ params }) => {
                                 </div>
                             </div>
                         </div>
-
-                        {packageDetails?.basicDetails?.notice !== "" && <DismissableInfoBox packages={packageDetails} />}
-
+                        {/* Important Notice Tag Line */}
+                        {packageDetails.basicDetails?.notice && packageDetails.basicDetails.notice.trim() !== '' && (
+                                <DismissableInfoBox packages={packageDetails}/>
+                        )}
                         {/* Action Buttons */}
                         <div className="p-6 bg-blue-100 border-b">
                             <div className="flex flex-col sm:flex-row gap-3 justify-center mx-auto">
@@ -381,7 +381,7 @@ const PackageDetailsPage = async ({ params }) => {
                                             <Accordion type="single" collapsible className="w-full">
                                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Important Information")?.map((info, index) => (
                                                     <AccordionItem key={index} value={`info-${index}`} className="border-yellow-400">
-                                                        <AccordionTrigger className="text-left text-lg">{info.selectionTitle}</AccordionTrigger>
+                                                        <AccordionTrigger className="text-left text-lg hover:no-underline">{info.selectionTitle}</AccordionTrigger>
                                                         <AccordionContent>
                                                             <div className="py-2 px-6 text-base whitespace-pre-line" dangerouslySetInnerHTML={{ __html: info.selectionDesc }} />
                                                         </AccordionContent>
@@ -400,7 +400,7 @@ const PackageDetailsPage = async ({ params }) => {
                                             <Accordion type="single" collapsible className="w-full">
                                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Other")?.map((info, index) => (
                                                     <AccordionItem key={index} value={`info-${index}`} className="border-black">
-                                                        <AccordionTrigger className="text-left text-lg">{info.selectionTitle}</AccordionTrigger>
+                                                        <AccordionTrigger className="text-left text-lg hover:no-underline">{info.selectionTitle}</AccordionTrigger>
                                                         <AccordionContent>
                                                             <div className="py-2 px-6 text-base whitespace-pre-line" dangerouslySetInnerHTML={{ __html: info.selectionDesc }} />
                                                         </AccordionContent>
@@ -421,7 +421,7 @@ const PackageDetailsPage = async ({ params }) => {
                                             <div key={index}>
                                                 <h4 className="font-semibold px-4">{policy.selectionTitle}</h4>
                                                 {policy.selectionDesc.split("\n")?.map((line, lineIndex) => (
-                                                    <p key={lineIndex} className="text-gray-700 whitespace-pre-line px-6">{line}</p>
+                                                    <p key={lineIndex} className="text-gray-700 whitespace-pre-line px-6" dangerouslySetInnerHTML={{ __html: line }} />
                                                 ))}
                                             </div>
                                         ))}
@@ -492,15 +492,17 @@ const PackageDetailsPage = async ({ params }) => {
                                         <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
                                             <div className="p-1">
                                                 <Card>
-                                                    <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between">
-                                                        <Image
-                                                            src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
-                                                            alt={item?.packageName}
-                                                            width={1280}
-                                                            height={720}
-                                                            quality={50}
-                                                            className="rounded-t-xl w-full h-full"
-                                                        />
+                                                    <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between  bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
+                                                        <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
+                                                            <Image
+                                                                src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
+                                                                alt={item?.packageName}
+                                                                width={1280}
+                                                                height={720}
+                                                                quality={50}
+                                                                className="rounded-t-xl w-full h-full"
+                                                            />
+                                                        </div>
                                                         <div className="p-4 flex flex-col gap-2 ">
                                                             <div className="flex xl:flex-row flex-col gap-2 xl:items-center justify-between font-barlow">
                                                                 <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
@@ -510,7 +512,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                                     <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
                                                                 </p>
                                                             </div>
-                                                            <p className="font-bold text-2xl line-clamp-2">{item?.packageName}</p>
+                                                            <p className="font-bold text-xl line-clamp-2">{item?.packageName}</p>
                                                         </div>
                                                         <div className="h-px bg-gray-200" />
                                                         <div className="p-4 flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow">

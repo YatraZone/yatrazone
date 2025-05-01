@@ -43,6 +43,7 @@ import {
   Heading3,
   PilcrowSquare, // For paragraph
 } from 'lucide-react'
+import { Switch } from "../ui/switch";
 
 // Create a FontSize extension
 const FontSize = Extension.create({
@@ -479,6 +480,8 @@ const EditPackage = () => {
     }
   }, [packages, setValue]);
 
+  const [showNotice, setShowNotice] = useState(!!watch('basicDetails.notice'));
+
   const handleBannerUpload = async (file) => {
     setBannerLoading(true);
     setImage(file[0]?.ufsUrl);
@@ -643,7 +646,38 @@ const EditPackage = () => {
           </div>
           <div className="flex flex-col gap-2 col-span-2 xl:col-span-4">
             <label htmlFor="notice" className="font-semibold">Any Important Notice Tag Line</label>
-            <Input name="notice" className="border-2 font-bold border-blue-600 focus:border-dashed focus:border-blue-500 focus:outline-none focus-visible:ring-0" onChange={(e) => setValue('basicDetails.notice', e.target.value)} {...register('basicDetails.notice')} />
+            <div className="flex items-center gap-4">
+              <Switch
+                checked={showNotice}
+                onCheckedChange={(checked) => {
+                  setShowNotice(checked);
+                  if (!checked) setValue('basicDetails.notice', '');
+                }}
+                id="notice-switch"
+              />
+              <span>{showNotice ? 'On' : 'Off'}</span>
+            </div>
+            {showNotice && (
+              <div className="flex items-center gap-2">
+                <Input
+                  name="notice"
+                  className="border-2 font-bold border-blue-600 focus:border-dashed focus:border-blue-500 focus:outline-none focus-visible:ring-0"
+                  onChange={(e) => setValue('basicDetails.notice', e.target.value)}
+                  value={watch('basicDetails.notice') || ''}
+                  {...register('basicDetails.notice')}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="text-xs px-2 py-1 border-red-500 text-red-600 hover:bg-red-50"
+                  onClick={() => {
+                    setValue('basicDetails.notice', '');
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-2 col-span-2 xl:col-span-4">
             <label htmlFor="smallDesc" className="font-semibold">Small Description</label>
