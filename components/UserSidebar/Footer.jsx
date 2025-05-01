@@ -39,22 +39,22 @@ const Footer = () => {
 
 
     return (
-        <footer className={`print:hidden ${pathName.includes('admin') && 'hidden'} ${pathName.includes('package') && 'block'} ${pathName.includes('customEnquiry') && 'block'} ${pathName.includes('checkout') && 'block'}  ${pathName.includes('category') && 'block'} ${pathName.includes('sign-up') && 'hidden'} ${pathName.includes('sign-in') && 'hidden'}  bg-[url('/bg-custom-2.jpg')] text-black py-8`}>
+        <footer className={`print:hidden ${pathName.includes('admin') && 'hidden'} ${pathName.includes('package') && 'block'} ${pathName.includes('customEnquiry') && 'block'} ${pathName.includes('checkout') && 'block'}  ${pathName.includes('category') && 'block'} ${pathName.includes('sign-up') && 'hidden'} ${pathName.includes('sign-in') && 'hidden'}  bg-[url('/bg-custom-2.jpg')] text-black py-8  border-t border-black`}>
              <div className="flex flex-wrap lg:justify-between justify-evenly md:gap-20 lg:gap-0 gap-12 max-w-[22rem] md:max-w-[45rem] lg:max-w-[60rem] xl:max-w-6xl mx-auto">
                 <div className="flex flex-col gap-2">
                     <h1 className="font-semibold text-xl my-4">Main Menu</h1>
                     {pages.filter(page => !page?.link?.includes('policy')).map(page => (
-                        <Link key={page._id} href={page.url} className="block text-gray-400 font-barlow hover:text-blue-500">
+                        <Link key={page._id} href={page.url} className="block text-gray-900 font-barlow hover:text-blue-500">
                             {page.title}
                         </Link>
                     ))}
-                    <Link href={'/contact'} className="block text-gray-400 font-barlow hover:text-blue-500">Contact</Link>
+                    <Link href={'/contact'} className="block text-gray-900 font-barlow hover:text-blue-500">Contact</Link>
                 </div>
 
                 <div className="flex flex-col gap-2">
                     <h1 className="font-semibold text-xl my-4">Our Policy</h1>
                     {pages.filter(page => page?.link?.includes('policy')).map(page => (
-                        <Link key={page._id} href={page.url} className="block text-gray-400 font-barlow hover:text-blue-500">
+                        <Link key={page._id} href={page.url} className="block text-gray-900 font-barlow hover:text-blue-500">
                             {page.title}
                         </Link>
                     ))}
@@ -63,13 +63,13 @@ const Footer = () => {
                 <div className="flex flex-col gap-8">
                     <div>
                         <h1 className="font-semibold text-xl flex items-center gap-2"><Phone className="text-blue-600" /> More Inquiry</h1>
-                        <Link href={'tel:+918006000325'} className="my-2 block rounded-full px-2 py-1 font-barlow text-gray-400  hover:text-blue-500">
+                        <Link href={'tel:+918006000325'} className="my-2 block rounded-full px-2 py-1 font-barlow text-gray-900  hover:text-blue-500">
                             +91 8006000325
                         </Link>
                     </div>
                     <div>
                         <h1 className="font-semibold text-xl flex items-center gap-2"><Send className="text-blue-600" /> Send Mail</h1>
-                        <Link href={'mailto:info@yatrazone.com'} className="my-2 block rounded-full px-2 py-1 font-barlow text-gray-400  hover:text-blue-500">
+                        <Link href={'mailto:info@yatrazone.com'} className="my-2 block rounded-full px-2 py-1 font-barlow text-gray-900  hover:text-blue-500">
                             info@yatrazone.com
                         </Link>
                     </div>
@@ -77,7 +77,7 @@ const Footer = () => {
                 <div className="flex flex-col items-center lg:items-start gap-8">
                     <div>
                         <h1 className="font-semibold text-xl flex justify-center lg:justify-normal items-center gap-2">We Are Here</h1>
-                        <p className="my-2 font-barlow max-w-72 text-justify text-gray-400">
+                        <p className="my-2 font-barlow max-w-72 text-justify text-gray-900">
                             YatraZone is more than just a travel company; we are facilitators of spiritual exploration and cultural immersion tailored for Indian pilgrims and global adventurers.
                         </p>
                     </div>
@@ -105,16 +105,16 @@ const Footer = () => {
                     <div className="flex items-center justify-between font-barlow">
                         <div className="flex flex-col md:flex-row items-start  md:items-center gap-2">
                             <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">Terms of Use</Link>
-                            <p className="text-gray-400 md:block hidden">|</p>
+                            <p className="text-gray-900 md:block hidden">|</p>
                             <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">Privacy and Cookies Policy</Link>
-                            <p className="text-gray-400 md:block hidden">|</p>
+                            <p className="text-gray-900 md:block hidden">|</p>
                             <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">FAQ Char Dham Yatra</Link>
                         </div>
                     </div>
                 </CardFooter>
             </Card>
             <div className="flex flex-col lg:flex-row items-center justify-center max-w-[25rem] md:max-w-[60rem] xl:max-w-6xl mx-auto font-barlow">
-                <p className="text-gray-300 text-center my-4">
+                <p className="text-gray-900 text-center my-4">
                     &copy; {new Date().getFullYear()} <Link href={'/'} className="hover:text-blue-600 font-bold">YatraZone</Link>. All rights reserved
                 </p>
             </div>

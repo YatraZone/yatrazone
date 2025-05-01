@@ -151,13 +151,13 @@ const AboutUsSection = () => {
     }
 
     return (
-        <section className="relative py-1 ">
-    
+        <section className="relative py-1 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
+{/*     
             <div
-                className="absolute -z-10 w-full h-[100%]  bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145"
-            />
+                className="absolute -z-10 w-full h-[100%]  max-w-screen overflow-x-hidden"
+            /> */}
             {/* <img src="/bg-custom-2.jpg" className="filter brightness-110 absolute -z-10 w-full object-cover" /> */}
-            <div className="max-w-[22rem] md:max-w-[45rem] lg:max-w-[60rem] xl:max-w-7xl mx-auto">
+            <div className="w-full">
                 <h1 className="font-semibold text-2xl border-b-4 border-dotted border-blue-600 font-barlow w-fit my-4">About Us</h1>
                 <h2 className="font-bold text-2xl md:text-4xl">Be a part of a spiritual journey.</h2>
                 <p className="text-gray-600 py-8 text-justify font-barlow">
@@ -169,7 +169,7 @@ const AboutUsSection = () => {
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {featuredPackages.map((item) => (
-                        <div key={item._id} className="rounded-2xl group flex flex-col justify-between relative overflow-hidden w-full h-96 p-8">
+                        <div key={item._id} className="rounded-2xl group flex flex-col justify-between relative overflow-hidden w-full h-96 p-0">
                             <Image
                                 src={item.image.url}
                                 width={1280}
@@ -178,12 +178,13 @@ const AboutUsSection = () => {
                                 quality={25}
                                 alt={item.title}
                                 className="object-cover absolute inset-0 w-full h-96 group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                                style={{ width: '100%', height: '100%' }}
                             />
                             <div className="bg-gradient-to-r from-black/80 via-black/30 to-transparent absolute inset-0"></div>
                             <div className="absolute bottom-4 left-0 text-center w-full z-20">
                                 <h1 className="text-white text-xl xl:text-2xl mt-2 font-bold">{item.title}</h1>
                                 <Link key={item._id} href={item.link}>
-                                    <button className=" hover:bg-white hover:text-black text-white font-bold px-4 py-2 rounded-full mt-4 transition duration-300 ease-in-out">
+                                    <button className="hover:bg-white hover:text-black text-white font-bold px-4 py-2 rounded-full mt-4 transition duration-300 ease-in-out">
                                         View More
                                     </button>
                                 </Link>
@@ -192,7 +193,6 @@ const AboutUsSection = () => {
                     ))}
                 </div>
             </div>
-        
         </section>
     );
 };

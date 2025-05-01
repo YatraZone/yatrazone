@@ -3,7 +3,6 @@
 import * as React from "react"
 import {
   BarChart,
-  BookOpenText,
   Boxes,
   ClipboardList,
   ClockArrowUp,
@@ -21,7 +20,6 @@ import {
   User,
   Users,
 } from "lucide-react"
-
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -71,6 +69,21 @@ const data = {
     
     // Space (empty item)
     { divider: true },
+
+    {
+      name:"Insta or Facebook Post",
+      url:"/admin/insta_fb_post",
+      icon:Image
+    },
+    {
+      name:"Manage Blogs",
+      url: "/admin/manage_blogs",
+      icon: Rss,
+    },
+
+   // Space (empty item)
+   { divider: true },
+
     
     // Third group: Content management
     {
