@@ -64,7 +64,39 @@ const sampleBlogs = [
     image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
     date: "18th Dec 2025",
     author: "Artist"
-  }
+  },
+  {
+    _id: "5",
+    title: "Nunc sed pretium nisi",
+    snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    date: "10th Dec 2025",
+    author: "Artist"
+  },
+  {
+    _id: "6",
+    title: "In tincidunt tellus eu elementum",
+    snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
+    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+    date: "12th Dec 2025",
+    author: "Artist"
+  },
+  {
+    _id: "7",
+    title: "Nunc sed pretium nisi",
+    snippet: "Nunc sed pretium nisi. Mauris laoreet nunc felis, in condimentum exim placerat ac. Etiam tempus, orci.",
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    date: "15th Dec 2025",
+    author: "Artist"
+  },
+  {
+    _id: "8",
+    title: "In tincidunt tellus eu elementum",
+    snippet: "In tincidunt tellus eu elementum pellentesque. Vivamus in dictum massa. Quisque vitae tellus nec a.",
+    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+    date: "18th Dec 2025",
+    author: "Artist"
+  },
 ];
 
 const RandomTourPackageSection = () => {
@@ -289,6 +321,8 @@ const RandomTourPackageSection = () => {
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
                         </Carousel>
                         <button className="mt-6 px-8 py-2 bg-black text-white font-semibold rounded transition hover:bg-gray-900">Follow Us</button>
                     </div>
