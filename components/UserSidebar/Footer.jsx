@@ -9,7 +9,7 @@ import Image from "next/image"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import toast from "react-hot-toast"
-
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../ui/accordion"
 const Footer = () => {
     const pathName = usePathname()
     const [pages, setPages] = useState([])
@@ -39,7 +39,7 @@ const Footer = () => {
 
 
     return (
-        <footer className={`print:hidden ${pathName.includes('admin') && 'hidden'} ${pathName.includes('package') && 'block'} ${pathName.includes('customEnquiry') && 'block'} ${pathName.includes('checkout') && 'block'}  ${pathName.includes('category') && 'block'} ${pathName.includes('sign-up') && 'hidden'} ${pathName.includes('sign-in') && 'hidden'}  bg-[url('/bg-custom-2.jpg')] text-black py-5  border-t border-black`}>
+        <footer className={`print:hidden ${pathName.includes('admin') && 'hidden'} ${pathName.includes('package') && 'block'} ${pathName.includes('customEnquiry') && 'block'} ${pathName.includes('checkout') && 'block'}  ${pathName.includes('category') && 'block'} ${pathName.includes('sign-up') && 'hidden'} ${pathName.includes('sign-in') && 'hidden'}  bg-[url('/bg-custom-2.jpg')] text-black py-5  border-t border-gray-300`}>
              <div className="flex flex-wrap lg:justify-between justify-evenly md:gap-20 lg:gap-0 gap-12 max-w-[22rem] md:max-w-[45rem] lg:max-w-[60rem] xl:max-w-6xl mx-auto">
                 <div className="flex flex-col gap-2">
                     <h1 className="font-semibold text-xl my-4">Main Menu</h1>
@@ -83,6 +83,20 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+                 {/* Accordance Section */}
+                        <div className="w-full flex justify-center">
+                            <div className="w-[84%]">
+                                <Accordion type="single" collapsible className="bg-[#fff] rounded-md  mb-8">
+                                    <AccordionItem value="item-1">
+                                        <AccordionTrigger className="text-black px-6 py-4 text-base hover:no-underline">#AGREEMENT : IMPORTANT NOTICE</AccordionTrigger>
+                                        <AccordionContent className="text-gray-900 px-6 pb-6 pt-1 text-sm">
+                                            By accessing, using, browsing or booking through our Web Site(s) or Directly or Indirectly through YatraZone: Your Spiritual Travel Solution or its representative(s), you agree that you have read, understood and agree to be bound by these terms and conditions and you agree to comply with all applicable laws, rules and regulations. By accepting our booking terms & conditions, user is also agreeing to terms & conditions of the Spiritual Travel, Hotels, aviation services, Airlines, and other associate service provide from us. All Seasons reserves the right to amend, modify, change, cancel, vary or add to these Policies/Rules or the arrangements and content featured on our website at any time without prior notice. Please check our website regularly for updates to Policy/Rules. Any modification to these Policy/Rules that occurs before your departure is considered a part of your reservations agreement with us.<br /><br />
+                                            *Kindly read T&C Policy and All remarks carefully before making your bookings. Once you made your booking, you bound to accept these Terms and Conditions. The information contained in this Web site is intended solely to provide general information for the personal use of the reader, who accepts full responsibility for its use. We accept no responsibility for any errors or omissions, or for the results obtained from the use of this information. All information in this site is provided "as is," with no guarantee of completeness, accuracy, timeliness, or of the results obtained from the use of this information, and without warranty of any kind, expressed or implied, including, but not limited to warranties of performance, merchantability, and fitness for a particular purpose. Neither shall it any extent substitute for the independent investigations and the sound technical and business judgment of the reader. YatraZone reserves the right to change the terms, conditions, and notices under which the Services are offered through the Website, including but not limited to the charges for the Services provided through the Website. The User shall be responsible for regularly reviewing these terms and conditions.
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            </div>
+                        </div>
             <Card className="my-6 px-2 py-4 max-w-xl lg:max-w-4xl xl:max-w-7xl mx-auto">
                 <CardContent className="flex flex-col lg:flex-row items-start md:items-center justify-between">
                     <div className="text-justify">
@@ -101,14 +115,12 @@ const Footer = () => {
                     </div>
                 </CardContent>
                 <CardFooter className="mt-8 flex flex-col items-start md:w-fit">
-                    <div className="w-full h-[1px] bg-gray-400" />
+                    <div className="w-full h-[1px] bg-gray-300" />
                     <div className="flex items-center justify-between font-barlow">
                         <div className="flex flex-col md:flex-row items-start  md:items-center gap-2">
                             <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">Terms of Use</Link>
                             <p className="text-gray-900 md:block hidden">|</p>
                             <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">Privacy and Cookies Policy</Link>
-                            <p className="text-gray-900 md:block hidden">|</p>
-                            <Link href={'/'} className="hover:text-blue-600 text-sm font-semibold">FAQ Char Dham Yatra</Link>
                         </div>
                     </div>
                 </CardFooter>

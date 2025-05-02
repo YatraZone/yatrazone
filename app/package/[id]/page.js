@@ -121,12 +121,13 @@ const PackageDetailsPage = async ({ params }) => {
             {/* Package Content */}
             <div className="min-h-screen mb-20 font-barlow">
                 {/* Banner */}
-                <div className="relative h-[300px] md:h-[300px] overflow-hidden w-full">
+                <div className="relative h-[300px] w-[1200px] md:h-[300px] w-full  overflow-hidden">
                     <Image
                         src={packageDetails.basicDetails?.imageBanner?.url || "https://dummyimage.com/600x400/000/fff"}
                         alt={packageDetails.packageName}
                         fill
                         className="object-cover md:object-fill"
+                        priority
                     />
                 </div>
 
@@ -201,7 +202,7 @@ const PackageDetailsPage = async ({ params }) => {
                         </div>
                         {/* Important Notice Tag Line */}
                         {packageDetails.basicDetails?.notice && packageDetails.basicDetails.notice.trim() !== '' && (
-                                <DismissableInfoBox packages={packageDetails}/>
+                            <DismissableInfoBox packages={packageDetails} />
                         )}
                         {/* Action Buttons */}
                         <div className="p-6 bg-blue-100 border-b">

@@ -15,22 +15,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Skeleton } from "./ui/skeleton";
 
-const instagramImages = [
-    "https://cdn.pixabay.com/photo/2020/04/21/22/55/balance-5074935_1280.jpg",
-    "/RandomTourPackageImages/u2.jpg",
-    "/RandomTourPackageImages/u3.jpg",
-    "/RandomTourPackageImages/u4.jpg",
-    "/RandomTourPackageImages/u5.jpg",
-    "/RandomTourPackageImages/u6.jpg",
-    "/RandomTourPackageImages/u7.jpg",
-    "/RandomTourPackageImages/u1.jpg",
-    "/RandomTourPackageImages/u2.jpg",
-    "/RandomTourPackageImages/u3.jpg",
-    "/RandomTourPackageImages/u4.jpg",
-    "/RandomTourPackageImages/u5.jpg",
-    "/RandomTourPackageImages/u6.jpg",
-    "/RandomTourPackageImages/u7.jpg"
-];
 
 const RandomTourPackageSection = () => {
     const [packages, setPackages] = useState([]);
@@ -177,7 +161,7 @@ const RandomTourPackageSection = () => {
                     <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
 
                     </h2>
-                    <h1 className="font-black text-xl md:text-3xl lg:text-4xl uppercase ">Trending Packages: The Best, Today</h1>
+                    <h1 className="text-xl md:text-3xl lg:text-4xl font-bold">Trending Packages: The Best, Today</h1>
                     <Carousel className={`w-[85%] md:w-[100%] drop-shadow-xl mx-auto my-6 md:my-12 ${packages.length > 0 ? "block" : "hidden"}`}>
                         <CarouselContent className="-ml-1 w-full">
                             {packages.length > 0 && packages.map((item, index) => (
@@ -207,7 +191,7 @@ const RandomTourPackageSection = () => {
                                                             <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
                                                         </p>
                                                     </div>
-                                                    <p className="font-bold text-xl line-clamp-2">{item?.packageName}</p>
+                                                    <p className="font-bold md:text-lg text-xl line-clamp-2">{item?.packageName}</p>
                                                 </div>
                                                 <div className="h-px bg-gray-200" />
                                                 <div className="p-2 flex items-center justify-between gap-2 font-barlow">
@@ -237,13 +221,94 @@ const RandomTourPackageSection = () => {
                     {/* Blog Carousel Section */}
                     <div className="w-full flex flex-col items-center mt-12">
                         <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 text-left w-full">Our Blog</h1>
+                        
+                        {/* Two Promotional Banners */}
+                        <div className="w-full flex flex-col md:flex-row gap-4 mb-8">
+                            {/* First Banner */}
+                            {blogs?.length > 0 && (
+                            <div className="w-full md:w-1/2 bg-amber-100 rounded-lg overflow-hidden relative">
+                                <div className="flex h-[250px]">
+                                    {/* <div className="text-sm font-semibold mb-1">STAY 4 NIGHTS</div> */}
+                                    <div className="w-1/2 p-4 flex flex-col justify-center">
+                                        <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                        {blogs?.[0]?.date?.slice(0, 10) || ''}
+                                        </div>
+                                        {/* NameCode and Role in one row, spaced between */}
+                                        <div className="flex flex-row items-center justify-between mb-1">
+                                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blogs?.[0]?.nameCode}</span>
+                                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blogs?.[0]?.role}</span>
+                                        </div>
+                                        <div className="text-2xl md:text-3xl font-black mb-2">{blogs?.[0]?.title}</div>
+                                        <p className="text-xs md:text-sm mb-4">
+                                        {blogs?.[0]?.shortDesc?.split(' ').length > 18
+                                                    ? blogs?.[0]?.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
+                                                    : blogs?.[0]?.shortDesc}
+                                        </p>
+                                        <a 
+                                            href={blogs?.[0]?.url ? blogs?.[0].url : '#'} 
+                                            className="bg-black text-white text-xs font-bold py-2 px-4 inline-block w-fit rounded"
+                                        >
+                                            Read More
+                                        </a>
+                                    </div>
+                                    <div className="w-1/2 relative">
+                                        <Image
+                                            src={blogs?.[0]?.image ? blogs?.[0].image : "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+                                            alt={blogs?.[0]?.title ? blogs?.[0].title : "Promotional offer"}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            )}
+                            {/* Second Banner */}
+                            {blogs?.length > 0 && (
+                            <div className="w-full md:w-1/2 bg-gray-900 text-white rounded-lg overflow-hidden relative">
+                                <div className="flex h-[250px]">
+                                    <div className="w-1/2 p-4 flex flex-col justify-center">
+                                        {/* <div className="text-sm font-semibold mb-1">MEMBER GET</div> */}
+                                        <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                        {blogs?.[1]?.date?.slice(0, 10) || ''}
+                                        </div>
+                                        {/* NameCode and Role in one row, spaced between */}
+                                        <div className="flex flex-row items-center justify-between mb-1">
+                                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blogs?.[1]?.nameCode}</span>
+                                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blogs?.[1]?.role}</span>
+                                        </div>
+                                        <div className="text-2xl md:text-3xl font-black text-amber-400 mb-2">{blogs?.[1]?.title}</div>
+                                        <p className="text-xs md:text-sm mb-4">
+                                        {blogs?.[1]?.shortDesc?.split(' ').length > 18
+                                                    ? blogs?.[1]?.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
+                                                    : blogs?.[1]?.shortDesc}
+                                        </p>
+                                        <a 
+                                                 href={blogs?.[1]?.url ? blogs?.[1].url : '#'} 
+                                            className="border border-white text-white text-xs font-bold py-2 px-4 inline-block w-fit rounded"
+                                        >
+                                            Read More
+                                        </a>
+                                    </div>
+                                    <div className="w-1/2 relative">
+                                        <Image
+                                            src={blogs?.[1]?.image ? blogs?.[1].image : "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+                                            alt={blogs?.[1]?.title ? blogs?.[1].title : "Member discount"}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            )}
+                        </div>
+                        
                         <Carousel
                             className="w-full"
                         >
                             <CarouselContent
                                 className="sm:-ml-4 flex  px-1 sm:px-0"
                             >
-                                {(isBlogsLoading ? [] : blogs).map((blog, idx) => (
+                                {(isBlogsLoading ? [] : blogs).slice(2).map((blog, idx) => (
                                     <CarouselItem
                                         key={blog._id || idx}
                                         className="basis-[85vw] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 max-w-xs sm:max-w-sm md:max-w-md flex-shrink-0"
@@ -266,7 +331,7 @@ const RandomTourPackageSection = () => {
                                                 <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blog.role}</span>
                                             </div>
                                             {/* Title below */}
-                                            <div className="font-semibold text-md mb-1 line-clamp-2">{blog.title}</div>
+                                            <div className="font-semibold text-lg md:text-xl mb-1 line-clamp-2">{blog.title}</div>
                                             {/* shortDesc limited to 18 words */}
                                             <div className="text-xs text-gray-600 mb-2 flex-grow">
                                                 {blog.shortDesc && blog.shortDesc.split(' ').length > 18
@@ -336,7 +401,6 @@ const RandomTourPackageSection = () => {
                             <CarouselPrevious />
                             <CarouselNext />
                         </Carousel>
-                        <button className="mt-6 px-8 py-2 bg-black text-white font-semibold rounded transition hover:bg-gray-900">Follow Us</button>
                     </div>
                 </div>
             </div>

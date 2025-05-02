@@ -10,34 +10,29 @@ import {
 } from "../ui/carousel";
 import { useState } from "react";
 
-const dummyImages = [
-  { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb" },
-  { url: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2" },
-  { url: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca" },
-  { url: "https://images.unsplash.com/photo-1454023492550-5696f8ff10e1" },
-  { url: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429" },
-  { url: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2" },
-  { url: "https://images.unsplash.com/photo-1416339306562-f3d12fefd36f" },
-  { url: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e" },
-  { url: "https://images.unsplash.com/photo-1502082553048-f009c37129b9" },
-];
-
 const chunkGalleryImages = (images) => {
   const slides = [];
   const allImages = [...images];
-  while (allImages.length % 6 !== 0) {
-    allImages.push(dummyImages[allImages.length % dummyImages.length]);
+  
+  // Create slides with up to 4 images each
+  for (let i = 0; i < allImages.length; i += 4) {
+    slides.push(allImages.slice(i, i + 4));
   }
-  for (let i = 0; i < allImages.length; i += 6) {
-    slides.push(allImages.slice(i, i + 6));
+  
+  // If no images are available, return an empty slide to render the carousel
+  if (slides.length === 0) {
+    slides.push([]);
   }
+  
   return slides;
 };
 
 const PackageGallery = ({ images }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-  const galleryImages = images && images.length ? images : dummyImages;
-
+  
+  // Use the provided images or an empty array
+  const galleryImages = images && images.length ? images : [];
+  
   const openModal = (index) => {
     setSelectedImageIndex(index);
     document.body.style.overflow = "hidden";
@@ -57,13 +52,13 @@ const PackageGallery = ({ images }) => {
         <CarouselContent>
           {slides.map((slide, slideIdx) => (
             <CarouselItem className="basis-full" key={slideIdx}>
-              <div className="grid grid-cols-4 gap-2 h-72 md:h-96">
+              <div className="grid grid-cols-4 gap-2 auto-rows-fr">
                 {/* Col 1 */}
-                <div className="flex flex-col gap-2 h-full">
+                <div className="flex flex-col gap-2 h-full ">
                   {slide[0] && (
                     <div
-                      className="flex-1 cursor-pointer rounded-lg overflow-hidden bg-gray-200"
-                      onClick={() => openModal(slideIdx * 6 + 0)}
+                      className=" cursor-pointer rounded-lg overflow-hidden bg-gray-200"
+                      onClick={() => openModal(slideIdx * 4 + 0)}
                     >
                       <Image
                         src={slide[0].url}
@@ -71,14 +66,14 @@ const PackageGallery = ({ images }) => {
                         width={300}
                         height={200}
                         style={{ height: '200px', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                        className="object-cover w-full h-[200px]"
+                        className="object-cover w-full h-[200px] hover:scale-110 transition-all duration-300"
                       />
                     </div>
                   )}
                   {slide[1] && (
                     <div
-                      className="flex-1 cursor-pointer rounded-lg overflow-hidden bg-gray-200"
-                      onClick={() => openModal(slideIdx * 6 + 1)}
+                      className=" cursor-pointer rounded-lg overflow-hidden bg-gray-200"
+                      onClick={() => openModal(slideIdx * 4 + 1)}
                     >
                       <Image
                         src={slide[1].url}
@@ -86,26 +81,26 @@ const PackageGallery = ({ images }) => {
                         width={300}
                         height={200}
                         style={{ height: '200px', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                        className="object-cover w-full h-[200px]"
+                        className="object-cover w-full h-[200px] hover:scale-110 transition-all duration-300"
                       />
                     </div>
                   )}
                 </div>
 
                 {/* Col 2 */}
-                <div className="flex flex-col gap-2 h-full">
+                <div className="flex flex-col gap-2 h-full ">
                   {slide[2] && (
                     <div
-                      className="flex-1 cursor-pointer rounded-lg overflow-hidden bg-gray-200"
-                      onClick={() => openModal(slideIdx * 6 + 2)}
+                      className=" cursor-pointer rounded-lg overflow-hidden bg-gray-200 h-full"
+                      onClick={() => openModal(slideIdx * 4 + 2)}
                     >
                       <Image
                         src={slide[2].url}
                         alt="Gallery"
                         width={300}
-                        height={200}
-                        style={{ height: '200px', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                        className="object-cover w-full h-[200px]"
+                        height={410}
+                        style={{ height: '100%', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                        className="object-cover w-full h-full hover:scale-110 transition-all duration-300"
                       />
                     </div>
                   )}
@@ -114,27 +109,27 @@ const PackageGallery = ({ images }) => {
                 <div className="flex flex-col gap-2 h-full">
                   {slide[3] && (
                     <div
-                      className="flex-1 cursor-pointer rounded-lg overflow-hidden bg-gray-200"
-                      onClick={() => openModal(slideIdx * 6 + 3)}
+                      className=" cursor-pointer rounded-lg overflow-hidden bg-gray-200 h-full"
+                      onClick={() => openModal(slideIdx * 4 + 3)}
                     >
                       <Image
                         src={slide[3].url}
                         alt="Gallery"
                         width={300}
-                        height={200}
-                        style={{ height: '200px', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                        className="object-cover w-full h-[200px]"
+                        height={410}
+                        style={{ height: '100%', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                        className="object-cover w-full h-full hover:scale-110 transition-all duration-300"
                       />
                     </div>
                   )}
                 </div>
 
-                {/* Col 3 */}
+                {/* Col 4 */}
                 <div className="flex flex-col gap-2 h-full">
-                  {slide[4] && (
+                  {slide[0] && (
                     <div
-                      className="flex-1 cursor-pointer rounded-lg overflow-hidden bg-gray-200"
-                      onClick={() => openModal(slideIdx * 6 + 0)}
+                      className=" cursor-pointer rounded-lg overflow-hidden bg-gray-200"
+                      onClick={() => openModal(slideIdx * 4 + 0)}
                     >
                       <Image
                         src={slide[0].url}
@@ -142,14 +137,14 @@ const PackageGallery = ({ images }) => {
                         width={300}
                         height={200}
                         style={{ height: '200px', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                        className="object-cover w-full h-[200px]"
+                        className="object-cover w-full h-[200px] hover:scale-110 transition-all duration-300"
                       />
                     </div>
                   )}
-                  {slide[5] && (
+                  {slide[1] && (
                     <div
-                      className="flex-1 cursor-pointer rounded-lg overflow-hidden bg-gray-200"
-                      onClick={() => openModal(slideIdx * 6 + 1)}
+                      className=" cursor-pointer rounded-lg overflow-hidden bg-gray-200"
+                      onClick={() => openModal(slideIdx * 4 + 1)}
                     >
                       <Image
                         src={slide[1].url}
@@ -157,7 +152,7 @@ const PackageGallery = ({ images }) => {
                         width={300}
                         height={200}
                         style={{ height: '200px', width: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                        className="object-cover w-full h-[200px]"
+                        className="object-cover w-full h-[200px] hover:scale-110 transition-all duration-300"
                       />
                     </div>
                   )}
@@ -194,7 +189,7 @@ const PackageGallery = ({ images }) => {
             <Image
               src={
                 flatImages[selectedImageIndex]?.url ||
-                "https://dummyimage.com/600x400/000/fff"
+                "/placeholder-image.jpg"
               }
               alt={`Gallery image ${selectedImageIndex + 1}`}
               fill

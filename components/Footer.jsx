@@ -42,7 +42,7 @@ const Footer = () => {
     return (
         <footer className={`print:hidden ${pathName.includes('admin') && 'hidden'} ${pathName.includes('package') && 'hidden'} ${pathName.includes('customEnquiry') && 'hidden'} ${pathName.includes('checkout') && 'hidden'}  ${pathName.includes('category') && 'hidden'} bg-[url('/bg-custom-2.jpg')] text-black py-8`}>
             <div className="w-full flex justify-center pb-5">
-                <div className="h-[1.5px] bg-black w-[80%] mx-auto px-4" />
+                <div className="h-[1.5px] bg-gray-300 w-[80%] mx-auto px-4" />
             </div>
 
             <div className="flex flex-wrap lg:justify-between justify-evenly md:gap-20 lg:gap-0 gap-12 max-w-[22rem] md:max-w-[45rem] lg:max-w-[60rem] xl:max-w-6xl mx-auto">
@@ -121,9 +121,7 @@ const Footer = () => {
                     </div>
                 </CardContent>
                 <CardFooter className="mt-8 flex flex-col items-start md:w-fit">
-                    <div className="w-full flex justify-center">
-                        <div className="h-[2px] bg-black w-[80%] mx-auto px-4" />
-                    </div>
+                <div className="w-full h-[1px] bg-gray-400" />
                     <div className="flex items-center justify-between font-barlow">
                         <div className="flex flex-col md:flex-row items-start  md:items-center gap-2">
                             <Link href={'/'} className="hover:text-blue-600 !text-sm font-semibold">Terms of Use</Link>

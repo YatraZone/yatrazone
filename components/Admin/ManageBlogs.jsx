@@ -245,7 +245,7 @@ const ManageBlogs = () => {
                                         </Tooltip>
                                     </TooltipProvider>
                                 </TableCell>
-                                <TableCell>{blog.date.slice(0,10)}</TableCell>
+                                <TableCell>{blog.date && typeof blog.date === 'string' ? blog.date.slice(0,10) : ''}</TableCell>
                                 <TableCell>{blog.nameCode}</TableCell>
                                 <TableCell>{blog.role}</TableCell>
                                 <TableCell>

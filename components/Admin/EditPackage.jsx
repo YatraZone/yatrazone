@@ -42,8 +42,14 @@ import {
   Heading2,
   Heading3,
   PilcrowSquare, // For paragraph
+  Table as TableIcon, // For table
+  Plus, // For adding rows/columns
+  Minus, // For deleting rows/columns
+  Merge as MergeIcon, // For merging cells
+  Scissors, // For splitting cells
 } from 'lucide-react'
 import { Switch } from "../ui/switch";
+import { tableExtensions } from './tiptap-table-extensions';
 
 // Create a FontSize extension
 const FontSize = Extension.create({
@@ -100,7 +106,7 @@ const LineHeight = Extension.create({
   addAttributes() {
     return {
       lineHeight: {
-        default: '1.5',
+        default: '1',
         parseHTML: element => element.style.lineHeight,
         renderHTML: attributes => {
           if (!attributes.lineHeight) return {}
@@ -154,7 +160,7 @@ const MenuBar = ({ editor }) => {
   ]
 
   const lineHeights = [
-    '1', '1.2', '1.5', '1.8', '2', '2.5', '3'
+    '0.5', '0.75', '1', '1.2', '1.5', '1.8', '2', '2.5', '3'
   ]
 
   const handleUrlSubmit = () => {
@@ -352,6 +358,117 @@ const MenuBar = ({ editor }) => {
         </div>
       )}
 
+      {/* Table Controls Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('table') ? 'bg-gray-200' : ''}`}
+          title="Insert Table"
+        >
+          <TableIcon className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().addColumnBefore().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().addColumnBefore() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().addColumnBefore()}
+          title="Add Column Before"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().addColumnAfter().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().addColumnAfter() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().addColumnAfter()}
+          title="Add Column After"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().addRowBefore().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().addRowBefore() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().addRowBefore()}
+          title="Add Row Before"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().addRowAfter().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().addRowAfter() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().addRowAfter()}
+          title="Add Row After"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().deleteColumn().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().deleteColumn() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().deleteColumn()}
+          title="Delete Column"
+        >
+          <Minus className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().deleteRow().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().deleteRow() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().deleteRow()}
+          title="Delete Row"
+        >
+          <Minus className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().deleteTable().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().deleteTable() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().deleteTable()}
+          title="Delete Table"
+        >
+          <Minus className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().mergeCells().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().mergeCells() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().mergeCells()}
+          title="Merge Cells"
+        >
+          <MergeIcon className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().splitCell().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().splitCell() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().splitCell()}
+          title="Split Cell"
+        >
+          <Scissors className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().toggleHeaderRow() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().toggleHeaderRow()}
+          title="Toggle Header Row"
+        >
+          <TableIcon className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHeaderColumn().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${!editor.can().toggleHeaderColumn() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!editor.can().toggleHeaderColumn()}
+          title="Toggle Header Column"
+        >
+          <TableIcon className="w-4 h-4" />
+        </button>
+      </div>
+
       {/* History Group */}
       <div className="flex items-center gap-1">
         <button
@@ -436,8 +553,8 @@ const EditPackage = () => {
       TextStyle.configure({
         types: ['textStyle']
       }),
-      FontSize.configure(),
-      LineHeight.configure(),
+      FontSize,
+      LineHeight,
       FontFamily,
       Typography,
       TextAlign.configure({
@@ -448,6 +565,7 @@ const EditPackage = () => {
       }),
       Color,
       ListItem,
+      ...tableExtensions,
     ],
     content: packages?.basicDetails?.fullDesc || '',
     onUpdate: ({ editor }) => {
