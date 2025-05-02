@@ -294,7 +294,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 {/* Description */}
                                 {(packageDetails.basicDetails?.fullDesc) &&
                                     <div className="">
-                                        <h3 className="text-2xl font-bold mb-4 px-2">• Description</h3>
+                                        <h3 className="text-2xl font-bold mb-2 px-2">• Description</h3>
                                         <div className="prose max-w-none">
                                             <div className="mb-4 capitalize font-semibold text-justify whitespace-pre-line px-6" dangerouslySetInnerHTML={{ __html: packageDetails.basicDetails?.fullDesc || "" }} />
                                         </div>
@@ -515,7 +515,10 @@ const PackageDetailsPage = async ({ params }) => {
                                                             </div>
                                                             <p className="font-bold text-xl line-clamp-2">{item?.packageName}</p>
                                                         </div>
-                                                        <div className="h-px bg-gray-200" />
+                                                        <div className="h-px bg-gray-200 my-1" />
+                                                        <div className="flex flex-col gap-2 flex-1">
+                                                            <div className="text-gray-700 text-sm mb-2 h-16 overflow-y-auto line-clamp-2"><span dangerouslySetInnerHTML={{ __html: item?.basicDetails?.smallDesc || "" }} /></div>
+                                                        </div>
                                                         <div className="p-4 flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow">
                                                             <div>
                                                                 <p className="text-sm">
