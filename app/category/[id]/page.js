@@ -42,9 +42,9 @@ const CategoryPage = async ({ params }) => {
                 {/* Fixed Banner Section */}
                 <CategoryBanner title={categoryInfo.title} bannerImage={categoryInfo.bannerImage} />
 
-                <div className="container mx-auto px-1 md:px-4 py-4">
+                {/* <div className="container mx-auto px-1 md:px-4 py-4">
                     <h2 className="text-2xl xl:text-4xl font-semibold text-black">{categoryInfo.title}</h2>
-                </div>
+                </div> */}
 
                 {/* Packages Section */}
                 <div className="container mx-auto px-1 md:px-4 py-12">
