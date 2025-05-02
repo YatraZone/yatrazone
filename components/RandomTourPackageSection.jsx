@@ -156,11 +156,10 @@ const RandomTourPackageSection = () => {
 
     return (
         <section className="bg-[url('/bg-custom-3.jpg')] md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
-            <div className=" w-full h-full overflow-hidden max-w-screen overflow-x-hidden">
+            <div className=" w-full h-full overflow-hidden max-w-screen ">
                 <div className="w-full py-9 px-14">
-                    <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
-
-                    </h2>
+                    {/* <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
+                    </h2> */}
                     <h1 className="text-xl md:text-3xl lg:text-4xl font-bold">Trending Packages: The Best, Today</h1>
                     <Carousel className={`w-[85%] md:w-[100%] drop-shadow-xl mx-auto my-6 md:my-12 ${packages.length > 0 ? "block" : "hidden"}`}>
                         <CarouselContent className="-ml-1 w-full">
@@ -171,7 +170,7 @@ const RandomTourPackageSection = () => {
                                 >
                                     <div className="p-1">
                                         <Card className="h-full">
-                                            <CardContent className="p-0 rounded-xl flex flex-col h-[400px] justify-between bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
+                                            <CardContent className="p-0 rounded-xl flex flex-col h-[400px] justify-between bg-white rounded-xl shadow p-4 flex flex-col relative overflow-hidden group">
                                             <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
                                                 <Image
                                                     src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
@@ -218,141 +217,142 @@ const RandomTourPackageSection = () => {
                         <CarouselNext />
                     </Carousel>
 
-                    {/* Blog Carousel Section */}
+                  
+                    {/* Blog Section with full-width background */}
                     <div className="w-full flex flex-col items-center mt-12">
-                        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 text-left w-full">Our Blog</h1>
-                        
-                        {/* Two Promotional Banners */}
-                        <div className="w-full flex flex-col md:flex-row gap-4 mb-8">
-                            {/* First Banner */}
-                            {blogs?.length > 0 && (
-                            <div className="w-full md:w-1/2 bg-amber-100 rounded-lg overflow-hidden relative">
-                                <div className="flex h-[250px]">
-                                    {/* <div className="text-sm font-semibold mb-1">STAY 4 NIGHTS</div> */}
-                                    <div className="w-1/2 p-4 flex flex-col justify-center">
-                                        <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
-                                        {blogs?.[0]?.date?.slice(0, 10) || ''}
-                                        </div>
-                                        {/* NameCode and Role in one row, spaced between */}
-                                        <div className="flex flex-row items-center justify-between mb-1">
-                                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blogs?.[0]?.nameCode}</span>
-                                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blogs?.[0]?.role}</span>
-                                        </div>
-                                        <div className="text-2xl md:text-3xl font-black mb-2">{blogs?.[0]?.title}</div>
-                                        <p className="text-xs md:text-sm mb-4">
-                                        {blogs?.[0]?.shortDesc?.split(' ').length > 18
-                                                    ? blogs?.[0]?.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
-                                                    : blogs?.[0]?.shortDesc}
-                                        </p>
-                                        <a 
-                                            href={blogs?.[0]?.url ? blogs?.[0].url : '#'} 
-                                            className="bg-black text-white text-xs font-bold py-2 px-4 inline-block w-fit rounded"
-                                        >
-                                            Read More
-                                        </a>
-                                    </div>
-                                    <div className="w-1/2 relative">
-                                        <Image
-                                            src={blogs?.[0]?.image ? blogs?.[0].image : "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
-                                            alt={blogs?.[0]?.title ? blogs?.[0].title : "Promotional offer"}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            )}
-                            {/* Second Banner */}
-                            {blogs?.length > 0 && (
-                            <div className="w-full md:w-1/2 bg-gray-900 text-white rounded-lg overflow-hidden relative">
-                                <div className="flex h-[250px]">
-                                    <div className="w-1/2 p-4 flex flex-col justify-center">
-                                        {/* <div className="text-sm font-semibold mb-1">MEMBER GET</div> */}
-                                        <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
-                                        {blogs?.[1]?.date?.slice(0, 10) || ''}
-                                        </div>
-                                        {/* NameCode and Role in one row, spaced between */}
-                                        <div className="flex flex-row items-center justify-between mb-1">
-                                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blogs?.[1]?.nameCode}</span>
-                                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blogs?.[1]?.role}</span>
-                                        </div>
-                                        <div className="text-2xl md:text-3xl font-black text-amber-400 mb-2">{blogs?.[1]?.title}</div>
-                                        <p className="text-xs md:text-sm mb-4">
-                                        {blogs?.[1]?.shortDesc?.split(' ').length > 18
-                                                    ? blogs?.[1]?.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
-                                                    : blogs?.[1]?.shortDesc}
-                                        </p>
-                                        <a 
-                                                 href={blogs?.[1]?.url ? blogs?.[1].url : '#'} 
-                                            className="border border-white text-white text-xs font-bold py-2 px-4 inline-block w-fit rounded"
-                                        >
-                                            Read More
-                                        </a>
-                                    </div>
-                                    <div className="w-1/2 relative">
-                                        <Image
-                                            src={blogs?.[1]?.image ? blogs?.[1].image : "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
-                                            alt={blogs?.[1]?.title ? blogs?.[1].title : "Member discount"}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            )}
-                        </div>
-                        
-                        <Carousel
-                            className="w-full"
-                        >
-                            <CarouselContent
-                                className="sm:-ml-4 flex  px-1 sm:px-0"
-                            >
-                                {(isBlogsLoading ? [] : blogs).slice(2).map((blog, idx) => (
-                                    <CarouselItem
-                                        key={blog._id || idx}
-                                        className="basis-[85vw] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 max-w-xs sm:max-w-sm md:max-w-md flex-shrink-0"
-                                    >
-                                        <div className="bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
-                                            <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
-                                                <Image
-                                                    src={blog.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
-                                                    alt={blog.title}
-                                                    fill
-                                                    className="object-cover w-full h-full"
-                                                />
-                                                <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
-                                                    {blog.date?.slice(0, 10) || ''}
-                                                </div>
+
+                            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 text-left w-full">Our Blog</h1>
+                            
+                            {/* Two Promotional Banners */}
+                            <div className="w-full flex flex-col md:flex-row gap-4 mb-8">
+                                {/* First Banner */}
+                                {blogs?.length > 0 && (
+                                <div className="w-full md:w-1/2 bg-amber-100 rounded-lg overflow-hidden relative">
+                                    <div className="flex h-[250px]">
+                                        {/* <div className="text-sm font-semibold mb-1">STAY 4 NIGHTS</div> */}
+                                        <div className="w-1/2 p-4 flex flex-col justify-center">
+                                            <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                            {blogs?.[0]?.date?.slice(0, 10) || ''}
                                             </div>
                                             {/* NameCode and Role in one row, spaced between */}
                                             <div className="flex flex-row items-center justify-between mb-1">
-                                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blog.nameCode}</span>
-                                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blog.role}</span>
+                                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blogs?.[0]?.nameCode}</span>
+                                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blogs?.[0]?.role}</span>
                                             </div>
-                                            {/* Title below */}
-                                            <div className="font-semibold text-lg md:text-xl mb-1 line-clamp-2">{blog.title}</div>
-                                            {/* shortDesc limited to 18 words */}
-                                            <div className="text-xs text-gray-600 mb-2 flex-grow">
-                                                {blog.shortDesc && blog.shortDesc.split(' ').length > 18
-                                                    ? blog.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
-                                                    : blog.shortDesc}
-                                            </div>
-                                            <a
-                                                href={blog.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="bg-yellow-400 text-white px-4 py-2 rounded text-xs font-bold w-fit mt-auto"
+                                            <div className="text-2xl md:text-3xl font-black mb-2">{blogs?.[0]?.title}</div>
+                                            <p className="text-xs md:text-sm mb-4">
+                                            {blogs?.[0]?.shortDesc?.split(' ').length > 18
+                                                        ? blogs?.[0]?.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
+                                                        : blogs?.[0]?.shortDesc}
+                                            </p>
+                                            <a 
+                                                href={blogs?.[0]?.url ? blogs?.[0].url : '#'} 
+                                                className="bg-black text-white text-xs font-bold py-2 px-4 inline-block w-fit rounded"
                                             >
-                                                READ MORE
+                                                Read More
                                             </a>
                                         </div>
-                                    </CarouselItem>
-                                ))}
-                            </CarouselContent>
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </Carousel>
+                                        <div className="w-1/2 relative">
+                                            <Image
+                                                src={blogs?.[0]?.image ? blogs?.[0].image : "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+                                                alt={blogs?.[0]?.title ? blogs?.[0].title : "Promotional offer"}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                )}
+                                {/* Second Banner */}
+                                {blogs?.length > 0 && (
+                                <div className="w-full md:w-1/2 bg-gray-900 text-white rounded-lg overflow-hidden relative">
+                                    <div className="flex h-[250px]">
+                                        <div className="w-1/2 p-4 flex flex-col justify-center">
+                                            {/* <div className="text-sm font-semibold mb-1">MEMBER GET</div> */}
+                                            <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                            {blogs?.[1]?.date?.slice(0, 10) || ''}
+                                            </div>
+                                            {/* NameCode and Role in one row, spaced between */}
+                                            <div className="flex flex-row items-center justify-between mb-1">
+                                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blogs?.[1]?.nameCode}</span>
+                                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blogs?.[1]?.role}</span>
+                                            </div>
+                                            <div className="text-2xl md:text-3xl font-black text-amber-400 mb-2">{blogs?.[1]?.title}</div>
+                                            <p className="text-xs md:text-sm mb-4">
+                                            {blogs?.[1]?.shortDesc?.split(' ').length > 18
+                                                        ? blogs?.[1]?.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
+                                                        : blogs?.[1]?.shortDesc}
+                                            </p>
+                                            <a 
+                                                     href={blogs?.[1]?.url ? blogs?.[1].url : '#'} 
+                                                className="border border-white text-white text-xs font-bold py-2 px-4 inline-block w-fit rounded"
+                                            >
+                                                Read More
+                                            </a>
+                                        </div>
+                                        <div className="w-1/2 relative">
+                                            <Image
+                                                src={blogs?.[1]?.image ? blogs?.[1].image : "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
+                                                alt={blogs?.[1]?.title ? blogs?.[1].title : "Member discount"}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                )}
+                            </div>
+                            <Carousel
+                                className="w-full"
+                            >
+                                <CarouselContent
+                                    className="sm:-ml-4 flex  px-1 sm:px-0"
+                                >
+                                    {(isBlogsLoading ? [] : blogs).slice(2).map((blog, idx) => (
+                                        <CarouselItem
+                                            key={blog._id || idx}
+                                            className="basis-[85vw] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 max-w-xs sm:max-w-sm md:max-w-md flex-shrink-0"
+                                        >
+                                            <div className="bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
+                                                <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
+                                                    <Image
+                                                        src={blog.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb'}
+                                                        alt={blog.title}
+                                                        fill
+                                                        className="object-cover w-full h-full"
+                                                    />
+                                                    <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                                        {blog.date?.slice(0, 10) || ''}
+                                                    </div>
+                                                </div>
+                                                {/* NameCode and Role in one row, spaced between */}
+                                                <div className="flex flex-row items-center justify-between mb-1">
+                                                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">{blog.nameCode}</span>
+                                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold">{blog.role}</span>
+                                                </div>
+                                                {/* Title below */}
+                                                <div className="font-semibold text-lg md:text-xl mb-1 line-clamp-2">{blog.title}</div>
+                                                {/* shortDesc limited to 18 words */}
+                                                <div className="text-xs text-gray-600 mb-2 flex-grow">
+                                                    {blog.shortDesc && blog.shortDesc.split(' ').length > 18
+                                                        ? blog.shortDesc.split(' ').slice(0, 18).join(' ') + '...'
+                                                        : blog.shortDesc}
+                                                </div>
+                                                <a
+                                                    href={blog.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="bg-yellow-400 text-white px-4 py-2 rounded text-xs font-bold w-fit mt-auto"
+                                                >
+                                                    READ MORE
+                                                </a>
+                                            </div>
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </Carousel>
                     </div>
 
                     {/* Instagram-like Image Carousel using Carousel classes */}

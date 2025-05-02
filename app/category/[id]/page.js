@@ -38,7 +38,7 @@ const CategoryPage = async ({ params }) => {
 
     return (
         <SidebarInset>
-            <div className="min-h-screen px-4 py-6">
+            <div className="min-h-screen px-4 py-2">
                 {/* Fixed Banner Section */}
                 <CategoryBanner title={categoryInfo.title} bannerImage={categoryInfo.bannerImage} />
 

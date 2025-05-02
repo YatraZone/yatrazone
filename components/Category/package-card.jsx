@@ -17,30 +17,49 @@ const PackageCard = async ({ pkg }) => {
   const totalReviews = reviews.filter(review => review.approved).length
 
   return (
-    <div className="bg-white shadow-xl border-2 rounded-lg overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 font-barlow">
-      <div className="relative h-48">
-
-        {pkg?.basicDetails?.thumbnail?.url ? <Image src={pkg?.basicDetails?.thumbnail?.url} alt={pkg?.packageName} width={800} height={600} quality={10} priority className="object-cover h-full" /> : <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><Loader2 className=" h-8 w-8 text-primary animate-spin" /></div>}
-
-        <div className="absolute top-3 right-3 bg-blue-100 border-2 border-blue-600 text-black px-3 py-1 rounded-full font-semibold">
+    <div className="bg-white shadow-xl border-2 rounded-xl transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 font-barlow flex flex-col h-full justify-between p-4 relative overflow-hidden group">
+      <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
+        {pkg?.basicDetails?.thumbnail?.url ? (
+          <Image
+            src={pkg?.basicDetails?.thumbnail?.url}
+            alt={pkg?.packageName}
+            width={800}
+            height={600}
+            quality={50}
+            priority
+            className="object-cover w-full h-full rounded-lg"
+          />
+        ) : (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <Loader2 className="h-8 w-8 text-primary animate-spin" />
+          </div>
+        )}
+        <div className="absolute top-3 left-3 bg-blue-100 border-2 border-blue-600 text-black px-3 py-1 rounded-full font-semibold z-10">
           ₹<span className="font-bold text-lg">{formatNumber(pkg?.price)}</span>
         </div>
       </div>
-      <div className="p-5">
-        <h3 className="text-xl md:text-2xl font-bold mb-2 line-clamp-1 font-gilda">{pkg?.packageName}</h3>
-        <div className="flex items-center text-gray-600 mb-3">
-          <Calendar className="h-4 w-4 mr-1" />
-          <span className="text-sm fonts">Duration: <span className="font-semibold">{pkg?.basicDetails?.duration} Days {pkg?.basicDetails?.duration - 1} Nights</span></span>
+      <div className="p-4 flex flex-col gap-2 flex-1">
+        <h3 className="font-bold md:text-lg text-xl line-clamp-2 font-gilda mb-1">{pkg?.packageName}</h3>
+        <div className="flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow mb-2">
+          <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
+            <MapPin size={20} /> {pkg?.basicDetails?.location}
+          </p>
+          <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
+            <Calendar size={20} /> {pkg?.basicDetails?.duration} Days {pkg?.basicDetails?.duration - 1} Nights
+          </p>
         </div>
-        <p className="text-gray-700 mb-4 h-32 capitalize overflow-y-auto"><span className="mb-4 capitalize text-justify whitespace-pre-line" dangerouslySetInnerHTML={{ __html: pkg?.basicDetails?.smallDesc }} /></p>
-        <div className="flex justify-between items-center">
+        <div className="h-px bg-gray-200 my-1" />
+        <div className="flex flex-col gap-2 flex-1">
+          <div className="text-gray-700 text-sm mb-2 h-16 overflow-y-auto line-clamp-2"><span dangerouslySetInnerHTML={{ __html: pkg?.basicDetails?.smallDesc }} /></div>
+        </div>
+        <div className="flex items-center justify-between gap-2 mt-auto">
           <div className="flex items-center">
             <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
             <span className="ml-1 text-base font-medium">{averageRating || 0}</span>
             <span className="ml-1 text-sm font-medium text-blue-600">({totalReviews || 0} reviews)</span>
           </div>
           <Link href={`/package/${pkg?._id}`}>
-            <Button size="lg" className="bg-blue-600 text-lg uppercase hover:bg-blue-500">Learn More</Button>
+            <Button size="lg" className="bg-blue-600 text-lg uppercase hover:bg-blue-500 rounded-sm">Learn More</Button>
           </Link>
         </div>
       </div>
