@@ -107,7 +107,7 @@ const RandomTourPackageSection = () => {
                         <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
 
                         </h2>
-                        <h1 className="font-bold text-xl md:text-3xl lg:text-4xl uppercase "> Trending Packages: The Best, Today</h1>
+                        <h1 className="font-bold text-xl md:text-3xl lg:text-4xl uppercase text-center"> Trending Packages: The Best, Today</h1>
                         <Carousel className="w-[75%] md:w-[95%] drop-shadow-xl mx-auto xl:w-full my-6 md:my-12">
                             <CarouselContent className="-ml-1">
                                 {[...Array(4)].map((_, index) => (
@@ -158,10 +158,9 @@ const RandomTourPackageSection = () => {
         <section className="bg-[url('/bg-custom-3.jpg')] md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
             <div className=" w-full h-full overflow-hidden max-w-screen ">
                 <div className="w-full py-9 px-14">
-                    {/* <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold">
-                    </h2> */}
-                    <h1 className="text-xl md:text-3xl lg:text-4xl font-bold">Trending Packages: The Best, Today</h1>
-                    <Carousel className={`w-[85%] md:w-[100%] drop-shadow-xl mx-auto my-6 md:my-12 ${packages.length > 0 ? "block" : "hidden"}`}>
+                    <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-center">Trending Packages: The Best, Today</h1>
+                    <p className=" text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Discover the hottest deals with our Trending Packages! Curated daily, these top-rated picks offer the best value and quality — handpicked for professionals who demand the best, today. Don’t miss out — elevate your experience now!</p>
+                    <Carousel className={`w-[85%] md:w-[100%] drop-shadow-xl mx-auto my-4 md:my-12 ${packages.length > 0 ? "block" : "hidden"}`}>
                         <CarouselContent className="-ml-1 w-full">
                             {packages.length > 0 && packages.map((item, index) => (
                                 <CarouselItem
@@ -170,7 +169,7 @@ const RandomTourPackageSection = () => {
                                 >
                                     <div className="p-1">
                                         <Card className="h-full">
-                                            <CardContent className="p-0 rounded-xl flex flex-col h-[400px] justify-between bg-white rounded-xl shadow p-4 flex flex-col relative overflow-hidden group">
+                                            <CardContent className="h-[400px] justify-between bg-white rounded-xl shadow p-4 flex flex-col relative overflow-hidden group">
                                             <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
                                                 <Image
                                                     src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
@@ -219,14 +218,15 @@ const RandomTourPackageSection = () => {
 
                   
                     {/* Blog Section with full-width background */}
-                    <div className="w-full flex flex-col items-center mt-12">
-
-                            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-5 text-left w-full">Our Blog</h1>
-                            
+                    {!isBlogsLoading && blogs && blogs.length > 0 && (
+                        <div className="w-full flex flex-col items-center mt-12">
+                            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold w-full text-center">Our Blog</h1>
+                            <p className="text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Stay ahead of the curve with Trending Packages – The Best, Today. We bring you a curated selection of the most popular, high-value deals and experiences that are capturing attention right now. From must-have products to top-rated services, each package is handpicked for quality, relevance, and impact. Updated daily to reflect what’s hot and happening, it’s your go-to source for discovering what’s trending – and making the most of it. Don’t just follow the trend, be part of it.
+                            </p>
                             {/* Two Promotional Banners */}
                             <div className="w-full flex flex-col md:flex-row gap-4 mb-8">
                                 {/* First Banner */}
-                                {blogs?.length > 0 && (
+                                {blogs.length > 0 && (
                                 <div className="w-full md:w-1/2 bg-amber-100 rounded-lg overflow-hidden relative">
                                     <div className="flex h-[250px]">
                                         {/* <div className="text-sm font-semibold mb-1">STAY 4 NIGHTS</div> */}
@@ -264,7 +264,7 @@ const RandomTourPackageSection = () => {
                                 </div>
                                 )}
                                 {/* Second Banner */}
-                                {blogs?.length > 0 && (
+                                {blogs.length > 1 && (
                                 <div className="w-full md:w-1/2 bg-gray-900 text-white rounded-lg overflow-hidden relative">
                                     <div className="flex h-[250px]">
                                         <div className="w-1/2 p-4 flex flex-col justify-center">
@@ -308,7 +308,7 @@ const RandomTourPackageSection = () => {
                                 <CarouselContent
                                     className="sm:-ml-4 flex  px-1 sm:px-0"
                                 >
-                                    {(isBlogsLoading ? [] : blogs).slice(2).map((blog, idx) => (
+                                    {blogs.slice(2).map((blog, idx) => (
                                         <CarouselItem
                                             key={blog._id || idx}
                                             className="basis-[85vw] sm:basis-1/2 md:basis-1/3 lg:basis-1/4 max-w-xs sm:max-w-sm md:max-w-md flex-shrink-0"
@@ -353,23 +353,18 @@ const RandomTourPackageSection = () => {
                                 <CarouselPrevious />
                                 <CarouselNext />
                             </Carousel>
-                    </div>
-
+                        </div>
+                    )}
                     {/* Instagram-like Image Carousel using Carousel classes */}
-                    <div className="w-full flex flex-col items-center mt-12">
-                        <h2 className="text-center font-semibold text-lg md:text-xl mb-4">With YatraZone</h2>
-                        {/* <p className="text-center text-xs md:text-sm text-gray-500 mb-4">Phasellus lorem malesuada ligula pulvinar commodo maecenas</p> */}
-                        <Carousel>
-                            <CarouselContent>
-                                {isInstaLoading || isFbLoading ? (
-                                    // Show skeletons while loading
-                                    Array.from({ length: 5 }).map((_, idx) => (
-                                        <CarouselItem key={idx} className="pl-1 md:basis-1/5">
-                                            <div className="relative rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-200 animate-pulse" />
-                                        </CarouselItem>
-                                    ))
-                                ) : allPosts.length > 0 ? (
-                                    allPosts.map((post, idx) => (
+                    {!isInstaLoading && !isFbLoading && allPosts.length > 0 && (
+                        <div className="w-full flex flex-col items-center mt-12">
+                            <h2 className="text-center font-bold text-xl md:text-3xl lg:text-4xl  text-center">Don’t just watch the trends — live them!</h2>
+                            <p className="text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">
+                         Follow us on social media for your daily dose of Trending Packages, exclusive offers, behind-the-scenes peeks, and real-time updates. Join our community of trendsetters and be the first to explore what’s new, what’s hot, and what everyone’s talking about. Your next favorite find is just a follow away!
+                            </p>
+                            <Carousel>
+                                <CarouselContent>
+                                    {allPosts.map((post, idx) => (
                                         <CarouselItem key={post._id || idx} className={`pl-1 ${allPosts.length <= 3 ? cardBasis : 'md:basis-1/5'}`} style={allPosts.length <= 3 ? { minWidth: `calc(100%/${allPosts.length})` } : {}}>
                                             <div className="relative group rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-100">
                                                 <Image
@@ -393,15 +388,13 @@ const RandomTourPackageSection = () => {
                                                 </a>
                                             </div>
                                         </CarouselItem>
-                                    ))
-                                ) : (
-                                    <div className="text-gray-500 col-span-full text-center py-8">No posts found</div>
-                                )}
-                            </CarouselContent>
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </Carousel>
-                    </div>
+                                    ))}
+                                </CarouselContent>
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </Carousel>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

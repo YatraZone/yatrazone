@@ -116,9 +116,6 @@ const AboutUsSection = () => {
                     <img className="absolute -top-32 left-0 -z-10 lg:scale-[2]" src="/bg-shape.png" alt="background gradient shape" />
                 </div>
                 <div className="max-w-[22rem] md:max-w-[45rem] lg:max-w-[60rem] xl:max-w-7xl mx-auto">
-                    <h1 className="font-semibold text-2xl border-b-4 border-dotted border-blue-600 font-barlow w-fit my-4">
-                        <Skeleton className="w-32 h-6" />
-                    </h1>
                     <h2 className="font-bold text-2xl md:text-4xl">
                         <Skeleton className="w-3/4 h-8" />
                     </h2>
@@ -153,9 +150,9 @@ const AboutUsSection = () => {
     return (
         <section className="relative py-1 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
             <div className="w-full">
-                <h1 className="font-semibold text-2xl border-b-4 border-dotted border-blue-600 font-barlow w-fit my-4">About Us</h1>
-                <h2 className="font-bold text-2xl md:text-4xl">Be a part of a spiritual journey.</h2>
-                <p className="text-gray-600 py-8 text-justify font-barlow">
+   
+                <h2 className="font-bold text-2xl md:text-4xl text-center mt-7">Be a part of a spiritual journey.</h2>
+                <p className="text-gray-600 py-8 text-center font-barlow  w-[80%] mx-auto">
                     YatraZone is more than just a travel company; we are facilitators of spiritual exploration and cultural immersion tailored for Indian pilgrims and global adventurers. With years of expertise in pilgrimage tourism within India, we curate authentic and meaningful journeys that resonate with every spiritual seeker.
                     From holy treks in the Himalayas to pilgrimages to ancient temples and sacred sites, we ensure transformative experiences.
                 </p>

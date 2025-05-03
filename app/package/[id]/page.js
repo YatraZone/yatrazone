@@ -35,6 +35,8 @@ import RandomTourPackageSection from "@/components/RandomTourPackageSection"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import connectDB from "@/lib/connectDB"
 import Package from "@/models/Package"
+import FeaturedPackagesClient from "@/components/FeaturedPackagesClient"; // Import the new component
+// import { useEffect, useState }from "react"
 
 const getPackageById = async (id) => {
     try {
@@ -231,12 +233,10 @@ const PackageDetailsPage = async ({ params }) => {
                                 }
                             </div>
                         </div>
-
-
                         <Tabs defaultValue="overview">
                             <TabsList className="grid grid-cols-2 bg-transparent md:grid-cols-3 lg:grid-cols-6 mb-6 w-full">
                                 <TabsTrigger
-                                    className=" py-4 relative  border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none  data-[state=active]:text-black data-[state=active]:border-b-2 group"
+                                    className="text-[16px] font-[600] text-black py-4 relative  border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none   data-[state=active]:border-b-2 group"
                                     value="overview"
                                 >
                                     Overview
@@ -245,7 +245,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 </TabsTrigger>
 
                                 <TabsTrigger
-                                    className="py-4 relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:text-black data-[state=active]:border-b-2 group"
+                                    className="py-4 text-[16px] font-[600] text-black  relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:border-b-2 group"
                                     value="Day Plan"
                                 >
                                     Day Plan
@@ -254,7 +254,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 </TabsTrigger>
 
                                 <TabsTrigger
-                                    className="py-4 relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:text-black data-[state=active]:border-b-2 group"
+                                    className="py-4 text-[16px] font-[600] text-black  relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:border-b-2 group"
                                     value="Include/Exclude"
                                 >
                                     Include/Exclude
@@ -263,7 +263,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 </TabsTrigger>
 
                                 <TabsTrigger
-                                    className="py-4 relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:text-black data-[state=active]:border-b-2 group"
+                                    className="py-4 text-[16px] font-[600] text-black  relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:border-b-2 group"
                                     value="AdditionalInformation"
                                 >
                                     Additional Information
@@ -272,7 +272,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 </TabsTrigger>
 
                                 <TabsTrigger
-                                    className="py-4 relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:text-black data-[state=active]:border-b-2 group"
+                                    className="py-4 text-[16px] font-[600] text-black  relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:border-b-2 group"
                                     value="PolicyContent"
                                 >
                                     Policy Content
@@ -281,7 +281,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 </TabsTrigger>
 
                                 <TabsTrigger
-                                    className="py-4 relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:text-black data-[state=active]:border-b-2 group"
+                                    className="py-4 text-[16px] font-[600] text-black  relative border-black data-[state=active]:!shadow-none data-[state=active]:!rounded-none data-[state=active]:border-b-2 group"
                                     value="reviews"
                                 >
                                     Reviews
@@ -294,7 +294,6 @@ const PackageDetailsPage = async ({ params }) => {
                                 {/* Description */}
                                 {(packageDetails.basicDetails?.fullDesc) &&
                                     <div className="">
-                                        <h3 className="text-2xl font-bold mb-2 px-2">• Description</h3>
                                         <div className="prose max-w-none">
                                             <div className="mb-4 capitalize font-semibold text-justify whitespace-pre-line px-6" dangerouslySetInnerHTML={{ __html: packageDetails.basicDetails?.fullDesc || "" }} />
                                         </div>
@@ -305,7 +304,10 @@ const PackageDetailsPage = async ({ params }) => {
                                     {/* Location Map - only show if location exists */}
                                     {packageDetails.info?.filter((item) => item.typeOfSelection === "Location Map")[0]?.selectionDesc && (
                                         <div className="w-full">
-                                            <h3 className="text-2xl font-bold mb-4 px-2">• Location</h3>
+                                            <h3 className="text-2xl font-bold mb-4 px-2">• Map Location</h3>
+                                            <p className="text-gray-900 text-sm md:text-md lg:text-lg font-barlow my-4 px-6">
+                                            Visit Us with Ease – Your next favorite pick is closer than you think!
+                                            </p>
                                             <PackageMap location={packageDetails.info?.filter((item) => item.typeOfSelection === "Location Map")[0]?.selectionDesc} />
                                         </div>
                                     )}
@@ -316,7 +318,6 @@ const PackageDetailsPage = async ({ params }) => {
                             <TabsContent value="Day Plan" className="space-y-6">
                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Day Plan")?.length > 0 &&
                                     <>
-                                        <h3 className="text-2xl font-bold mb-4 px-2">• Day Plan</h3>
                                         <Accordion type="single" collapsible className="w-full">
                                             {packageDetails.info?.filter((info) => info.typeOfSelection === "Day Plan")?.map((day) => (
                                                 <AccordionItem key={day._id} value={`day-${day.selectionTitle}`} className="my-4 border-black">
@@ -365,7 +366,6 @@ const PackageDetailsPage = async ({ params }) => {
                                 {/* FAQs */}
                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Frequently Asked Questions").length > 0 && (
                                     <div>
-                                        <h3 className="text-2xl font-bold mb-4 px-2">• Frequently Asked Questions</h3>
                                         {packageDetails.info
                                             ?.filter((info) => info.typeOfSelection === "Frequently Asked Questions")
                                             ?.map((item, index) => (
@@ -376,7 +376,6 @@ const PackageDetailsPage = async ({ params }) => {
 
                                 {/* Important Information */}
                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Important Information").length > 0 && <div className="pt-12">
-                                    <h3 className="text-2xl font-bold">• Important Information</h3>
                                     <div className="p-4">
                                         <div className="flex items-start">
                                             <Accordion type="single" collapsible className="w-full">
@@ -395,7 +394,6 @@ const PackageDetailsPage = async ({ params }) => {
 
                                 {/* Other */}
                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Other").length > 0 && <div className="pt-12">
-                                    <h3 className="text-2xl font-bold">• Other</h3>
                                     <div className="p-4">
                                         <div className="flex items-start">
                                             <Accordion type="single" collapsible className="w-full">
@@ -485,6 +483,8 @@ const PackageDetailsPage = async ({ params }) => {
                             </div>
                         }
 
+
+
                         {packages.length > 0 && <div className="p-4 bg-white">
                             <h3 className="text-2xl font-bold mb-4 px-2">You Might Also Like</h3>
                             <Carousel className="max-w-xl lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-full md:w-full">
@@ -543,6 +543,52 @@ const PackageDetailsPage = async ({ params }) => {
                                 <CarouselNext />
                             </Carousel>
                         </div>}
+
+                        {/* You Might Also Like */}
+                        <section className="p-4 bg-white">
+                            <h3 className="text-2xl font-bold mb-4 px-2"> Glimpse of a package</h3>
+                            <p className="text-gray-600 text-sm md:text-md lg:text-lg font-barlow my-4 px-6">
+                            Step Inside Our World – Explore Our Gallery to see the latest trending packages, customer favorites, and behind-the-scenes moments. From curated collections to exclusive glimpses of what’s in store, every image tells a story of style, quality, and innovation. Get inspired, get excited – and get ready to experience it for yourself.
+                            </p>
+                            <Carousel className="max-w-xl lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-full md:w-full">
+                                <CarouselContent className="-ml-1 w-full">
+                                    {packages.map((item) => (
+                                        <CarouselItem key={item._id} className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
+                                            <div className="p-1">
+                                                <Card>
+                                                    <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between  bg-white rounded-xl shadow  flex flex-col  relative overflow-hidden group">
+                                                        <div className="relative w-full h-full rounded-lg overflow-hidden">
+                                                            <Image
+                                                                src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
+                                                                alt={item?.packageName}
+                                                                width={1280}
+                                                                height={720}
+                                                                quality={50}
+                                                                className="rounded-t-xl w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                                                            />
+                                                            {/* Overlay for lighter, full black shade on hover */}
+                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100  transition-all duration-500 z-10"></div>
+                                                            {/* Text slides up on hover */}
+                                                            <div className="absolute bottom-0 left-0 text-center w-full z-20 translate-y-full group-hover:translate-y-[-25%] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                                                                <h1 className="text-white text-xl xl:text-2xl mt-2 font-bold">{item?.packageName}</h1>
+                                                                <Link href={`/package/${item._id}`}>
+                                                                    <button className="hover:bg-white hover:text-black text-white font-bold px-4 py-2 rounded-full mt-4 transition duration-300 ease-in-out">
+                                                                        View More
+                                                                    </button>
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </Carousel>
+                        </section>
                     </div>
                 </div>
             </div>

@@ -158,7 +158,10 @@ const InstaFbPost = () => {
 
     const handlePostDelete = async (id) => {
         try {
-            const url = editPost && posts.find(post => post._id === editPost).type === "facebook" ? fbUrl : instaUrl;
+            // Get the post type from the filtered posts
+            const post = posts.find(post => post._id === id);
+            const url = post.type === "facebook" ? fbUrl : instaUrl;
+            
             const response = await fetch(`${url}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
@@ -303,7 +306,7 @@ const InstaFbPost = () => {
                             <input
                                 name="link"
                                 type="url"
-                                value={fbFormData.url}
+                                value={fbFormData.link || ""}
                                 onChange={handleFbInputChange}
                                 className="w-full border rounded px-3 py-2"
                                 required
