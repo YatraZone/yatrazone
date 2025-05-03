@@ -61,6 +61,7 @@ const RandomTourPackageSection = () => {
             try {
                 const res = await fetch("/api/getRandomPackages");
                 const data = await res.json();
+                console.log(data.packages);
 
                 if (data.packages && data.packages.length > 0) {
                     setPackages(data.packages);
@@ -155,7 +156,7 @@ const RandomTourPackageSection = () => {
     const cardBasis = allPosts.length <= 3 ? `basis-1/${allPosts.length}` : "md:basis-1/5";
 
     return (
-        <section className="bg-[url('/bg-custom-3.jpg')] md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
+        <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
             <div className=" w-full h-full overflow-hidden max-w-screen ">
                 <div className="w-full py-9 px-14">
                     <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-center">Trending Packages: The Best, Today</h1>

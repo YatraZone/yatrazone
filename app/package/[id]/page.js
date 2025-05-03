@@ -29,21 +29,17 @@ import { getReviewsById } from "@/actions/GetReviewsById"
 import { Card, CardContent } from "@/components/ui/card"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import toast from "react-hot-toast"
 import { DismissableInfoBox } from "@/components/Package/NoticeBox"
-import RandomTourPackageSection from "@/components/RandomTourPackageSection"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import connectDB from "@/lib/connectDB"
 import Package from "@/models/Package"
-import FeaturedPackagesClient from "@/components/FeaturedPackagesClient"; // Import the new component
-// import { useEffect, useState }from "react"
+import FeaturedPackagesCarousel from "@/components/FeaturedPackagesCarousel";
 
 const getPackageById = async (id) => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPackageById/${id}`);
 
         if (!res.ok) {
-            console.error(`Error fetching package: ${res.statusText}`);
             return null; // Return null when package is not found
         }
 
@@ -54,11 +50,25 @@ const getPackageById = async (id) => {
 
         return data;
     } catch (error) {
-        console.error("Fetch error:", error);
+        // console.error("Fetch error:", error);
         return null; // Return null on fetch failure
     }
 };
 
+// Fetch featured packages from the API
+const getFeaturedPackages = async () => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/featured-packages`);
+
+        if (!res.ok) return [];
+        const data = await res.json();
+        console.log(data);
+        return data || [];
+    } catch (error) {
+        // console.error('Error fetching featured packages:', error);
+        return [];
+    }
+};
 
 const PackageDetailsPage = async ({ params }) => {
     const { id } = await params;
@@ -68,6 +78,9 @@ const PackageDetailsPage = async ({ params }) => {
     const reviews = await getReviewsById(id);
 
     const packages = await Package.find({}).limit(10).lean().exec();
+
+    const featuredPackages = await getFeaturedPackages();
+    // console.log('SSR featuredPackages:', featuredPackages);
 
     const user = session?.user
         ? await User.findOne({ _id: (session?.user?.id) }).lean()
@@ -126,7 +139,7 @@ const PackageDetailsPage = async ({ params }) => {
                 <div className="relative h-[300px] w-[1200px] md:h-[300px] w-full  overflow-hidden">
                     <Image
                         src={packageDetails.basicDetails?.imageBanner?.url || "https://dummyimage.com/600x400/000/fff"}
-                        alt={packageDetails.packageName}
+                        alt={packageDetails.packageName || "Tour package image"}
                         fill
                         className="object-cover md:object-fill"
                         priority
@@ -142,7 +155,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 <div className="flex md:flex-row flex-col items-center gap-4">
                                     <Image
                                         src={packageDetails.basicDetails?.thumbnail?.url || "https://dummyimage.com/600x400/000/fff"}
-                                        alt={packageDetails.packageName}
+                                        alt={packageDetails.packageName || "Tour package image"}
                                         width={300}
                                         height={300}
                                         className="object-cover w-full lg:w-96 rounded-xl aspect-video"
@@ -304,9 +317,9 @@ const PackageDetailsPage = async ({ params }) => {
                                     {/* Location Map - only show if location exists */}
                                     {packageDetails.info?.filter((item) => item.typeOfSelection === "Location Map")[0]?.selectionDesc && (
                                         <div className="w-full">
-                                            <h3 className="text-2xl font-bold mb-4 px-2">• Map Location</h3>
-                                            <p className="text-gray-900 text-sm md:text-md lg:text-lg font-barlow my-4 px-6">
-                                            Visit Us with Ease – Your next favorite pick is closer than you think!
+                                            <h3 className="text-2xl font-bold mb-4 px-2 text-center"> Map Location</h3>
+                                            <p className="text-gray-900 text-sm md:text-md lg:text-lg font-barlow my-4 px-6 text-center">
+                                                Visit Us with Ease – Your next favorite pick is closer than you think!
                                             </p>
                                             <PackageMap location={packageDetails.info?.filter((item) => item.typeOfSelection === "Location Map")[0]?.selectionDesc} />
                                         </div>
@@ -461,8 +474,8 @@ const PackageDetailsPage = async ({ params }) => {
                                                         <span className="ml-2">({review.rating}.0)</span>
                                                         <span className="ml-2 text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' })}</span>
                                                     </div>
+                                                    <p className="mt-4 text-gray-700 italic">{review.message}</p>
                                                 </div>
-                                                <p className="mt-4 text-gray-700 italic">{review.message}</p>
                                             </CardContent>
                                         </Card>
                                     )) : (
@@ -478,15 +491,19 @@ const PackageDetailsPage = async ({ params }) => {
                         {/* Gallery */}
                         {packageDetails?.gallery?.length > 0 &&
                             <div className="px-8 py-6">
-                                <h3 className="text-2xl font-bold mb-4">• Gallery</h3>
+                                <h3 className="text-2xl font-bold mb-4 px-2 text-center"> Glimpse of a package</h3>
+                                <p className="text-gray-600 text-sm md:text-md lg:text-lg font-barlow my-4 px-6 text-center w-[80%] mx-auto">
+                                    Step Inside Our World – Explore Our Gallery to see the latest trending packages, customer favorites, and behind-the-scenes moments. From curated collections to exclusive glimpses of what’s in store, every image tells a story of style, quality, and innovation. Get inspired, get excited – and get ready to experience it for yourself.
+                                </p>
                                 <PackageGallery images={packageDetails.gallery} />
                             </div>
                         }
-
-
-
                         {packages.length > 0 && <div className="p-4 bg-white">
-                            <h3 className="text-2xl font-bold mb-4 px-2">You Might Also Like</h3>
+                            <h3 className="text-2xl font-bold mb-4 px-2 text-center">You Might Also Like</h3>
+                            <p className="text-gray-900 text-sm md:text-md lg:text-lg font-barlow my-4 px-6 text-center w-[80%] mx-auto">
+                                Discover the Best with Trending Packages – Handpicked deals that are hot today and gone tomorrow! Whether you're looking for top-rated experiences, exclusive products, or unbeatable services, our curated selection brings you the finest offers, updated daily. Don’t miss out – explore what’s trending now and elevate your day with the best!
+
+                            </p>
                             <Carousel className="max-w-xl lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-full md:w-full">
                                 <CarouselContent className="-ml-1 w-full">
                                     {packages.map((item, index) => (
@@ -497,7 +514,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
                                                             <Image
                                                                 src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
-                                                                alt={item?.packageName}
+                                                                alt={item?.packageName || "Tour package image"}
                                                                 width={1280}
                                                                 height={720}
                                                                 quality={50}
@@ -544,50 +561,14 @@ const PackageDetailsPage = async ({ params }) => {
                             </Carousel>
                         </div>}
 
-                        {/* You Might Also Like */}
-                        <section className="p-4 bg-white">
-                            <h3 className="text-2xl font-bold mb-4 px-2"> Glimpse of a package</h3>
-                            <p className="text-gray-600 text-sm md:text-md lg:text-lg font-barlow my-4 px-6">
-                            Step Inside Our World – Explore Our Gallery to see the latest trending packages, customer favorites, and behind-the-scenes moments. From curated collections to exclusive glimpses of what’s in store, every image tells a story of style, quality, and innovation. Get inspired, get excited – and get ready to experience it for yourself.
-                            </p>
-                            <Carousel className="max-w-xl lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-full md:w-full">
-                                <CarouselContent className="-ml-1 w-full">
-                                    {packages.map((item) => (
-                                        <CarouselItem key={item._id} className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
-                                            <div className="p-1">
-                                                <Card>
-                                                    <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between  bg-white rounded-xl shadow  flex flex-col  relative overflow-hidden group">
-                                                        <div className="relative w-full h-full rounded-lg overflow-hidden">
-                                                            <Image
-                                                                src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
-                                                                alt={item?.packageName}
-                                                                width={1280}
-                                                                height={720}
-                                                                quality={50}
-                                                                className="rounded-t-xl w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
-                                                            />
-                                                            {/* Overlay for lighter, full black shade on hover */}
-                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100  transition-all duration-500 z-10"></div>
-                                                            {/* Text slides up on hover */}
-                                                            <div className="absolute bottom-0 left-0 text-center w-full z-20 translate-y-full group-hover:translate-y-[-25%] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
-                                                                <h1 className="text-white text-xl xl:text-2xl mt-2 font-bold">{item?.packageName}</h1>
-                                                                <Link href={`/package/${item._id}`}>
-                                                                    <button className="hover:bg-white hover:text-black text-white font-bold px-4 py-2 rounded-full mt-4 transition duration-300 ease-in-out">
-                                                                        View More
-                                                                    </button>
-                                                                </Link>
-                                                            </div>
-                                                        </div>
 
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-                                <CarouselPrevious />
-                                <CarouselNext />
-                            </Carousel>
+                        <section className="p-4 bg-white">
+                            <h3 className="font-bold text-2xl md:text-4xl text-center mt-7">Be a part of a spiritual journey.</h3>
+                            <p className="text-gray-600 py-8 text-center font-barlow  w-[80%] mx-auto">
+                                YatraZone is more than just a travel company; we are facilitators of spiritual exploration and cultural immersion tailored for Indian pilgrims and global adventurers. With years of expertise in pilgrimage tourism within India, we curate authentic and meaningful journeys that resonate with every spiritual seeker.
+                                From holy treks in the Himalayas to pilgrimages to ancient temples and sacred sites, we ensure transformative experiences.
+                            </p>
+                            <FeaturedPackagesCarousel featuredPackages={featuredPackages} />
                         </section>
                     </div>
                 </div>
