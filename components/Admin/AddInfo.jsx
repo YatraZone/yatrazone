@@ -43,15 +43,8 @@ import {
   Heading1,
   Heading2,
   Heading3,
-  PilcrowSquare, // For paragraph
-  Table as TableIcon, // For table
-  Plus, // For adding rows/columns
-  Minus, // For deleting rows/columns
-  Merge as MergeIcon, // For merging cells
-  Scissors, // For splitting cells
 } from 'lucide-react'
 import { Switch } from "../ui/switch";
-import { tableExtensions } from './tiptap-table-extensions';
 // Create a FontSize extension
 const FontSize = Extension.create({
   name: 'fontSize',
@@ -100,54 +93,6 @@ const FontSize = Extension.create({
   }
 })
 
-// Create a LineHeight extension
-const LineHeight = Extension.create({
-  name: 'lineHeight',
-
-  addAttributes() {
-    return {
-      lineHeight: {
-        default: '1',
-        parseHTML: element => element.style.lineHeight,
-        renderHTML: attributes => {
-          if (!attributes.lineHeight) return {}
-          return {
-            style: `line-height: ${attributes.lineHeight}`
-          }
-        }
-      }
-    }
-  },
-
-  addGlobalAttributes() {
-    return [
-      {
-        types: ['textStyle'],
-        attributes: {
-          lineHeight: {
-            default: '1.5',
-            parseHTML: element => element.style.lineHeight,
-            renderHTML: attributes => {
-              if (!attributes.lineHeight) return {}
-              return {
-                style: `line-height: ${attributes.lineHeight}`
-              }
-            }
-          }
-        }
-      }
-    ]
-  },
-
-  addCommands() {
-    return {
-      setLineHeight: lineHeight => ({ chain }) => {
-        return chain().setMark('textStyle', { lineHeight });
-      },
-    }
-  }
-})
-
 const MenuBar = ({ editor }) => {
   const [showUrlPopup, setShowUrlPopup] = useState(false);
   const [urlInput, setUrlInput] = useState('');
@@ -158,10 +103,6 @@ const MenuBar = ({ editor }) => {
 
   const fontSizes = [
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px'
-  ]
-
-  const lineHeights = [
-    '0.5', '0.75', '1', '1.2', '1.5', '1.8', '2', '2.5', '3'
   ]
 
   const handleUrlSubmit = () => {
@@ -191,14 +132,9 @@ const MenuBar = ({ editor }) => {
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 1 }) ? 'bg-gray-200' : ''}`} title="Heading 1"><Heading1 className="w-4 h-4" /></button>
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`} title="Heading 2"><Heading2 className="w-4 h-4" /></button>
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''}`} title="Heading 3"><Heading3 className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().setParagraph().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('paragraph') ? 'bg-gray-200' : ''}`} title="Paragraph"><PilcrowSquare className="w-4 h-4" /></button>
       {/* Font size */}
       <select className="p-1 rounded bg-transparent border border-gray-300 hover:bg-gray-100" onChange={e => editor.chain().focus().setFontSize(e.target.value).run()} value={editor.getAttributes('textStyle').fontSize || '16px'} title="Font Size">
         {fontSizes.map(size => (<option key={size} value={size}>{size}</option>))}
-      </select>
-      {/* Line height */}
-      <select className="p-1 rounded bg-transparent border border-gray-300 hover:bg-gray-100" onChange={e => editor.chain().focus().setLineHeight(e.target.value).run()} value={editor.getAttributes('textStyle').lineHeight || '1.5'} title="Line Height">
-        {lineHeights.map(height => (<option key={height} value={height}>{height}</option>))}
       </select>
       {/* Lists */}
       <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('bulletList') ? 'bg-gray-200' : ''}`} title="Bullet List"><List className="w-4 h-4" /></button>
@@ -210,17 +146,6 @@ const MenuBar = ({ editor }) => {
       {/* Undo/Redo */}
       <button type="button" onClick={() => editor.chain().focus().undo().run()} className="p-1 rounded hover:bg-gray-100" title="Undo"><Undo className="w-4 h-4" /></button>
       <button type="button" onClick={() => editor.chain().focus().redo().run()} className="p-1 rounded hover:bg-gray-100" title="Redo"><Redo className="w-4 h-4" /></button>
-      {/* Table controls */}
-      <button type="button" onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} className="p-1 rounded hover:bg-gray-100" title="Insert Table"><TableIcon className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().addColumnBefore().run()} className="p-1 rounded hover:bg-gray-100" title="Add Column"><Plus className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().addColumnAfter().run()} className="p-1 rounded hover:bg-gray-100" title="Add Column After"><Plus className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().addRowBefore().run()} className="p-1 rounded hover:bg-gray-100" title="Add Row"><Plus className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().addRowAfter().run()} className="p-1 rounded hover:bg-gray-100" title="Add Row After"><Plus className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().deleteColumn().run()} className="p-1 rounded hover:bg-gray-100" title="Delete Column"><Minus className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().deleteRow().run()} className="p-1 rounded hover:bg-gray-100" title="Delete Row"><Minus className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().deleteTable().run()} className="p-1 rounded hover:bg-gray-100" title="Delete Table"><Minus className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().mergeCells().run()} className="p-1 rounded hover:bg-gray-100" title="Merge Cells"><MergeIcon className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().splitCell().run()} className="p-1 rounded hover:bg-gray-100" title="Split Cell"><Scissors className="w-4 h-4" /></button>
       {/* Show URL popup for links */}
       {showUrlPopup && (
         <div className="absolute bg-white border p-2 rounded shadow-lg flex gap-2 z-50">
@@ -249,7 +174,6 @@ const AddInfo = () => {
             types: ['textStyle']
           }),
           FontSize,
-          LineHeight,
           FontFamily,
           Typography,
           TextAlign.configure({
@@ -260,11 +184,10 @@ const AddInfo = () => {
           }),
           Color,
           ListItem,
-          ...tableExtensions,
         ],
         content: packages?.basicDetails?.fullDesc || '',
         onUpdate: ({ editor }) => {
-          setValue('basicDetails.fullDesc', editor.getHTML())
+          setValue('info.selectionDesc', editor.getHTML())
         },
         editorProps: {
           attributes: {
@@ -280,7 +203,6 @@ const AddInfo = () => {
            types: ['textStyle']
          }),
          FontSize,
-         LineHeight,
          FontFamily,
          Typography,
          TextAlign.configure({
@@ -291,11 +213,10 @@ const AddInfo = () => {
          }),
          Color,
          ListItem,
-         ...tableExtensions,
        ],
        content: packages?.basicDetails?.fullDesc || '',
        onUpdate: ({ editor }) => {
-         setValue('basicDetails.fullDesc', editor.getHTML())
+         setValue('info.selectionDesc', editor.getHTML())
        },
        editorProps: {
          attributes: {

@@ -61,7 +61,7 @@ const RandomTourPackageSection = () => {
             try {
                 const res = await fetch("/api/getRandomPackages");
                 const data = await res.json();
-                console.log(data.packages);
+                // console.log(data.packages);
 
                 if (data.packages && data.packages.length > 0) {
                     setPackages(data.packages);
@@ -69,7 +69,7 @@ const RandomTourPackageSection = () => {
                     setPackages([]);
                 }
             } catch (error) {
-                console.error("Error fetching packages:", error);
+                // console.error("Error fetching packages:", error);
                 setPackages([]);
             } finally {
                 setIsLoading(false);
@@ -80,7 +80,7 @@ const RandomTourPackageSection = () => {
             try {
                 const res = await fetch("/api/blogs");
                 const data = await res.json();
-                console.log(data);  
+                // console.log(data);  
                 if (Array.isArray(data)) {
                     setBlogs(data);
                 } else if (Array.isArray(data.blogs)) {
@@ -89,7 +89,7 @@ const RandomTourPackageSection = () => {
                     setBlogs([]);
                 }
             } catch (error) {
-                console.error("Error fetching blogs:", error);
+                // console.error("Error fetching blogs:", error);
                 setBlogs([]);
             } finally {
                 setIsBlogsLoading(false);

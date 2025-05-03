@@ -296,7 +296,54 @@
   text-decoration: underline;
 }
 
+.custom-desc-list {
+  font-family: inherit;
+  font-size: 1.05rem; /* Adjust as needed */
+  line-height: 1.6;
+  color: #1a1a1a;
+  word-break: break-word;
+}
 
+.custom-desc-list p {
+  margin: 0 0 0.7em 0; /* Add space below paragraphs */
+}
 
+.custom-desc-list ul,
+.custom-desc-list ol {
+  margin: 0 0 1em 1.5em; /* Add space below lists, keep indent */
+  padding-left: 1.5em;
+}
 
+.custom-desc-list li {
+  margin-bottom: 0.35em; /* Space between list items */
+  line-height: 1.5;
+}
 
+.custom-desc-list strong,
+.custom-desc-list b {
+  font-weight: bold;
+}
+
+.custom-desc-list em,
+.custom-desc-list i {
+  font-style: italic;
+}
+
+/* Allow <br> tags to create visible line breaks */
+.custom-desc-list br {
+  content: '';
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.custom-desc-list ul {
+  list-style-type: disc !important;
+  margin-left: 1.5em;
+  padding-left: 1.5em;
+}
+
+.custom-desc-list ol {
+  list-style-type: decimal !important;
+  margin-left: 1.5em;
+  padding-left: 1.5em;
+}
