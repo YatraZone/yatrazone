@@ -12,8 +12,9 @@ export async function GET() {
     // Determine how many packages to return (minimum of 3 or total available)
     const limit = Math.min(10, totalPackages);
 
-    // Use MongoDB's aggregation to get random samples efficiently
+    // Only fetch active packages
     const randomPackages = await Package.aggregate([
+      { $match: { active: true } }, // Only active packages
       { $sample: { size: limit } }
     ]);
 

@@ -192,7 +192,8 @@ const AddDirectPackage = () => {
                                             <Button
                                                 size="icon"
                                                 variant="ghost"
-                                                onClick={() => copyToClipboard(`${window.location.origin}/package/${pkg._id}`)}
+                                                onClick={() => pkg.active && copyToClipboard(`${window.location.origin}/package/${pkg._id}`)}
+                                                disabled={!pkg.active}
                                             >
                                                 <Copy className="w-4 h-4" />
                                             </Button>

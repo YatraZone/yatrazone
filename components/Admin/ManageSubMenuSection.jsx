@@ -233,11 +233,14 @@ const ManageSubMenuSection = () => {
             if (category.subCat) {
                 for (const subcat of category.subCat) {
                     if (subcat._id === selectedSubcategory && subcat.subCatPackage) {
-                        return subcat.subCatPackage.map(pkg => ({
-                            ...pkg,
-                            categoryTitle: category.catTitle,
-                            subcategoryTitle: subcat.title
-                        }))
+                        // Filter only active packages
+                        return subcat.subCatPackage
+                            .filter(pkg => pkg.active) // Only show active packages
+                            .map(pkg => ({
+                                ...pkg,
+                                categoryTitle: category.catTitle,
+                                subcategoryTitle: subcat.title
+                            }))
                     }
                 }
             }
@@ -376,7 +379,7 @@ const ManageSubMenuSection = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {categories.map((category) => (
+                            {categories.filter(cat => cat.active).map((category) => (
                                 <TableRow key={category._id}>
                                     <TableCell className="font-medium">{category.catTitle}</TableCell>
                                     <TableCell>
@@ -429,7 +432,7 @@ const ManageSubMenuSection = () => {
                         </TableHeader>
                         <TableBody>
                             {categories.map((category) => (
-                                category.subCat?.map((subCategory) => (
+                                category.subCat?.filter(subCategory => subCategory.active).map((subCategory) => (
                                     <TableRow key={`subcat-${subCategory._id}`}>
                                         <TableCell>{category.catTitle}</TableCell>
                                         <TableCell>{subCategory.title}</TableCell>

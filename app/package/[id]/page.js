@@ -89,11 +89,11 @@ const PackageDetailsPage = async ({ params }) => {
         return new Intl.NumberFormat('en-IN').format(number);
     };
 
-    if (!packageDetails) {
+    if (!packageDetails || packageDetails.active === false) {
         return (
             <div className="container mx-auto px-4 py-12 text-center">
-                <h1 className="text-3xl font-bold mb-4">Package Not Found</h1>
-                <p className="mb-8">The package you are looking for does not exist or has been removed.</p>
+                <h1 className="text-3xl font-bold mb-4">Package Not Available</h1>
+                <p className="mb-8">This package is either not found or has been disabled by the admin.</p>
                 <Button asChild className="bg-blue-600 hover:bg-blue-700">
                     <Link href="/">Back to Home</Link>
                 </Button>
@@ -520,7 +520,7 @@ const PackageDetailsPage = async ({ params }) => {
                         {packageDetails?.gallery?.length > 0 &&
                             <div className="px-8 py-6">
                                 <h3 className="text-2xl font-bold mb-4 px-2 text-center"> Glimpse of a package</h3>
-                                <p className="text-gray-600 text-sm md:text-md lg:text-lg font-barlow my-4 px-6 text-center w-[80%] mx-auto">
+                                <p className="text-gray-900 font-barlow my-4 px-6 text-center w-[80%] mx-auto">
                                     Step Inside Our World – Explore Our Gallery to see the latest trending packages, customer favorites, and behind-the-scenes moments. From curated collections to exclusive glimpses of what’s in store, every image tells a story of style, quality, and innovation. Get inspired, get excited – and get ready to experience it for yourself.
                                 </p>
                                 <PackageGallery images={packageDetails.gallery} />
@@ -528,9 +528,8 @@ const PackageDetailsPage = async ({ params }) => {
                         }
                         {packages.length > 0 && <div className="p-4 bg-white">
                             <h3 className="text-2xl font-bold mb-4 px-2 text-center">You Might Also Like</h3>
-                            <p className="text-gray-900 text-sm md:text-md lg:text-lg font-barlow my-4 px-6 text-center w-[80%] mx-auto">
+                            <p className="text-gray-900 font-barlow my-4 px-6 text-center w-[80%] mx-auto">
                                 Discover the Best with Trending Packages – Handpicked deals that are hot today and gone tomorrow! Whether you're looking for top-rated experiences, exclusive products, or unbeatable services, our curated selection brings you the finest offers, updated daily. Don’t miss out – explore what’s trending now and elevate your day with the best!
-
                             </p>
                             <Carousel className="max-w-xl lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-full md:w-full">
                                 <CarouselContent className="-ml-1 w-full">
@@ -591,8 +590,8 @@ const PackageDetailsPage = async ({ params }) => {
 
 
                         <section className="p-4 bg-white">
-                            <h3 className="font-bold text-2xl md:text-4xl text-center mt-7">Be a part of a spiritual journey.</h3>
-                            <p className="text-gray-600 py-8 text-center font-barlow  w-[80%] mx-auto">
+                            <h3 className="font-bold text-2xl md:text-2xl text-center mt-7">Be a part of a spiritual journey.</h3>
+                            <p className="text-gray-900 py-8 text-center font-barlow  w-[80%] mx-auto">
                                 YatraZone is more than just a travel company; we are facilitators of spiritual exploration and cultural immersion tailored for Indian pilgrims and global adventurers. With years of expertise in pilgrimage tourism within India, we curate authentic and meaningful journeys that resonate with every spiritual seeker.
                                 From holy treks in the Himalayas to pilgrimages to ancient temples and sacred sites, we ensure transformative experiences.
                             </p>

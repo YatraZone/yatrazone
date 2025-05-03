@@ -36,9 +36,12 @@ const CategoryPage = async ({ params }) => {
 
     const categoryInfo = await getCategoryInfo(getCategory)
 
+    // Only show packages that are active
+    const visiblePackages = packages.filter(pkg => pkg.active);
+
     return (
         <SidebarInset>
-            <div className="min-h-screen px-4 py-2">
+            <div className="min-h-screen p-2">
                 {/* Fixed Banner Section */}
                 <CategoryBanner title={categoryInfo.title} bannerImage={categoryInfo.bannerImage} />
 
@@ -49,7 +52,7 @@ const CategoryPage = async ({ params }) => {
                 {/* Packages Section */}
                 <div className="container mx-auto px-1 md:px-4 py-12">
 
-                    {packages.length === 0 ? (
+                    {visiblePackages.length === 0 ? (
                         <div className="text-center py-12">
                             <h3 className="text-xl font-medium text-gray-600">No packages found for this category</h3>
                             <p className="mt-2 text-gray-500">Please try another category</p>
@@ -57,7 +60,7 @@ const CategoryPage = async ({ params }) => {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                             <Suspense fallback={<PackageCardSkeleton count={3} />}>
-                                {packages.map((pkg) => (
+                                {visiblePackages.map((pkg) => (
                                     <PackageCard key={pkg._id} pkg={pkg} />
                                 ))}
                             </Suspense>

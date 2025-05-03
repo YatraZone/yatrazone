@@ -4,7 +4,7 @@ import MainLayout from "@/components/MainLayout";
 
 export default function RootLayout({ children }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <MainLayout>{children}</MainLayout>
     </SidebarProvider>
   );
