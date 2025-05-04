@@ -51,7 +51,7 @@ const ResponsiveCarousel = ({ packages, formatNumericStr }) => {
                                                 className="rounded-t-xl w-full h-full"
                                             />
                                         </div>
-                                        <div className="p-4 flex flex-col gap-2">
+                                        <div className="p-2 flex flex-col gap-2">
                                             <div className="flex xl:flex-row flex-col gap-2 xl:items-center justify-between font-barlow">
                                                 <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
                                                     <MapPin size={20} /> {item?.basicDetails?.location}
