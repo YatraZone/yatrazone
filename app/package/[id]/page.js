@@ -136,7 +136,7 @@ const PackageDetailsPage = async ({ params }) => {
             {/* Package Content */}
             <div className="min-h-screen mb-20 font-barlow">
                 {/* Banner */}
-                <div className="relative h-[300px] w-[1200px] md:h-[300px] w-full  overflow-hidden">
+                <div className="relative h-[300px]  md:h-[300px] w-full  overflow-hidden">
                     <Image
                         src={packageDetails.basicDetails?.imageBanner?.url || "https://dummyimage.com/600x400/000/fff"}
                         alt={packageDetails.packageName || "Tour package image"}

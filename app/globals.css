@@ -347,3 +347,31 @@
   margin-left: 1.5em;
   padding-left: 1.5em;
 }
+
+.custom-desc-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: inherit;
+}
+
+.custom-desc-list th,
+.custom-desc-list td {
+  border: 1px solid #0e69e1; /* Updated border color for better contrast */
+  padding: 2px 4px; /* Minimum padding: 2px top/bottom, 4px left/right */
+  text-align: left;
+}
+
+.custom-desc-list th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+/* .custom-desc-list tr:nth-child(even) {
+  background-color: #f8fafc;
+} */
+
+.custom-desc-list tr:hover {
+  background-color: #edf2f7;
+}

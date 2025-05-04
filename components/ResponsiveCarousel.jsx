@@ -40,7 +40,7 @@ const ResponsiveCarousel = ({ packages, formatNumericStr }) => {
                         >
                             <div className="p-1">
                                 <Card>
-                                    <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
+                                    <CardContent className="justify-between bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
                                         <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
                                             <Image
                                                 src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
@@ -60,7 +60,7 @@ const ResponsiveCarousel = ({ packages, formatNumericStr }) => {
                                                     <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
                                                 </p>
                                             </div>
-                                            <p className="font-bold text-xl line-clamp-2">{item?.packageName}</p>
+                                            <p className="font-bold md:text-lg text-xl line-clamp-2">{item?.packageName}</p>
                                         </div>
                                         <div className="h-px bg-gray-200 my-1" />
                                         <div className="flex flex-col gap-2 flex-1">

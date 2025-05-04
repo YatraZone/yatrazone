@@ -20,18 +20,18 @@ import TextStyle from '@tiptap/extension-text-style'
 import { FontFamily } from '@tiptap/extension-font-family'
 import Typography from '@tiptap/extension-typography'
 import TextAlign from '@tiptap/extension-text-align'
-import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
+import Link from '@tiptap/extension-link'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import { Extension } from '@tiptap/core'
-import { 
-  Bold, 
-  Italic, 
-  Underline as UnderlineIcon, 
-  AlignLeft, 
-  AlignCenter, 
-  AlignRight, 
+import {
+  Bold,
+  Italic,
+  Underline as UnderlineIcon,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
   Link as LinkIcon,
   List,
   ListOrdered,
@@ -43,8 +43,9 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  PilcrowSquare, // For paragraph
 } from 'lucide-react'
-import { Switch } from "../ui/switch";
+
 // Create a FontSize extension
 const FontSize = Extension.create({
   name: 'fontSize',
@@ -93,6 +94,54 @@ const FontSize = Extension.create({
   }
 })
 
+// Create a LineHeight extension
+const LineHeight = Extension.create({
+  name: 'lineHeight',
+
+  addAttributes() {
+    return {
+      lineHeight: {
+        default: '1',
+        parseHTML: element => String(element.style.lineHeight),
+        renderHTML: attributes => {
+          if (!attributes.lineHeight) return {}
+          return {
+            style: `line-height: ${attributes.lineHeight}`
+          }
+        }
+      }
+    }
+  },
+
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['textStyle'],
+        attributes: {
+          lineHeight: {
+            default: '1.5',
+            parseHTML: element => String(element.style.lineHeight),
+            renderHTML: attributes => {
+              if (!attributes.lineHeight) return {}
+              return {
+                style: `line-height: ${attributes.lineHeight}`
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+
+  addCommands() {
+    return {
+      setLineHeight: lineHeight => ({ chain }) => {
+        return chain().setMark('textStyle', { lineHeight: String(lineHeight) });
+      },
+    }
+  }
+})
+
 const MenuBar = ({ editor }) => {
   const [showUrlPopup, setShowUrlPopup] = useState(false);
   const [urlInput, setUrlInput] = useState('');
@@ -105,6 +154,10 @@ const MenuBar = ({ editor }) => {
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px'
   ]
 
+  const lineHeights = [
+    '0.5', '0.75', '1', '1.2', '1.5', '1.8', '2', '2.5', '3'
+  ]
+
   const handleUrlSubmit = () => {
     if (urlInput) {
       editor.chain().focus().setLink({ href: urlInput }).run();
@@ -114,47 +167,255 @@ const MenuBar = ({ editor }) => {
   }
 
   return (
-    <div className="flex flex-wrap gap-1 items-center border rounded p-2 bg-white mb-2 sticky top-0 z-10">
-      {/* Font Style */}
-      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('bold') ? 'bg-gray-200' : ''}`} title="Bold"><Bold className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('italic') ? 'bg-gray-200' : ''}`} title="Italic"><Italic className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('underline') ? 'bg-gray-200' : ''}`} title="Underline"><UnderlineIcon className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().toggleStrike().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('strike') ? 'bg-gray-200' : ''}`} title="Strikethrough"><Strikethrough className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().toggleCode().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('code') ? 'bg-gray-200' : ''}`} title="Code"><Code className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().unsetAllMarks().run()} className="p-1 rounded hover:bg-gray-100" title="Clear Formatting">A</button>
-      {/* Color */}
-      <input type="color" className="w-6 h-6 border-none p-0 m-0" value={editor.getAttributes('textStyle').color || '#000000'} onChange={e => editor.chain().focus().setColor(e.target.value).run()} title="Text Color" />
-      {/* Alignment */}
-      <button type="button" onClick={() => editor.chain().focus().setTextAlign('left').run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''}`} title="Align Left"><AlignLeft className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().setTextAlign('center').run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''}`} title="Align Center"><AlignCenter className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().setTextAlign('right').run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''}`} title="Align Right"><AlignRight className="w-4 h-4" /></button>
-      {/* Headings & Paragraph */}
-      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 1 }) ? 'bg-gray-200' : ''}`} title="Heading 1"><Heading1 className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`} title="Heading 2"><Heading2 className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''}`} title="Heading 3"><Heading3 className="w-4 h-4" /></button>
-      {/* Font size */}
-      <select className="p-1 rounded bg-transparent border border-gray-300 hover:bg-gray-100" onChange={e => editor.chain().focus().setFontSize(e.target.value).run()} value={editor.getAttributes('textStyle').fontSize || '16px'} title="Font Size">
-        {fontSizes.map(size => (<option key={size} value={size}>{size}</option>))}
-      </select>
-      {/* Lists */}
-      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('bulletList') ? 'bg-gray-200' : ''}`} title="Bullet List"><List className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('orderedList') ? 'bg-gray-200' : ''}`} title="Ordered List"><ListOrdered className="w-4 h-4" /></button>
-      {/* Quote */}
-      <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} className={`p-1 rounded hover:bg-gray-100 ${editor.isActive('blockquote') ? 'bg-gray-200' : ''}`} title="Blockquote"><Quote className="w-4 h-4" /></button>
-      {/* Link */}
-      <button type="button" onClick={() => setShowUrlPopup(true)} className="p-1 rounded hover:bg-gray-100" title="Add Link"><LinkIcon className="w-4 h-4" /></button>
-      {/* Undo/Redo */}
-      <button type="button" onClick={() => editor.chain().focus().undo().run()} className="p-1 rounded hover:bg-gray-100" title="Undo"><Undo className="w-4 h-4" /></button>
-      <button type="button" onClick={() => editor.chain().focus().redo().run()} className="p-1 rounded hover:bg-gray-100" title="Redo"><Redo className="w-4 h-4" /></button>
-      {/* Show URL popup for links */}
+    <div className="border-b border-gray-200 p-2 flex flex-wrap gap-2 relative">
+      {/* Text Style Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('paragraph') ? 'bg-gray-200' : ''}`}
+          title="Paragraph"
+        >
+          <PilcrowSquare className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 1 }) ? 'bg-gray-200' : ''}`}
+          title="Heading 1"
+        >
+          <Heading1 className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`}
+          title="Heading 2"
+        >
+          <Heading2 className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''}`}
+          title="Heading 3"
+        >
+          <Heading3 className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Basic Formatting Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('bold') ? 'bg-gray-200' : ''}`}
+          title="Bold"
+        >
+          <Bold className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('italic') ? 'bg-gray-200' : ''}`}
+          title="Italic"
+        >
+          <Italic className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('underline') ? 'bg-gray-200' : ''}`}
+          title="Underline"
+        >
+          <UnderlineIcon className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('strike') ? 'bg-gray-200' : ''}`}
+          title="Strikethrough"
+        >
+          <Strikethrough className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Alignment Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''}`}
+          title="Align Left"
+        >
+          <AlignLeft className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''}`}
+          title="Align Center"
+        >
+          <AlignCenter className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''}`}
+          title="Align Right"
+        >
+          <AlignRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Lists Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('bulletList') ? 'bg-gray-200' : ''}`}
+          title="Bullet List"
+        >
+          <List className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('orderedList') ? 'bg-gray-200' : ''}`}
+          title="Numbered List"
+        >
+          <ListOrdered className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Special Formatting Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('blockquote') ? 'bg-gray-200' : ''}`}
+          title="Quote"
+        >
+          <Quote className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleCode().run()}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('code') ? 'bg-gray-200' : ''}`}
+          title="Code"
+        >
+          <Code className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Color Picker */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <input
+          type="color"
+          onInput={event => editor.chain().focus().setColor(event.target.value).run()}
+          value={editor.getAttributes('textStyle').color || '#000000'}
+          className="w-8 h-8 p-1 rounded cursor-pointer"
+          title="Text Color"
+        />
+      </div>
+
+      {/* Links Group */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <button
+          type="button"
+          onClick={() => setShowUrlPopup(true)}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive('link') ? 'bg-gray-200' : ''}`}
+          title="Add Link"
+        >
+          <LinkIcon className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* URL Popup Modal */}
       {showUrlPopup && (
-        <div className="absolute bg-white border p-2 rounded shadow-lg flex gap-2 z-50">
-          <input type="text" value={urlInput} onChange={e => setUrlInput(e.target.value)} placeholder="Paste URL..." className="border rounded px-2 py-1" />
-          <button onClick={handleUrlSubmit} className="bg-blue-500 text-white px-2 py-1 rounded">Add</button>
+        <div className="absolute left-1/2 top-12 -translate-x-1/2 z-50 bg-white border border-gray-300 rounded shadow-lg p-4 flex flex-col items-center min-w-[220px]">
+          <div className="flex flex-col gap-2 w-full">
+            <label htmlFor="url-input" className="text-sm font-medium">Enter URL</label>
+            <input
+              id="url-input"
+              type="url"
+              value={urlInput}
+              onChange={e => setUrlInput(e.target.value)}
+              className="border px-2 py-1 rounded w-full"
+              placeholder="https://example.com"
+              required
+            />
+            <div className="flex gap-2 justify-end">
+              <button type="button" onClick={() => setShowUrlPopup(false)} className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
+              <button type="button" onClick={handleUrlSubmit} className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700">Add</button>
+            </div>
+          </div>
         </div>
       )}
+
+      {/* History Group */}
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().undo()}
+          className="p-2 rounded hover:bg-gray-100 disabled:opacity-50"
+          title="Undo"
+        >
+          <Undo className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().redo()}
+          className="p-2 rounded hover:bg-gray-100 disabled:opacity-50"
+          title="Redo"
+        >
+          <Redo className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Font Size Dropdown */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <select
+          className="p-1 rounded bg-transparent border border-gray-300 hover:bg-gray-100"
+          onChange={e => {
+            if (e.target.value) {
+              editor.chain().focus().setFontSize(e.target.value).run()
+            }
+          }}
+          value={editor.getAttributes('textStyle').fontSize || '16px'}
+        >
+          <option value="">Font Size</option>
+          {fontSizes.map(size => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Line Height Dropdown */}
+      <div className="flex items-center gap-1 border-r pr-2">
+        <select
+          className="p-1 rounded bg-transparent border border-gray-300 hover:bg-gray-100"
+          onChange={e => {
+            if (e.target.value) {
+              editor.chain().focus().setLineHeight(String(e.target.value)).run()
+            }
+          }}
+          value={editor.getAttributes('textStyle').lineHeight || '1.5'}
+        >
+          <option value="">Line Height</option>
+          {lineHeights.map(height => (
+            <option key={height} value={height}>
+              {height}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
-  );
+  )
 }
 
 const AddInfo = () => {
@@ -165,64 +426,53 @@ const AddInfo = () => {
   const [editItem, setEditItem] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [editorContent, setEditorContent] = useState('');
-
   const addEditor = useEditor({
     extensions: [
-          StarterKit,
-          Underline,
-          TextStyle.configure({
-            types: ['textStyle']
-          }),
-          FontSize,
-          FontFamily,
-          Typography,
-          TextAlign.configure({
-            types: ['heading', 'paragraph'],
-          }),
-          Link.configure({
-            openOnClick: false,
-          }),
-          Color,
-          ListItem,
-        ],
-        content: packages?.basicDetails?.fullDesc || '',
-        onUpdate: ({ editor }) => {
-          setValue('info.selectionDesc', editor.getHTML())
-        },
-        editorProps: {
-          attributes: {
-            class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none'
-          }
-        }
+      StarterKit,
+      Underline,
+      TextStyle.configure({ types: ['textStyle'] }),
+      FontSize.configure(),
+      LineHeight.configure(),
+      FontFamily,
+      Typography,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Link.configure({ openOnClick: false }),
+      Color,
+      ListItem,
+    ],
+    content: editorContent,
+    onUpdate: ({ editor }) => {
+      setValue('info.selectionDesc', editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none'
+      }
+    }
   });
   const editEditor = useEditor({
-   extensions: [
-         StarterKit,
-         Underline,
-         TextStyle.configure({
-           types: ['textStyle']
-         }),
-         FontSize,
-         FontFamily,
-         Typography,
-         TextAlign.configure({
-           types: ['heading', 'paragraph'],
-         }),
-         Link.configure({
-           openOnClick: false,
-         }),
-         Color,
-         ListItem,
-       ],
-       content: packages?.basicDetails?.fullDesc || '',
-       onUpdate: ({ editor }) => {
-         setValue('info.selectionDesc', editor.getHTML())
-       },
-       editorProps: {
-         attributes: {
-           class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none'
-         }
-       }
+    extensions: [
+      StarterKit,
+      Underline,
+      TextStyle.configure({ types: ['textStyle'] }),
+      FontSize.configure(),
+      LineHeight.configure(),
+      FontFamily,
+      Typography,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Link.configure({ openOnClick: false }),
+      Color,
+      ListItem,
+    ],
+    content: editorContent,
+    onUpdate: ({ editor }) => {
+      setValue('info.selectionDesc', editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none'
+      }
+    }
   });
 
   // Filter "Day Plan" info

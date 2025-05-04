@@ -232,7 +232,7 @@ const RandomTourPackageSection = () => {
                                     <div className="flex h-[250px]">
                                         {/* <div className="text-sm font-semibold mb-1">STAY 4 NIGHTS</div> */}
                                         <div className="w-1/2 p-4 flex flex-col justify-center">
-                                            <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                            <div className="absolute top-2 left-2 text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
                                             {blogs?.[0]?.date?.slice(0, 10) || ''}
                                             </div>
                                             {/* NameCode and Role in one row, spaced between */}
@@ -270,7 +270,7 @@ const RandomTourPackageSection = () => {
                                     <div className="flex h-[250px]">
                                         <div className="w-1/2 p-4 flex flex-col justify-center">
                                             {/* <div className="text-sm font-semibold mb-1">MEMBER GET</div> */}
-                                            <div className="absolute top-2 left-2 text-xs text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
+                                            <div className="absolute top-2 left-2 text-gray-700 bg-yellow-400 text-xs font-bold px-2 py-1 rounded">
                                             {blogs?.[1]?.date?.slice(0, 10) || ''}
                                             </div>
                                             {/* NameCode and Role in one row, spaced between */}
@@ -359,7 +359,7 @@ const RandomTourPackageSection = () => {
                     {/* Instagram-like Image Carousel using Carousel classes */}
                     {!isInstaLoading && !isFbLoading && allPosts.length > 0 && (
                         <div className="w-full flex flex-col items-center mt-12">
-                            <h2 className="text-center font-bold text-xl md:text-3xl lg:text-4xl  text-center">Don’t just watch the trends — live them!</h2>
+                            <h2 className="text-center font-bold text-xl md:text-3xl lg:text-4xl">Don’t just watch the trends — live them!</h2>
                             <p className="text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">
                          Follow us on social media for your daily dose of Trending Packages, exclusive offers, behind-the-scenes peeks, and real-time updates. Join our community of trendsetters and be the first to explore what’s new, what’s hot, and what everyone’s talking about. Your next favorite find is just a follow away!
                             </p>
