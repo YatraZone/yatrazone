@@ -306,7 +306,7 @@ const InstaFbPost = () => {
                             <input
                                 name="link"
                                 type="url"
-                                value={fbFormData.link || ""}
+                                value={fbFormData.url}
                                 onChange={handleFbInputChange}
                                 className="w-full border rounded px-3 py-2"
                                 required

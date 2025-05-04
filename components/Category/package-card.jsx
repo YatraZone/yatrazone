@@ -10,7 +10,7 @@ const PackageCard = async ({ pkg }) => {
   }
 
   const reviews = await getReviewsById(pkg?._id)
-
+// console.log(reviews)
   const rating = reviews.filter(review => review.approved).reduce((acc, review) => acc + review.rating, 0);
   const averageRating = rating / reviews.length;
 

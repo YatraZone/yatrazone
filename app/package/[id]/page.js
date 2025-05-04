@@ -30,10 +30,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { DismissableInfoBox } from "@/components/Package/NoticeBox"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import connectDB from "@/lib/connectDB"
 import Package from "@/models/Package"
-import FeaturedPackagesCarousel from "@/components/FeaturedPackagesCarousel";
+import PackageCarouselWrapper from "@/components/PackageCarouselWrapper";
+import FeaturedCarouselWrapper from "@/components/FeaturedCarouselWrapper";
 
 const getPackageById = async (id) => {
     try {
@@ -307,7 +307,13 @@ const PackageDetailsPage = async ({ params }) => {
                                 {/* Description */}
                                 {(packageDetails.basicDetails?.fullDesc) &&
                                     <div className="prose max-w-none leading-none">
-                                        <div className="custom-desc-list  px-6" dangerouslySetInnerHTML={{ __html: packageDetails.basicDetails?.fullDesc || "" }} />
+                                        <div className="custom-desc-list  px-6">
+                                            {packageDetails.basicDetails?.fullDesc ? (
+                                                <div dangerouslySetInnerHTML={{ __html: packageDetails.basicDetails.fullDesc }}></div>
+                                            ) : (
+                                                <p>No description available</p>
+                                            )}
+                                        </div>
                                     </div>
                                 }
                                 {/* Location Map & Gallery Row (50% width each, only in overview section) */}
@@ -338,7 +344,13 @@ const PackageDetailsPage = async ({ params }) => {
                                                         </div>
                                                     </AccordionTrigger>
                                                     <AccordionContent>
-                                                        <div className="py-2 px-6 text-base whitespace-pre-line" dangerouslySetInnerHTML={{ __html: day.selectionDesc }} />
+                                                        <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                            {day.selectionDesc ? (
+                                                                <div dangerouslySetInnerHTML={{ __html: day.selectionDesc }}></div>
+                                                            ) : (
+                                                                <p>No description available</p>
+                                                            )}
+                                                        </div>
                                                     </AccordionContent>
                                                 </AccordionItem>
                                             ))}
@@ -367,7 +379,13 @@ const PackageDetailsPage = async ({ params }) => {
                                                         ?.map((item, index) => (
                                                             <tr key={index} className="border-t">
                                                                 <td className="border px-4 py-2 text-left">{index + 1}</td>
-                                                                <td className="border px-4 py-2 text-left" dangerouslySetInnerHTML={{ __html: item.selectionDesc }} />
+                                                                <td className="border px-4 py-2 text-left">
+                                                                    {item.selectionDesc ? (
+                                                                        <div dangerouslySetInnerHTML={{ __html: item.selectionDesc }}></div>
+                                                                    ) : (
+                                                                        <span>No description available</span>
+                                                                    )}
+                                                                </td>
                                                             </tr>
                                                         ))}
                                                 </tbody>
@@ -390,7 +408,13 @@ const PackageDetailsPage = async ({ params }) => {
                                                         ?.map((item, index) => (
                                                             <tr key={index} className="border-t">
                                                                 <td className="border px-4 py-2 text-left">{index + 1}</td>
-                                                                <td className="border px-4 py-2 text-left" dangerouslySetInnerHTML={{ __html: item.selectionDesc }} />
+                                                                <td className="border px-4 py-2 text-left">
+                                                                    {item.selectionDesc ? (
+                                                                        <div dangerouslySetInnerHTML={{ __html: item.selectionDesc }}></div>
+                                                                    ) : (
+                                                                        <span>No description available</span>
+                                                                    )}
+                                                                </td>
                                                             </tr>
                                                         ))}
                                                 </tbody>
@@ -409,7 +433,13 @@ const PackageDetailsPage = async ({ params }) => {
                                             <AccordionItem key={index} value={`faq-${index}`} className="border-black">
                                                 <AccordionTrigger className="text-left text-lg !no-underline font-bold  px-4 rounded-xl">{faq.selectionTitle}</AccordionTrigger>
                                                 <AccordionContent>
-                                                    <div className="py-2 px-6 text-base whitespace-pre-line" dangerouslySetInnerHTML={{ __html: faq.selectionDesc }} />
+                                                    <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                        {faq.selectionDesc ? (
+                                                            <div dangerouslySetInnerHTML={{ __html: faq.selectionDesc }}></div>
+                                                        ) : (
+                                                            <p>No description available</p>
+                                                        )}
+                                                    </div>
                                                 </AccordionContent>
                                             </AccordionItem>
                                         ))}
@@ -424,7 +454,13 @@ const PackageDetailsPage = async ({ params }) => {
                                                     <AccordionItem key={index} value={`info-${index}`} className="border-yellow-400">
                                                         <AccordionTrigger className="text-left text-lg hover:no-underline">{info.selectionTitle}</AccordionTrigger>
                                                         <AccordionContent>
-                                                            <div className="py-2 px-6 text-base whitespace-pre-line" dangerouslySetInnerHTML={{ __html: info.selectionDesc }} />
+                                                            <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                                {info.selectionDesc ? (
+                                                                    <div dangerouslySetInnerHTML={{ __html: info.selectionDesc }}></div>
+                                                                ) : (
+                                                                    <p>No description available</p>
+                                                                )}
+                                                            </div>
                                                         </AccordionContent>
                                                     </AccordionItem>
                                                 ))}
@@ -442,7 +478,13 @@ const PackageDetailsPage = async ({ params }) => {
                                                     <AccordionItem key={index} value={`info-${index}`} className="border-black">
                                                         <AccordionTrigger className="text-left text-lg hover:no-underline">{info.selectionTitle}</AccordionTrigger>
                                                         <AccordionContent>
-                                                            <div className="py-2 px-6 text-base whitespace-pre-line" dangerouslySetInnerHTML={{ __html: info.selectionDesc }} />
+                                                            <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                                {info.selectionDesc ? (
+                                                                    <div dangerouslySetInnerHTML={{ __html: info.selectionDesc }}></div>
+                                                                ) : (
+                                                                    <p>No description available</p>
+                                                                )}
+                                                            </div>
                                                         </AccordionContent>
                                                     </AccordionItem>
                                                 ))}
@@ -461,7 +503,13 @@ const PackageDetailsPage = async ({ params }) => {
                                             <div key={index}>
                                                 <h4 className="font-semibold px-4">{policy.selectionTitle}</h4>
                                                 {policy.selectionDesc.split("\n")?.map((line, lineIndex) => (
-                                                    <p key={lineIndex} className="text-gray-700 whitespace-pre-line px-6" dangerouslySetInnerHTML={{ __html: line }} />
+                                                    line ? (
+                                                        <p key={lineIndex} className="text-gray-700 whitespace-pre-line px-6">
+                                                            <span dangerouslySetInnerHTML={{ __html: line }}></span>
+                                                        </p>
+                                                    ) : (
+                                                        <p key={lineIndex} className="text-gray-700 whitespace-pre-line px-6"></p>
+                                                    )
                                                 ))}
                                             </div>
                                         ))}
@@ -531,61 +579,10 @@ const PackageDetailsPage = async ({ params }) => {
                             <p className="text-gray-900 font-barlow my-4 px-6 text-center w-[80%] mx-auto">
                                 Discover the Best with Trending Packages – Handpicked deals that are hot today and gone tomorrow! Whether you're looking for top-rated experiences, exclusive products, or unbeatable services, our curated selection brings you the finest offers, updated daily. Don’t miss out – explore what’s trending now and elevate your day with the best!
                             </p>
-                            <Carousel className="max-w-xl lg:max-w-3xl xl:max-w-5xl mx-auto my-6 md:my-10 w-full md:w-full">
-                                <CarouselContent className="-ml-1 w-full">
-                                    {packages.map((item, index) => (
-                                        <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
-                                            <div className="p-1">
-                                                <Card>
-                                                    <CardContent className="p-0 rounded-xl flex flex-col h-[420px] justify-between  bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
-                                                        <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
-                                                            <Image
-                                                                src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
-                                                                alt={item?.packageName || "Tour package image"}
-                                                                width={1280}
-                                                                height={720}
-                                                                quality={50}
-                                                                className="rounded-t-xl w-full h-full"
-                                                            />
-                                                        </div>
-                                                        <div className="p-4 flex flex-col gap-2 ">
-                                                            <div className="flex xl:flex-row flex-col gap-2 xl:items-center justify-between font-barlow">
-                                                                <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
-                                                                    <MapPin size={20} /> {item?.basicDetails?.location}
-                                                                </p>
-                                                                <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
-                                                                    <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
-                                                                </p>
-                                                            </div>
-                                                            <p className="font-bold text-xl line-clamp-2">{item?.packageName}</p>
-                                                        </div>
-                                                        <div className="h-px bg-gray-200 my-1" />
-                                                        <div className="flex flex-col gap-2 flex-1">
-                                                            <div className="text-gray-700 text-sm mb-2 h-16 overflow-y-auto line-clamp-2"><span dangerouslySetInnerHTML={{ __html: item?.basicDetails?.smallDesc || "" }} /></div>
-                                                        </div>
-                                                        <div className="p-4 flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow">
-                                                            <div>
-                                                                <p className="text-sm">
-                                                                    Starting From:{" "}
-                                                                    <span className="font-bold text-blue-600">
-                                                                        ₹<span className="text-xl">{formatNumeric(item?.price)}</span>
-                                                                    </span>
-                                                                </p>
-                                                                <p className="text-xs font-semibold">Onwards</p>
-                                                            </div>
-                                                            <Link href={`/package/${item._id}`}>
-                                                                <Button className="bg-blue-500 hover:bg-blue-600 uppercase rounded-sm">Learn more</Button>
-                                                            </Link>
-                                                        </div>
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-                                <CarouselPrevious />
-                                <CarouselNext />
-                            </Carousel>
+                            <PackageCarouselWrapper 
+                                packages={JSON.parse(JSON.stringify(packages))} 
+                                formatNumeric={formatNumeric.toString()} 
+                            />
                         </div>}
 
 
@@ -595,7 +592,7 @@ const PackageDetailsPage = async ({ params }) => {
                                 YatraZone is more than just a travel company; we are facilitators of spiritual exploration and cultural immersion tailored for Indian pilgrims and global adventurers. With years of expertise in pilgrimage tourism within India, we curate authentic and meaningful journeys that resonate with every spiritual seeker.
                                 From holy treks in the Himalayas to pilgrimages to ancient temples and sacred sites, we ensure transformative experiences.
                             </p>
-                            <FeaturedPackagesCarousel featuredPackages={featuredPackages} />
+                            <FeaturedCarouselWrapper featuredPackages={JSON.parse(JSON.stringify(featuredPackages))} />
                         </section>
                     </div>
                 </div>

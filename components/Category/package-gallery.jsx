@@ -46,13 +46,18 @@ const PackageGallery = ({ images }) => {
   const slides = chunkGalleryImages(galleryImages);
   const flatImages = galleryImages;
 
+  // Responsive container width based on sidebar
+  // const containerClass = sidebarOpen
+  //   ? "space-y-4 overflow-visible px-5 relative w-full md:w-[calc(100%-var(--sidebar-width))] transition-all"
+  //   : "space-y-4 overflow-visible px-5 relative w-full transition-all";
+
   return (
-    <div className="space-y-4 overflow-visible px-5 relative">
+    <div className="space-y-4 overflow-visible px-5 relative w-full transition-all">
       <Carousel className="overflow-visible w-full">
         <CarouselContent>
           {slides.map((slide, slideIdx) => (
             <CarouselItem className="basis-full" key={slideIdx}>
-              <div className="grid grid-cols-4 gap-2 auto-rows-fr">
+         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 auto-rows-fr">
                 {/* Col 1 */}
                 <div className="flex flex-col gap-2 h-full ">
                   {slide[0] && (
