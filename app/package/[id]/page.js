@@ -136,7 +136,7 @@ const PackageDetailsPage = async ({ params }) => {
             {/* Package Content */}
             <div className="min-h-screen mb-20 font-barlow">
                 {/* Banner */}
-                <div className="relative h-[300px]  md:h-[300px] w-full  overflow-hidden">
+                <div className="relative h-[100px]  md:h-[300px] w-full  overflow-hidden">
                     <Image
                         src={packageDetails.basicDetails?.imageBanner?.url || "https://dummyimage.com/600x400/000/fff"}
                         alt={packageDetails.packageName || "Tour package image"}
@@ -145,7 +145,6 @@ const PackageDetailsPage = async ({ params }) => {
                         priority
                     />
                 </div>
-
                 {/* Package Details */}
                 <div className="md:w-full w-[22rem] mx-auto md:px-4 py-6">
                     <div className="bg-white rounded-lg  overflow-hidden">
@@ -173,7 +172,7 @@ const PackageDetailsPage = async ({ params }) => {
                                             </div>
                                             <div className="flex items-center text-gray-600">
                                                 <Calendar className="h-4 w-4 mr-1" />
-                                                <span>Duration: {packageDetails.basicDetails?.duration}</span>
+                                                <span>Duration: {packageDetails.basicDetails?.duration} Days</span>
                                             </div>
                                             <div className="flex items-center text-gray-600">
                                                 <Clock className="h-4 w-4 mr-1 " />
@@ -317,7 +316,7 @@ const PackageDetailsPage = async ({ params }) => {
                                     </div>
                                 }
                                 {/* Location Map & Gallery Row (50% width each, only in overview section) */}
-                                <div className="flex flex-col md:flex-row gap-8 my-8 w-full">
+                                <div className="flex  gap-8 my-8 w-full">
                                     {/* Location Map - only show if location exists */}
                                     {packageDetails.info?.filter((item) => item.typeOfSelection === "Location Map")[0]?.selectionDesc && (
                                         <div className="w-full">
@@ -344,7 +343,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         </div>
                                                     </AccordionTrigger>
                                                     <AccordionContent>
-                                                        <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                        <div className="py-2 px-6 prose max-w-none leading-none custom-desc-list ">
                                                             {day.selectionDesc ? (
                                                                 <div dangerouslySetInnerHTML={{ __html: day.selectionDesc }}></div>
                                                             ) : (
@@ -365,11 +364,10 @@ const PackageDetailsPage = async ({ params }) => {
                                     <div className="flex md:flex-row flex-col items-start justify-evenly gap-6">
                                         {/* Inclusions */}
                                         <div className="w-full overflow-x-auto">
-                                            <h3 className="text-2xl font-bold mb-4">• Inclusions</h3>
+                                            <h3 className="text-2xl font-bold mb-4 text-center">Inclusions</h3>
                                             <table className="min-w-full table-auto border-collapse">
                                                 <thead>
                                                     <tr className="bg-gray-100">
-                                                        <th className="border px-4 py-2 text-left">#</th>
                                                         <th className="border px-4 py-2 text-left">Description</th>
                                                     </tr>
                                                 </thead>
@@ -378,7 +376,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         ?.filter((info) => info.typeOfSelection === "Inclusions")
                                                         ?.map((item, index) => (
                                                             <tr key={index} className="border-t">
-                                                                <td className="border px-4 py-2 text-left">{index + 1}</td>
+                                                             
                                                                 <td className="border px-4 py-2 text-left">
                                                                     {item.selectionDesc ? (
                                                                         <div dangerouslySetInnerHTML={{ __html: item.selectionDesc }}></div>
@@ -394,11 +392,10 @@ const PackageDetailsPage = async ({ params }) => {
 
                                         {/* Exclusions */}
                                         <div className="w-full overflow-x-auto">
-                                            <h3 className="text-2xl font-bold mb-4">• Exclusions</h3>
+                                            <h3 className="text-2xl font-bold mb-4 text-center">Exclusions</h3>
                                             <table className="min-w-full table-auto border-collapse">
                                                 <thead>
                                                     <tr className="bg-gray-100">
-                                                        <th className="border px-4 py-2 text-left">#</th>
                                                         <th className="border px-4 py-2 text-left">Description</th>
                                                     </tr>
                                                 </thead>
@@ -407,7 +404,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         ?.filter((info) => info.typeOfSelection === "Exclusions")
                                                         ?.map((item, index) => (
                                                             <tr key={index} className="border-t">
-                                                                <td className="border px-4 py-2 text-left">{index + 1}</td>
+                                                            
                                                                 <td className="border px-4 py-2 text-left">
                                                                     {item.selectionDesc ? (
                                                                         <div dangerouslySetInnerHTML={{ __html: item.selectionDesc }}></div>
@@ -427,13 +424,12 @@ const PackageDetailsPage = async ({ params }) => {
                             <TabsContent value="AdditionalInformation" className="space-y-8">
                                 {/* FAQs */}
                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Frequently Asked Questions").length > 0 && <div>
-                                    <h3 className="text-2xl font-bold mb-4">• Frequently Asked Questions</h3>
                                     <Accordion type="single" collapsible className="w-full">
                                         {packageDetails.info?.filter((info) => info.typeOfSelection === "Frequently Asked Questions")?.map((faq, index) => (
                                             <AccordionItem key={index} value={`faq-${index}`} className="border-black">
                                                 <AccordionTrigger className="text-left text-lg !no-underline font-bold  px-4 rounded-xl">{faq.selectionTitle}</AccordionTrigger>
                                                 <AccordionContent>
-                                                    <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                    <div className="py-2 px-6 text-base whitespace-pre-line  prose max-w-none leading-none custom-desc-list ">
                                                         {faq.selectionDesc ? (
                                                             <div dangerouslySetInnerHTML={{ __html: faq.selectionDesc }}></div>
                                                         ) : (
@@ -446,8 +442,8 @@ const PackageDetailsPage = async ({ params }) => {
                                     </Accordion>
                                 </div>}
                                 {/* Important Information */}
-                                {packageDetails.info?.filter((info) => info.typeOfSelection === "Important Information").length > 0 && <div className="pt-12">
-                                    <div className="p-4">
+                                {packageDetails.info?.filter((info) => info.typeOfSelection === "Important Information").length > 0 && <div className="">
+                                    <div className="p-1">
                                         <div className="flex items-start">
                                             <Accordion type="single" collapsible className="w-full">
                                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Important Information")?.map((info, index) => (
@@ -470,15 +466,15 @@ const PackageDetailsPage = async ({ params }) => {
                                 </div>}
 
                                 {/* Other */}
-                                {packageDetails.info?.filter((info) => info.typeOfSelection === "Other").length > 0 && <div className="pt-12">
-                                    <div className="p-4">
+                                {packageDetails.info?.filter((info) => info.typeOfSelection === "Other").length > 0 && <div className="">
+                                    <div className="p-1">
                                         <div className="flex items-start">
                                             <Accordion type="single" collapsible className="w-full">
                                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Other")?.map((info, index) => (
                                                     <AccordionItem key={index} value={`info-${index}`} className="border-black">
                                                         <AccordionTrigger className="text-left text-lg hover:no-underline">{info.selectionTitle}</AccordionTrigger>
                                                         <AccordionContent>
-                                                            <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                            <div className="py-2 px-6 text-base whitespace-pre-line  prose max-w-none leading-none custom-desc-list ">
                                                                 {info.selectionDesc ? (
                                                                     <div dangerouslySetInnerHTML={{ __html: info.selectionDesc }}></div>
                                                                 ) : (
@@ -497,14 +493,14 @@ const PackageDetailsPage = async ({ params }) => {
                             <TabsContent value="PolicyContent" className="space-y-8">
                                 {/* Policies */}
                                 {packageDetails.info?.filter((info) => info.typeOfSelection === "Policy Content").length > 0 && <div>
-                                    <h3 className="text-2xl font-bold mb-4 px-2">• Policies</h3>
+                                    <h3 className="text-2xl font-bold mb-4 px-2"></h3>
                                     <div className="space-y-4 px-2">
                                         {packageDetails.info?.filter((info) => info.typeOfSelection === "Policy Content")?.map((policy, index) => (
                                             <div key={index}>
-                                                <h4 className="font-semibold px-4">{policy.selectionTitle}</h4>
+                                                <h4 className="font-bold text-lg px-5 mb-3">{policy.selectionTitle}</h4>
                                                 {policy.selectionDesc.split("\n")?.map((line, lineIndex) => (
                                                     line ? (
-                                                        <p key={lineIndex} className="text-gray-700 whitespace-pre-line px-6">
+                                                        <p key={lineIndex} className="text-gray-700 whitespace-pre-line px-6  prose max-w-none leading-none custom-desc-list ">
                                                             <span dangerouslySetInnerHTML={{ __html: line }}></span>
                                                         </p>
                                                     ) : (
@@ -566,7 +562,7 @@ const PackageDetailsPage = async ({ params }) => {
 
                         {/* Gallery */}
                         {packageDetails?.gallery?.length > 0 &&
-                            <div className="px-8 py-6">
+                            <div className="px-2 md:px-8 py-6 mt-5 md:mt-10">
                                 <h3 className="text-2xl font-bold mb-4 px-2 text-center"> Glimpse of a package</h3>
                                 <p className="text-gray-900 font-barlow my-4 px-6 text-center w-[80%] mx-auto">
                                     Step Inside Our World – Explore Our Gallery to see the latest trending packages, customer favorites, and behind-the-scenes moments. From curated collections to exclusive glimpses of what’s in store, every image tells a story of style, quality, and innovation. Get inspired, get excited – and get ready to experience it for yourself.
@@ -574,7 +570,8 @@ const PackageDetailsPage = async ({ params }) => {
                                 <PackageGallery images={packageDetails.gallery} />
                             </div>
                         }
-                        {packages.length > 0 && <div className="p-4 bg-white">
+                        {/* You Might Also Like */}
+                        {packages.length > 0 && <div className="px-2 md:px-8 py-6 mt-10 md:mt-3">
                             <h3 className="text-2xl font-bold mb-4 px-2 text-center">You Might Also Like</h3>
                             <p className="text-gray-900 font-barlow my-4 px-6 text-center w-[80%] mx-auto">
                                 Discover the Best with Trending Packages – Handpicked deals that are hot today and gone tomorrow! Whether you're looking for top-rated experiences, exclusive products, or unbeatable services, our curated selection brings you the finest offers, updated daily. Don’t miss out – explore what’s trending now and elevate your day with the best!
@@ -585,8 +582,8 @@ const PackageDetailsPage = async ({ params }) => {
                             />
                         </div>}
 
-
-                        <section className="p-4 bg-white">
+                        {/* Be a part of spiritual journey */}
+                        <section className="px-2">
                             <h3 className="font-bold text-2xl md:text-2xl text-center mt-7">Be a part of a spiritual journey.</h3>
                             <p className="text-gray-900 py-8 text-center font-barlow  w-[80%] mx-auto">
                                 YatraZone is more than just a travel company; we are facilitators of spiritual exploration and cultural immersion tailored for Indian pilgrims and global adventurers. With years of expertise in pilgrimage tourism within India, we curate authentic and meaningful journeys that resonate with every spiritual seeker.

@@ -158,8 +158,8 @@ const RandomTourPackageSection = () => {
     return (
         <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
             <div className=" w-full h-full overflow-hidden max-w-screen ">
-                <div className="w-full py-9 px-14">
-                    <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-center">Trending Packages: The Best, Today</h1>
+                <div className="w-full py-9 px-5 md:px-14">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center">Trending Packages: The Best, Today</h1>
                     <p className=" text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Discover the hottest deals with our Trending Packages! Curated daily, these top-rated picks offer the best value and quality — handpicked for professionals who demand the best, today. Don’t miss out — elevate your experience now!</p>
                     <Carousel className={`w-[85%] md:w-[100%] drop-shadow-xl mx-auto my-4 md:my-12 ${packages.length > 0 ? "block" : "hidden"}`}>
                         <CarouselContent className="-ml-1 w-full">
@@ -171,7 +171,7 @@ const RandomTourPackageSection = () => {
                                     <div className="p-1">
                                         <Card className="h-full">
                                             <CardContent className="h-[400px] justify-between bg-white rounded-xl shadow p-4 flex flex-col relative overflow-hidden group">
-                                            <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
+                                            <div className="relative w-full h-60 md:h-48 mb-3 rounded-lg overflow-hidden">
                                                 <Image
                                                     src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
                                                     alt={item?.packageName}
@@ -182,7 +182,7 @@ const RandomTourPackageSection = () => {
                                                 />
                                             </div>
                                                 <div className="p-2 flex flex-col gap-2">
-                                                    <div className="flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow">
+                                                    <div className="flex xl:flex-row flex xl:items-center justify-between gap-2 font-barlow">
                                                         <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
                                                             <MapPin size={20} /> {item?.basicDetails?.location}
                                                         </p>
@@ -221,7 +221,7 @@ const RandomTourPackageSection = () => {
                     {/* Blog Section with full-width background */}
                     {!isBlogsLoading && blogs && blogs.length > 0 && (
                         <div className="w-full flex flex-col items-center mt-12">
-                            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold w-full text-center">Our Blog</h1>
+                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold w-full text-center">Our Blog</h1>
                             <p className="text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Stay ahead of the curve with Trending Packages – The Best, Today. We bring you a curated selection of the most popular, high-value deals and experiences that are capturing attention right now. From must-have products to top-rated services, each package is handpicked for quality, relevance, and impact. Updated daily to reflect what’s hot and happening, it’s your go-to source for discovering what’s trending – and making the most of it. Don’t just follow the trend, be part of it.
                             </p>
                             {/* Two Promotional Banners */}
@@ -359,7 +359,7 @@ const RandomTourPackageSection = () => {
                     {/* Instagram-like Image Carousel using Carousel classes */}
                     {!isInstaLoading && !isFbLoading && allPosts.length > 0 && (
                         <div className="w-full flex flex-col items-center mt-12">
-                            <h2 className="text-center font-bold text-xl md:text-3xl lg:text-4xl">Don’t just watch the trends — live them!</h2>
+                            <h2 className="text-center font-bold text-2xl md:text-3xl lg:text-4xl">Don’t just watch the trends — live them!</h2>
                             <p className="text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">
                          Follow us on social media for your daily dose of Trending Packages, exclusive offers, behind-the-scenes peeks, and real-time updates. Join our community of trendsetters and be the first to explore what’s new, what’s hot, and what everyone’s talking about. Your next favorite find is just a follow away!
                             </p>
@@ -367,13 +367,13 @@ const RandomTourPackageSection = () => {
                                 <CarouselContent>
                                     {allPosts.map((post, idx) => (
                                         <CarouselItem key={post._id || idx} className={`pl-1 ${allPosts.length <= 3 ? cardBasis : 'md:basis-1/5'}`} style={allPosts.length <= 3 ? { minWidth: `calc(100%/${allPosts.length})` } : {}}>
-                                            <div className="relative group rounded-lg overflow-hidden w-full h-40 md:h-52 bg-gray-100">
+                                            <div className="relative group rounded-lg overflow-hidden w-full h-60  md:h-52 bg-gray-100">
                                                 <Image
                                                     src={post.image}
                                                     alt={`${post.type === "facebook" ? "Facebook" : "Instagram"} ${idx}`}
                                                     width={400}
                                                     height={400}
-                                                    className="object-cover w-full h-full"
+                                                    className="object-cover md:object-cover w-full h-full"
                                                 />
                                                 <a
                                                     href={post.url}

@@ -39,7 +39,7 @@ export function   NavMain({
                             <CollapsibleTrigger asChild className="hover:bg-blue-300 h-auto data-[state=open]:bg-blue-300">
                                 <SidebarMenuButton tooltip={item.title} >
                                     <ChartBarStacked className={`${open ? "!size-4" : "!size-6"} text-center`} />
-                                    <span className="text-sm   ">{item.title}</span>
+                                    <span className="text-sm">{item.title}</span>
                                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                 </SidebarMenuButton>
                             </CollapsibleTrigger>
@@ -50,7 +50,7 @@ export function   NavMain({
                                             <SidebarMenuSubButton asChild className="hover:bg-blue-300">
                                                 <a href={'/category/' + subItem.url} className="flex items-center">
                                                     <CircleSmall className="!size-3 text-center" />
-                                                    <span className="text-lg">{subItem.title}</span>
+                                                    <span className="text-sm">{subItem.title}</span>
                                                 </a>
                                             </SidebarMenuSubButton>
                                         </SidebarMenuSubItem>

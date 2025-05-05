@@ -81,7 +81,7 @@ const ResponsiveFeaturedCarousel = ({ featuredPackages: initialFeaturedPackages 
 
     return (
         <div className="flex flex-col items-center">
-            <Carousel className={`max-w-xl lg:max-w-3xl ${containerWidth} mx-auto my-6 md:my-10 w-full md:w-full`}>
+            <Carousel className={`max-w-2xl lg:max-w-3xl ${containerWidth} mx-auto my-6 md:my-10 w-full`}>
                 <CarouselContent className="-ml-1 w-full">
                     {(Array.isArray(featuredPackages) ? featuredPackages : []).map((item) => (
                         <CarouselItem key={item._id} className={`pl-1 ${itemWidthClasses}`}>
