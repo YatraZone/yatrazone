@@ -156,13 +156,13 @@ const RandomTourPackageSection = () => {
     const cardBasis = allPosts.length <= 3 ? `basis-1/${allPosts.length}` : "md:basis-1/5";
 
     return (
-        <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
+        <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full px-10 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
             <div className=" w-full h-full overflow-hidden max-w-screen ">
-                <div className="w-full py-9 px-5 md:px-14">
-                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center">Trending Packages: The Best, Today</h1>
+                <div className="w-full py-9 px-5 md:px-2">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mt-10">Trending Packages: The Best, Today</h1>
                     <p className=" text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Discover the hottest deals with our Trending Packages! Curated daily, these top-rated picks offer the best value and quality — handpicked for professionals who demand the best, today. Don’t miss out — elevate your experience now!</p>
-                    <Carousel className={`w-[85%] md:w-[100%] drop-shadow-xl mx-auto my-4 md:my-12 ${packages.length > 0 ? "block" : "hidden"}`}>
-                        <CarouselContent className="-ml-1 w-full">
+                    <Carousel className={`w-full md:w-[92%] drop-shadow-xl mx-auto my-4 ${packages.length > 0 ? "block" : "hidden"}`}>
+                        <CarouselContent className="-ml-1 w-full ">
                             {packages.length > 0 && packages.map((item, index) => (
                                 <CarouselItem
                                     key={index}
@@ -221,7 +221,7 @@ const RandomTourPackageSection = () => {
                     {/* Blog Section with full-width background */}
                     {!isBlogsLoading && blogs && blogs.length > 0 && (
                         <div className="w-full flex flex-col items-center mt-12">
-                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold w-full text-center">Our Blog</h1>
+                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold w-full text-center md:pt-10">Our Blog</h1>
                             <p className="text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Stay ahead of the curve with Trending Packages – The Best, Today. We bring you a curated selection of the most popular, high-value deals and experiences that are capturing attention right now. From must-have products to top-rated services, each package is handpicked for quality, relevance, and impact. Updated daily to reflect what’s hot and happening, it’s your go-to source for discovering what’s trending – and making the most of it. Don’t just follow the trend, be part of it.
                             </p>
                             {/* Two Promotional Banners */}

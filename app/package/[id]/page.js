@@ -343,7 +343,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         </div>
                                                     </AccordionTrigger>
                                                     <AccordionContent>
-                                                        <div className="py-2 px-6 prose max-w-none leading-none custom-desc-list ">
+                                                        <div className="py-2 px-6 text-base whitespace-pre-line">
                                                             {day.selectionDesc ? (
                                                                 <div dangerouslySetInnerHTML={{ __html: day.selectionDesc }}></div>
                                                             ) : (

@@ -41,56 +41,6 @@ const AboutUsSection = () => {
             location: "Rajasthan, India",
             footertext: "Step into history and faith",
         },
-        // {
-        //     _id: "4",
-        //     link: "#",
-        //     image: { url: "https://dummyimage.com/1280x720/999/fff" },
-        //     headerText: "Holy River Tour",
-        //     title: "Ganges Expedition",
-        //     subTitle: "Experience the sacred river",
-        //     location: "Haridwar, India",
-        //     footertext: "A transformative river pilgrimage",
-        // },
-        // {
-        //     _id: "5",
-        //     link: "#",
-        //     image: { url: "https://dummyimage.com/1280x720/000/fff" },
-        //     headerText: "Spiritual Retreat",
-        //     title: "Himalayan Pilgrimage",
-        //     subTitle: "Find peace in the mountains",
-        //     location: "Uttarakhand, India",
-        //     footertext: "A journey to rejuvenate your soul",
-        // },
-        // {
-        //     _id: "6",
-        //     link: "#",
-        //     image: { url: "https://dummyimage.com/1280x720/333/fff" },
-        //     headerText: "Divine Experience",
-        //     title: "Temple Tour",
-        //     subTitle: "Sacred sites across India",
-        //     location: "Varanasi, India",
-        //     footertext: "Explore the roots of spirituality",
-        // },
-        // {
-        //     _id: "7",
-        //     link: "#",
-        //     image: { url: "https://dummyimage.com/1280x720/666/fff" },
-        //     headerText: "Cultural Journey",
-        //     title: "Ancient Wonders",
-        //     subTitle: "Historical & spiritual landmarks",
-        //     location: "Rajasthan, India",
-        //     footertext: "Step into history and faith",
-        // },
-        // {
-        //     _id: "8",
-        //     link: "#",
-        //     image: { url: "https://dummyimage.com/1280x720/999/fff" },
-        //     headerText: "Holy River Tour",
-        //     title: "Ganges Expedition",
-        //     subTitle: "Experience the sacred river",
-        //     location: "Haridwar, India",
-        //     footertext: "A transformative river pilgrimage",
-        // },
     ];
 
     useEffect(() => {
@@ -149,7 +99,7 @@ const AboutUsSection = () => {
     }
 
     return (
-        <section className="relative py-1 w-full px-2 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
+        <section className="relative py-1 w-full px-10 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
             <div className="w-full">
    
                 <h2 className="font-bold text-2xl md:text-4xl text-center mt-7">Be a part of a spiritual journey.</h2>
