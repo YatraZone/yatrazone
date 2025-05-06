@@ -25,7 +25,6 @@ export default function SearchBar({ placeholder }) {
             try {
                 const res = await fetch("/api/getSearchPackages");
                 const data = await res.json();
-
                 if (data.packages && data.packages.length > 0) {
                     setPackages(data.packages);
                 }

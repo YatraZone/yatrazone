@@ -41,7 +41,23 @@ export function AppSidebar({ className, menuItems, fixedMenuItems, policy }) {
   return (
     <Sidebar collapsible="icon" className={`${className}`}>
       <SidebarHeader className="pt-3 h-16 flex items-center justify-start">
-        <Link href="/"><img src="/logo.png" alt="logo" className={` ${open ? "w-[12rem]" : "-rotate-10"}`} /></Link>
+        <Link href="/">
+          {/* Desktop (md and up) */}
+          <span className="hidden md:block">
+            {open ? (
+              <img src="/logo.png" alt="logo" className="w-[12rem] transition-all duration-200" />
+            ) : (
+              <img src="/small-logo.png" alt="small logo" className="w-[5rem] transition-all duration-200" />
+            )}
+          </span>
+
+          {/* Mobile (below md) */}
+          <span className="block md:hidden">
+            <img src="/logo.png" alt="logo" className="w-[12rem] transition-all duration-200" />
+          </span>
+        </Link>
+
+
       </SidebarHeader>
       <SidebarContent className="lg:mt-2 items-center font-barlow">
         <NavMain items={menuItems} fixedItems={fixedMenuItems} />

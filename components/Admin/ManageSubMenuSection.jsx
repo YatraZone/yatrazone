@@ -208,7 +208,8 @@ const ManageSubMenuSection = () => {
             if (!response.ok) {
                 toast.error("Failed to update status")
             }
-            fetchCategories()
+            await fetchCategories();
+            window.dispatchEvent(new Event('menuItemsUpdated'));
         } catch (error) {
             toast.error("Something went wrong")
         }
@@ -233,14 +234,11 @@ const ManageSubMenuSection = () => {
             if (category.subCat) {
                 for (const subcat of category.subCat) {
                     if (subcat._id === selectedSubcategory && subcat.subCatPackage) {
-                        // Filter only active packages
-                        return subcat.subCatPackage
-                            .filter(pkg => pkg.active) // Only show active packages
-                            .map(pkg => ({
-                                ...pkg,
-                                categoryTitle: category.catTitle,
-                                subcategoryTitle: subcat.title
-                            }))
+                        return subcat.subCatPackage.map(pkg => ({
+                            ...pkg,
+                            categoryTitle: category.catTitle,
+                            subcategoryTitle: subcat.title
+                        }))
                     }
                 }
             }
@@ -379,7 +377,7 @@ const ManageSubMenuSection = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {categories.filter(cat => cat.active).map((category) => (
+                            {categories.map((category) => (
                                 <TableRow key={category._id}>
                                     <TableCell className="font-medium">{category.catTitle}</TableCell>
                                     <TableCell>
@@ -432,7 +430,7 @@ const ManageSubMenuSection = () => {
                         </TableHeader>
                         <TableBody>
                             {categories.map((category) => (
-                                category.subCat?.filter(subCategory => subCategory.active).map((subCategory) => (
+                                category.subCat?.map((subCategory) => (
                                     <TableRow key={`subcat-${subCategory._id}`}>
                                         <TableCell>{category.catTitle}</TableCell>
                                         <TableCell>{subCategory.title}</TableCell>

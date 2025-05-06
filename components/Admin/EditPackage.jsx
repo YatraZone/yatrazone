@@ -124,7 +124,7 @@ const LineHeight = Extension.create({
         types: ['textStyle'],
         attributes: {
           lineHeight: {
-            default: '1.5',
+            default: '1',
             parseHTML: element => element.style.lineHeight,
             renderHTML: attributes => {
               if (!attributes.lineHeight) return {}

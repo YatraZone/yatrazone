@@ -48,7 +48,7 @@ const AboutUsSection = () => {
             try {
                 const response = await fetch('/api/featured-packages');
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 setFeaturedPackages(data.length ? data : dummyPackages); // Use dummy data if API returns empty
             } catch (error) {
                 console.error('Error fetching data:', error);

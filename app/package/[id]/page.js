@@ -34,6 +34,8 @@ import connectDB from "@/lib/connectDB"
 import Package from "@/models/Package"
 import PackageCarouselWrapper from "@/components/PackageCarouselWrapper";
 import FeaturedCarouselWrapper from "@/components/FeaturedCarouselWrapper";
+import ComingSoon from "@/models/ComingSoon";
+import ComingSoonEnquiryForm from "@/components/ComingSoonEnquiryForm";
 
 const getPackageById = async (id) => {
     try {
@@ -70,11 +72,30 @@ const getFeaturedPackages = async () => {
     }
 };
 
+// Helper: get Coming Soon package by id
+const getComingSoonById = async (id) => {
+    try {
+        await connectDB();
+        const pkg = await ComingSoon.findById(id).lean();
+        console.log(pkg)
+        return pkg || null;
+    } catch (e) {
+        return null;
+    }
+};
+
 const PackageDetailsPage = async ({ params }) => {
     const { id } = await params;
-    await connectDB()
+    await connectDB();
     const session = await getServerSession(authOptions);
-    const packageDetails = await getPackageById(id);
+    // Try Package first
+    let packageDetails = await getPackageById(id);
+    let isComingSoon = false;
+    if (!packageDetails) {
+        // Try ComingSoon
+        packageDetails = await getComingSoonById(id);
+        isComingSoon = !!packageDetails;
+    }
     const reviews = await getReviewsById(id);
 
     const packages = await Package.find({}).limit(10).lean().exec();
@@ -89,7 +110,7 @@ const PackageDetailsPage = async ({ params }) => {
         return new Intl.NumberFormat('en-IN').format(number);
     };
 
-    if (!packageDetails || packageDetails.active === false) {
+    if (!packageDetails) {
         return (
             <div className="container mx-auto px-4 py-12 text-center">
                 <h1 className="text-3xl font-bold mb-4">Package Not Available</h1>
@@ -98,6 +119,92 @@ const PackageDetailsPage = async ({ params }) => {
                     <Link href="/">Back to Home</Link>
                 </Button>
             </div>
+        );
+    }
+
+    if (isComingSoon) {
+        // --- COMING SOON PAGE ---
+        return (
+            <SidebarInset>
+                <div className="min-h-screen mb-20 font-barlow">
+                    {/* Banner */}
+                    <div className="relative h-[120px] md:h-[300px] w-full overflow-hidden bg-gray-300 flex items-center justify-center">
+                        {packageDetails.bannerUrl ? (
+                            <Image src={packageDetails.thumbUrl} alt="Banner" fill className="object-cover" />
+                        ) : (
+                            <span className="text-2xl md:text-4xl font-bold text-gray-400">IMAGE BANNER</span>
+                        )}
+                    </div>
+                    <div className="lg:p-6 p-2 border-b">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                            <div className="flex md:flex-row flex-col items-center gap-4">
+                            {packageDetails.thumbUrl ? (
+                                <Image
+                                    src={packageDetails.bannerUrl || "https://dummyimage.com/600x400/000/fff"}
+                                    alt="Tour package image"
+                                    width={300}
+                                    height={300}
+                                    className="object-cover w-full lg:w-96 rounded-xl aspect-video"
+                                />
+                            ):(
+                                <div className="w-full aspect-video bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-500">Image<br/>Update Soon</div>
+                            )}
+                                <div className="flex flex-col gap-2 lg:w-[50rem]">
+                                    {/* <div className="flex items-center gap-2 text-sm text-gray-600">
+                                        <Tag className="h-4 w-4" />
+                                        <span className="font-medium">Package Code: <span className="font-bold tracking-wider text-black">kj</span></span>
+                                    </div> */}
+                                    <h2 className="text-2xl lg:text-4xl font-gilda font-bold w-full">{packageDetails?.title}</h2>
+                                    <div className="flex flex-wrap gap-4">
+                                        <div className="flex items-center text-gray-600">
+                                            <MapPin className="h-4 w-4 mr-1" />
+                                            <span>Location: {packageDetails.location}</span>
+                                        </div>
+                                        <div className="flex items-center text-gray-600">
+                                            <Calendar className="h-4 w-4 mr-1" />
+                                            <span>Duration: {packageDetails.days} Days</span>
+                                        </div>
+                                        <div className="flex items-center text-gray-600">
+                                            <Clock className="h-4 w-4 mr-1 " />
+                                            <span>Tour Type: {packageDetails.tourType}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4 mt-4">
+                                        <Button size="icon" className="bg-white border-2 border-blue-600 !p-6 hover:bg-blue-100 rounded-lg">
+                                            <Link href={`tel:+918006000325`}><PhoneCall className="!h-6 !w-6 text-black" /></Link>
+                                        </Button>
+                                        <Button className="bg-green-600 border-2 border-green-300 !p-6 hover:bg-green-700 !text-white rounded-lg">
+                                            <Link
+                                                href={`https://wa.me/918006000325?text=${encodeURIComponent(`I'm interested in your package $sdfg`)}`}
+                                                className="flex items-center gap-2 text-lg"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <MessageCircle className="!h-6 !w-6 !text-white" />
+                                                Whatsapp
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="md:text-right w-fit">
+                                <div className="text-2xl font-bold text-primary">₹<span className="text-4xl text-blue-600">XXXX*</span></div>
+                                <div className="text-sm text-gray-600 font-medium">Per Person</div>
+                                <div className="flex items-center md:justify-end mt-1">
+                                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                                        <span className="ml-1 text-sm font-medium">0</span>
+                                         <span className="ml-1 text-sm text-gray-500 font-medium">reviews</span>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* ENQUIRY FORM */}
+                    <div className="bg-blue-100 rounded-lg p-8 mt-10 max-w-3xl mx-auto">
+                        <h2 className="font-bold text-xl mb-6">Enquire Now For this Package</h2>
+                        <ComingSoonEnquiryForm packageId={packageDetails._id?.toString()} />
+                    </div>
+                </div>
+            </SidebarInset>
         );
     }
 
@@ -129,7 +236,6 @@ const PackageDetailsPage = async ({ params }) => {
     const avgRating = validReviews.length > 0
         ? parseFloat(validReviews.reduce((total, review) => total + review.rating, 0) / validReviews.length)
         : 0;
-
 
     return (
         <SidebarInset>
@@ -343,7 +449,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         </div>
                                                     </AccordionTrigger>
                                                     <AccordionContent>
-                                                        <div className="py-2 px-6 text-base whitespace-pre-line">
+                                                        <div className="py-2 px-6 prose max-w-none leading-none">
                                                             {day.selectionDesc ? (
                                                                 <div dangerouslySetInnerHTML={{ __html: day.selectionDesc }}></div>
                                                             ) : (
@@ -376,7 +482,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         ?.filter((info) => info.typeOfSelection === "Inclusions")
                                                         ?.map((item, index) => (
                                                             <tr key={index} className="border-t">
-                                                             
+
                                                                 <td className="border px-4 py-2 text-left">
                                                                     {item.selectionDesc ? (
                                                                         <div dangerouslySetInnerHTML={{ __html: item.selectionDesc }}></div>
@@ -404,7 +510,7 @@ const PackageDetailsPage = async ({ params }) => {
                                                         ?.filter((info) => info.typeOfSelection === "Exclusions")
                                                         ?.map((item, index) => (
                                                             <tr key={index} className="border-t">
-                                                            
+
                                                                 <td className="border px-4 py-2 text-left">
                                                                     {item.selectionDesc ? (
                                                                         <div dangerouslySetInnerHTML={{ __html: item.selectionDesc }}></div>
@@ -576,9 +682,9 @@ const PackageDetailsPage = async ({ params }) => {
                             <p className="text-gray-900 font-barlow my-4 px-6 text-center w-[80%] mx-auto">
                                 Discover the Best with Trending Packages – Handpicked deals that are hot today and gone tomorrow! Whether you're looking for top-rated experiences, exclusive products, or unbeatable services, our curated selection brings you the finest offers, updated daily. Don’t miss out – explore what’s trending now and elevate your day with the best!
                             </p>
-                            <PackageCarouselWrapper 
-                                packages={JSON.parse(JSON.stringify(packages))} 
-                                formatNumeric={formatNumeric.toString()} 
+                            <PackageCarouselWrapper
+                                packages={JSON.parse(JSON.stringify(packages))}
+                                formatNumeric={formatNumeric.toString()}
                             />
                         </div>}
 

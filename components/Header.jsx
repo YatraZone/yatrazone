@@ -2,7 +2,7 @@
 
 import { ChevronDown, LogOutIcon, Mail, Phone, User2Icon } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import MenuBar from "./MenuBar"
 import { Button } from "./ui/button"
 import { signOut, useSession } from "next-auth/react"
@@ -15,9 +15,15 @@ import SearchBar from "./SearchBar"
 const Header = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isAuthDropdownOpen, setIsAuthDropdownOpen] = useState(false)
+  const [menuItems, setMenuItems] = useState([])
   const { data: session, status } = useSession()
   const pathName = usePathname()
 
+  useEffect(() => {
+    fetch("/api/getAllMenuItems")
+      .then(res => res.json())
+      .then(data => setMenuItems(data));
+  }, [])
 
   const isUser = session && !session.user.isAdmin
 
@@ -63,7 +69,7 @@ const Header = () => {
         </Link>
 
         <div className="relative flex items-center">
-          <MenuBar />
+          <MenuBar menuItems={menuItems.filter(item => item.active)} />
         </div>
 
         <div className="items-center z-50 gap-4 flex">
@@ -140,7 +146,7 @@ const Header = () => {
       </div>
       <div className="lg:hidden flex items-center z-50 justify-center md:justify-between py-1 px-2 md:px-8">
         <div className="relative flex items-center">
-          <MenuBar />
+          <MenuBar menuItems={menuItems.filter(item => item.active)} />
         </div>
         <Link href={"/"}>
           <img className="w-44 drop-shadow-xl" src="/logo.png" alt="YatraZone" />
@@ -222,4 +228,3 @@ const Header = () => {
 }
 
 export default Header
-
