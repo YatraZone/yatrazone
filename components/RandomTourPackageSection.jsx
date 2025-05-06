@@ -171,7 +171,7 @@ const RandomTourPackageSection = () => {
                                     <div className="p-1">
                                         <Card>
                                             <CardContent className="justify-between bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
-                                                <div className="relative w-full h-52 md:h-48 mb-3 rounded-lg overflow-hidden">
+                                                <div className="relative w-full h-48 md:h-48 mb-3 rounded-lg overflow-hidden">
                                                     <Image
                                                         src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
                                                         alt={item?.packageName || "Tour package image"}
@@ -182,7 +182,7 @@ const RandomTourPackageSection = () => {
                                                     />
                                                 </div>
                                                 <div className="p-2 flex flex-col gap-2">
-                                                    <div className="flex xl:flex-row  gap-2 xl:items-center justify-between font-barlow">
+                                                    <div className="flex gap-2 xl:items-center justify-between font-barlow">
                                                         <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
                                                             <MapPin size={20} /> {item?.basicDetails?.location}
                                                         </p>

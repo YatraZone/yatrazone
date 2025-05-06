@@ -103,6 +103,7 @@ const HeroSection = () => {
         const res = await fetch(`/api/packages/search?q=${value}`);
         if (res.ok) {
           const data = await res.json();
+          console.log(data)
           setPackages(data);
         } else {
           setPackages([]);
@@ -145,7 +146,7 @@ const HeroSection = () => {
             {/* Only show dropdown if there are packages and query is not empty */}
             {packages && packages.length > 0 && query.trim().length >= 2 && (
             <ul
-            className="bg-red-900 absolute left-0 w-full bg-white border rounded-lg max-h-72 sm:max-h-80  shadow-lg z-[100]">
+            className="bg-red-900 absolute left-0 w-full bg-white border rounded-lg max-h-72 sm:max-h-90 overflow-y-auto  shadow-lg z-[100]">
                 {packages.map((pkg, index) => {
                   const duration = pkg?.basicDetails?.duration;
                   const isValidDuration = typeof duration === 'number' && !isNaN(duration) && duration > 0;
@@ -278,7 +279,7 @@ const HeroSection = () => {
 
 
       {/* Hotel Search Form: Only visible on small screens */}
-      <div className="block xl:hidden w-full h-full px-4 mt-[22%] mb-10 relative max-h-[90vh] overflow-y-auto">
+      <div className="block xl:hidden w-full h-full px-4 mt-[22%] relative max-h-[90vh]">
         <HotelSearchForm />
       </div>
     </section>
