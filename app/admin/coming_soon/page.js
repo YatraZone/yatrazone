@@ -11,7 +11,7 @@ const  ComingSoonAdminPage = () => {
                 </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                <h1 className="text-4xl px-12 font-semibold">Insta / Facebook Posts</h1>
+                <h1 className="text-4xl px-12 font-semibold">Coming Soon Package</h1>
               <ComingSoon />
             </div>
         </SidebarInset>

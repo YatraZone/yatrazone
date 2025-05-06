@@ -18,20 +18,6 @@ const ComingSoonEnquiries = () => {
     const itemsPerPage = 10;
     const [loadingDelete, setLoadingDelete] = useState(false);
 
-    useEffect(() => {
-        const fetchEnquiries = async () => {
-            try {
-                const response = await fetch("/api/comingSoonEnquiry");
-                const data = await response.json();
-                setAllEnquiry(data);
-                setFilteredEnquiry(data);
-            } catch (error) {
-                toast.error("Something went wrong", { style: { borderRadius: "10px", border: "2px solid red" } });
-            }
-        };
-        fetchEnquiries();
-    }, []);
-
     // Group by month
     const groupByMonth = (enquiries) => {
         const months = {};
@@ -46,6 +32,20 @@ const ComingSoonEnquiries = () => {
         return months;
     };
     const monthGroups = groupByMonth(allEnquiry);
+
+    useEffect(() => {
+        const fetchEnquiries = async () => {
+            try {
+                const response = await fetch("/api/comingSoonEnquiry");
+                const data = await response.json();
+                setAllEnquiry(data);
+                setFilteredEnquiry(data);
+            } catch (error) {
+                toast.error("Something went wrong", { style: { borderRadius: "10px", border: "2px solid red" } });
+            }
+        };
+        fetchEnquiries();
+    }, []);
 
     useEffect(() => {
         if (selectedMonth === 'all') {
@@ -228,7 +228,7 @@ const ComingSoonEnquiries = () => {
                                 <div className="flex items-center justify-between w-full">
                                     <div>
                                         <h2 className="text-xl sm:text-2xl font-bold">{selectedEnquiry.name}</h2>
-                                        <div className="flex items-center gap-2 text-gray-600">
+                                        <div className="flex items-center gap-2 text-gray-600 pt-5">
                                             <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
                                             <span className="text-xs sm:text-sm truncate max-w-[200px] sm:max-w-none">{selectedEnquiry.email}</span>
                                         </div>

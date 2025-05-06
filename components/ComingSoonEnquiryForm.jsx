@@ -16,12 +16,12 @@ export default function ComingSoonEnquiryForm({ packageId }) {
       phone: form.phone.value,
       email: form.email.value,
       address: form.address.value,
-      adults: form.adults.value,
-      children: form.children.value,
-      infants: form.infants.value,
       travelDate: form.travelDate.value,
       startFrom: form.startFrom.value,
-      whichLocation: form.whichLocation.value
+      whichLocation: form.whichLocation.value,
+      adults: form.adults.value,
+      children: form.children.value === '' ? 0 : form.children.value,
+      infants: form.infants.value === '' ? 0 : form.infants.value
     };
     const res = await fetch("/api/comingSoonEnquiry", {
       method: "POST",
@@ -42,33 +42,69 @@ export default function ComingSoonEnquiryForm({ packageId }) {
 
   if (submitted) {
     return (
-      <div className="bg-pink-300 rounded-lg p-6 mt-10 max-w-xl mx-auto text-center">
-        <h3 className="font-bold text-xl mb-2">Popup Message</h3>
-        <p>Thank you for your interest in Yatrazone. One of our dedicated executives will connect with you shortly to assist with your travel needs and provide personalized support. We look forward to helping you plan your perfect journey.</p>
+      <div className="flex flex-col items-center justify-center bg-green-50 rounded-lg p-8 mt-12 max-w-lg mx-auto shadow-md animate-fade-in">
+        <svg className="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect width="100%" height="100%" fill="none"/><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2l4 -4" /><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
+        <h2 className="font-extrabold text-3xl text-gray-800 mb-2">Thank You!</h2>
+        <p className="text-gray-700 text-lg mb-6">Your enquiry has been received. Our team will contact you soon to help you plan your spiritual journey with YatraZone.</p>
         <a
           href="/"
-          className="inline-block mt-4 px-6 py-2 bg-white text-pink-500 font-semibold rounded-full shadow hover:bg-pink-100 transition"
+          className="inline-block px-8 py-2 bg-green-500 text-white font-semibold rounded-full shadow hover:bg-green-600 transition"
         >
-          Home
+          Back to Home
         </a>
       </div>
     );
   }
 
   return (
-    <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
-      <input className="rounded px-4 py-2" placeholder="Name" name="name" required />
-      <input className="rounded px-4 py-2" placeholder="Phone Number" name="phone" required />
-      <input className="rounded px-4 py-2" placeholder="Email" name="email" required />
-      <input className="rounded px-4 py-2" placeholder="Address" name="address" required />
-      <input className="rounded px-4 py-2" type="number" placeholder="Adult Count" name="adults" required />
-      <input className="rounded px-4 py-2" type="number" placeholder="Child Count" name="children" required />
-      <input className="rounded px-4 py-2" type="number" placeholder="Infant" name="infants" required />
-      <input className="rounded px-4 py-2" type="date" placeholder="Travel Date" name="travelDate" required />
-      <input className="rounded px-4 py-2" placeholder="Start From" name="startFrom" required />
-      <input className="rounded px-4 py-2" placeholder="Which Location" name="whichLocation" required />
-      <div className="col-span-1 md:col-span-2 flex justify-center mt-4">
-        <button type="submit" className="bg-orange-500 px-8 py-2 rounded text-white font-bold" disabled={loading}>
+    <form className="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto mt-8 animate-fade-in" onSubmit={handleSubmit}>
+      
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">Enquire for this Package</h2>
+ 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Full Name</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" placeholder="Enter your name" name="name" required />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Phone Number</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" placeholder="Enter your phone number" name="phone" required />
+        </div>
+        <div className="flex flex-col gap-2 md:col-span-2">
+          <label className="font-semibold text-gray-700">Email</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" placeholder="Enter your email" name="email" required />
+        </div>
+        <div className="flex flex-col gap-2 md:col-span-2">
+          <label className="font-semibold text-gray-700">Address</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" placeholder="Enter your address" name="address" required />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Travel Date</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" type="date" name="travelDate" required />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Start From</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" placeholder="City of Departure" name="startFrom" required />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Which Location</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" placeholder="Destination" name="whichLocation" required />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Adults</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" type="number" min="1" placeholder="No. of Adults" name="adults" required />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Children</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" type="number" min="0" placeholder="No. of Children" name="children" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">Infants</label>
+          <input className="rounded px-4 py-2 border border-gray-300 focus:border-orange-500 focus:outline-none" type="number" min="0" placeholder="No. of Infants" name="infants" />
+        </div>
+      </div>
+      <div className="flex justify-center mt-8">
+        <button type="submit" className="bg-orange-500 px-10 py-3 rounded-full text-white font-bold text-lg shadow hover:bg-orange-600 transition-all duration-200" disabled={loading}>
           {loading ? "Submitting..." : "Submit Enquiry"}
         </button>
       </div>

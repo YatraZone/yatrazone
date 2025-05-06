@@ -36,6 +36,7 @@ import PackageCarouselWrapper from "@/components/PackageCarouselWrapper";
 import FeaturedCarouselWrapper from "@/components/FeaturedCarouselWrapper";
 import ComingSoon from "@/models/ComingSoon";
 import ComingSoonEnquiryForm from "@/components/ComingSoonEnquiryForm";
+import ImportantNotice from "@/components/ImportantNotice"
 
 const getPackageById = async (id) => {
     try {
@@ -150,10 +151,10 @@ const PackageDetailsPage = async ({ params }) => {
                                 <div className="w-full aspect-video bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-500">Image<br/>Update Soon</div>
                             )}
                                 <div className="flex flex-col gap-2 lg:w-[50rem]">
-                                    {/* <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <div className="flex items-center gap-2 text-sm text-gray-600">
                                         <Tag className="h-4 w-4" />
-                                        <span className="font-medium">Package Code: <span className="font-bold tracking-wider text-black">kj</span></span>
-                                    </div> */}
+                                        <span className="font-medium">Package Code: <span className="font-bold tracking-wider text-2xl text-black">Not Available</span></span>
+                                    </div>
                                     <h2 className="text-2xl lg:text-4xl font-gilda font-bold w-full">{packageDetails?.title}</h2>
                                     <div className="flex flex-wrap gap-4">
                                         <div className="flex items-center text-gray-600">
@@ -185,6 +186,7 @@ const PackageDetailsPage = async ({ params }) => {
                                             </Link>
                                         </Button>
                                     </div>
+                                    <h2 className="text-2xl lg:text-4xl font-gilda font-bold w-full">Package Price Not Available Now</h2>
                                 </div>
                             </div>
                             <div className="md:text-right w-fit">
@@ -199,8 +201,8 @@ const PackageDetailsPage = async ({ params }) => {
                         </div>
                     </div>
                     {/* ENQUIRY FORM */}
-                    <div className="bg-blue-100 rounded-lg p-8 mt-10 max-w-3xl mx-auto">
-                        <h2 className="font-bold text-xl mb-6">Enquire Now For this Package</h2>
+                    <div className="bg-gray-100 rounded-lg p-8 mt-10 max-w-3xl mx-auto">
+                        
                         <ComingSoonEnquiryForm packageId={packageDetails._id?.toString()} />
                     </div>
                 </div>
@@ -310,7 +312,7 @@ const PackageDetailsPage = async ({ params }) => {
                                     </div>
                                 </div>
                                 <div className="md:text-right w-fit">
-                                    <div className="text-2xl font-bold text-primary">₹<span className="text-4xl text-blue-600">{formatNumber(packageDetails.price)}</span></div>
+                                    <div className="text-2xl font-bold text-primary">₹<span className="text-4xl text-blue-600">{formatNumber(packageDetails.price)}*</span></div>
                                     <div className="text-sm text-gray-600 font-medium">{packageDetails.priceUnit}</div>
                                     <div className="flex items-center md:justify-end mt-1">
                                         <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
@@ -320,6 +322,10 @@ const PackageDetailsPage = async ({ params }) => {
                                 </div>
                             </div>
                         </div>
+                        {/* Important Notice Tag Line */}
+                        <ImportantNotice />
+
+
                         {/* Important Notice Tag Line */}
                         {packageDetails.basicDetails?.notice && packageDetails.basicDetails.notice.trim() !== '' && (
                             <DismissableInfoBox packages={packageDetails} />

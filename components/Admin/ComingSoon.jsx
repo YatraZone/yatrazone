@@ -223,7 +223,7 @@ const ComingSoon = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                 <div className="space-y-2 w-full">
-                    <label className="font-semibold">Banner Image</label>
+                    <label className="font-semibold">Thumbnail Image</label>
                     <div className="grid grid-cols-1 w-full gap-4">
                         {bannerUrl ? (
                             <div className="relative aspect-video rounded-lg h-40 w-full overflow-hidden border-2 border-blue-600 group">
@@ -233,7 +233,7 @@ const ComingSoon = () => {
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-gray-500">No Banner uploaded</p>
+                            <p className="text-gray-500">No Thumbnail uploaded</p>
                         )}
                     </div>
                     <UploadButton
@@ -247,7 +247,7 @@ const ComingSoon = () => {
                     </UploadButton>
                 </div>
                 <div className="space-y-2 w-full">
-                    <label className="font-semibold">Thumbnail Image</label>
+                    <label className="font-semibold">Banner Image</label>
                     <div className="grid grid-cols-1 w-full gap-4">
                         {thumbUrl ? (
                             <div className="relative aspect-video rounded-lg h-40 w-full overflow-hidden border-2 border-blue-600 group">
@@ -257,7 +257,7 @@ const ComingSoon = () => {
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-gray-500">No Thumbnail uploaded</p>
+                            <p className="text-gray-500">No Banner uploaded</p>
                         )}
                     </div>
                     <UploadButton
@@ -282,12 +282,6 @@ const ComingSoon = () => {
               }}>
                 Cancel Edit
               </Button>
-            )}
-            {url && (
-                <div className="mt-6">
-                    <div className="font-semibold">Generated URL:</div>
-                    <div className="bg-gray-100 rounded p-2 break-all">{url}</div>
-                </div>
             )}
             <div className="bg-blue-100 p-4 rounded-lg shadow max-w-5xl mx-auto w-full overflow-x-auto lg:overflow-visible text-center mt-8">
                 <Table className="w-full min-w-max lg:min-w-0">

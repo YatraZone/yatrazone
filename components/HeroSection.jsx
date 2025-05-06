@@ -15,6 +15,8 @@ import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSearch } from "@/context/SearchContext";
 import { CalendarClock, MapPin, Search, X } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
 const HeroSection = () => {
   const [banners, setBanners] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -67,125 +69,84 @@ const HeroSection = () => {
     });
   }, [api]);
 
-  const HotelSearchForm = () => {
-    const [query, setQuery] = useState("");
-    const [packages, setPackages] = useState([]);
-    const [recentSearches, setRecentSearches] = useState([]);
-    const { isSearchOpen, setIsSearchOpen } = useSearch();
-    const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [relatedPackages, setRelatedPackages] = useState([]);
+  const [packages, setPackages] = useState([]);
+  const [recentSearches, setRecentSearches] = useState([]);
+  const { isSearchOpen, setIsSearchOpen } = useSearch();
+  const router = useRouter();
 
-    useEffect(() => {
-      const storedSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
-      setRecentSearches(storedSearches);
-    }, []);
+  useEffect(() => {
+    const storedSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+    setRecentSearches(storedSearches);
 
-    useEffect(() => {
-      const handleKeyDown = (event) => {
-        if (event.ctrlKey && event.key === "k") {
-          event.preventDefault();
-          setIsSearchOpen(true);
-        }
-      };
-      window.addEventListener("keydown", handleKeyDown);
-      return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
-
-    const handleSearch = async (event) => {
-      const value = event.target.value;
-      setQuery(value);
-
-      if (value.trim().length < 2) {
-        setPackages([]); // hide dropdown if less than 2 chars
-        return;
-      }
-
+    const fetchPackages = async () => {
       try {
-        const res = await fetch(`/api/packages/search?q=${value}`);
-        if (res.ok) {
-          const data = await res.json();
-          console.log(data)
-          setPackages(data);
-        } else {
-          setPackages([]);
+        const res = await fetch("/api/getSearchPackages");
+        const data = await res.json();
+        if (data.packages && data.packages.length > 0) {
+          setPackages(data.packages);
         }
       } catch (error) {
-        setPackages([]);
+        console.error("Error fetching packages:", error);
       }
     };
 
-    const handlePackageClick = (id, name) => {
-      const updatedSearches = [{ id, name }, ...recentSearches.filter(item => item.id !== id)].slice(0, 5);
-      setRecentSearches(updatedSearches);
-      localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+    fetchPackages();
+  }, []);
 
-      router.push(`/package/${encodeURIComponent(id)}`);
-      setIsSearchOpen(false);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.key === "k") {
+        event.preventDefault();
+        setIsSearchOpen(true);
+      }
     };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
-    const handleSubmit = () => {
-      if (!query.trim()) return;
-      router.push(`/search?q=${encodeURIComponent(query)}`);
-      setIsSearchOpen(false);
-    };
+  const handleSearch = async (event) => {
+    const value = event.target.value;
+    setQuery(value);
 
-    return (
-      <div className="relative rounded-3xl shadow-xl p-10 w-full max-w-md mx-auto xl:max-w-lg xl:mx-0 xl:absolute xl:top-1/2 xl:right-20 xl:-translate-y-1/2 z-[999]">
+    if (value.trim().length < 2) {
+      setRelatedPackages([]);
+      return;
+    }
 
-        <h2 className="text-2xl font-bold mb-1">Packages</h2>
-        <p className="text-gray-500 text-sm mb-6">Experience Effortless Bookings with Adani OneApp</p>
-        <Form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative z-[50] w-full h-full">
-            <Input
-              type="text"
-              placeholder="Search hotels or places..."
-              className="w-full border rounded-lg px-6 py-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              value={query || ""}
-              onChange={handleSearch}
-              autoComplete="off"
-            />
-            {/* Only show dropdown if there are packages and query is not empty */}
-            {packages && packages.length > 0 && query.trim().length >= 2 && (
-            <ul
-            className="bg-red-900 absolute left-0 w-full bg-white border rounded-lg max-h-72 sm:max-h-90 overflow-y-auto  shadow-lg z-[100]">
-                {packages.map((pkg, index) => {
-                  const duration = pkg?.basicDetails?.duration;
-                  const isValidDuration = typeof duration === 'number' && !isNaN(duration) && duration > 0;
-                  return (
-                    <li
-                      key={pkg._id || index}
-                      className="flex items-center gap-3 py-6 px-2 cursor-pointer hover:bg-blue-50 transition"
-                      onClick={() => handlePackageClick(pkg._id, pkg.packageName)}
-                    >
-                      <img
-                        src={pkg?.basicDetails?.thumbnail?.url || "/placeholder.jpg"}
-                        alt={pkg.packageName}
-                        className="w-12 h-12 rounded object-cover flex-shrink-0"
-                      />
-                      <div className="flex-1 min-w-0 flex-col">
-                        <p className="font-semibold text-base truncate">{pkg.packageName}</p>
-                        <p className="flex items-center gap-1 text-blue-600 text-xs font-semibold truncate">
-                          <MapPin className="h-3 w-3 inline-block" />
-                          {pkg?.basicDetails?.location}
-                        </p>
-                        <p className="flex items-center gap-1 text-blue-600 text-xs font-semibold">
-                          <CalendarClock className="h-3 w-3 inline-block" />
-                          {isValidDuration ? (
-                            <>{duration} Days {duration - 1} Nights</>
-                          ) : (
-                            "Duration N/A"
-                          )}
-                        </p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full py-3 font-semibold text-lg my-10">Search</Button>
-        </Form>
-      </div>
-    );
+    try {
+      const res = await fetch(`/api/packages/search?q=${value}`);
+      if (res.ok) {
+        const data = await res.json();
+        setRelatedPackages(data);
+      } else {
+        setRelatedPackages([]);
+      }
+    } catch (error) {
+      console.error("Error fetching packages:", error);
+      setRelatedPackages([]);
+    }
+  };
+
+  const handlePackageClick = (id, name) => {
+    const updatedSearches = [{ id, name }, ...recentSearches.filter(item => item.id !== id)].slice(0, 5);
+    setRecentSearches(updatedSearches);
+    localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+
+    router.push(`/package/${encodeURIComponent(id)}`);
+    setIsSearchOpen(false);
+  };
+
+  const handleSubmit = () => {
+    if (!query.trim()) return;
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+    setIsSearchOpen(false);
+  };
+
+  const clearRecentSearches = () => {
+    localStorage.removeItem("recentSearches");
+    setRecentSearches([]);
   };
 
   if (isLoading) {
@@ -277,11 +238,132 @@ const HeroSection = () => {
 
       </div>
 
+      <div className="block xl:hidden w-full h-full px-4 mt-[20%] relative max-h-[90vh]">
+        <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
+          <DialogTrigger asChild>
+            <div
+              className="w-full border-2 border-blue-600 rounded-full px-6 py-4 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer text-left text-gray-700 flex items-center gap-2"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <Search className="h-6 w-6 text-gray-600" />
+              <span className={query ? "text-gray-900" : "text-gray-400"}>
+                {query ? query : "Destination, Attraction"}
+              </span>
+            </div>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[60vh] font-barlow p-4 overflow-y-auto">
+            <div className="relative mt-6">
+              <Search className="absolute left-3 top-4 h-6 w-6 text-gray-600" />
+              <Input
+                type="text"
+                value={query}
+                onChange={handleSearch}
+                placeholder="Destination, Attraction"
+                className="px-10 !py-6 flex-1 w-full placeholder:font-normal placeholder:text-gray-600 border-2 border-blue-600  focus-visible:ring-0 rounded-full shadow-none focus:ring-0 outline-none"
+              />
+            </div>
 
-      {/* Hotel Search Form: Only visible on small screens */}
-      <div className="block xl:hidden w-full h-full px-4 mt-[22%] relative max-h-[90vh]">
-        <HotelSearchForm />
+            {/* Show Search Results first if available */}
+            {query && relatedPackages.length > 0 && (
+              <>
+                <h2 className="mt-4 text-xl font-medium mb-2 font-barlow">Search Results: {query}</h2>
+                <ul className="mt-2 border rounded-md shadow-sm bg-white max-h-[25rem] overflow-y-auto">
+                  {relatedPackages.map((pkg, index) => (
+                    <li
+                      key={index}
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center space-x-4"
+                      onClick={() => handlePackageClick(pkg?._id, pkg?.packageName)}
+                    >
+                      <Image
+                        src={typeof pkg?.basicDetails?.thumbnail?.url === "string" && pkg.basicDetails.thumbnail.url.trim() !== "" ? pkg.basicDetails.thumbnail.url : "/placeholder.jpg"}
+                        width={1280} height={720} quality={50}
+                        alt={pkg?.packageName}
+                        className="w-24 h-24 rounded-md object-cover"
+                      />
+                      <div>
+                        <p className="font-medium">{pkg?.packageName}</p>
+                        <p className="text-xs flex items-center font-medium text-gray-500">
+                          <MapPin className="h-4 w-4 mr-1 mt-1 " />
+                          {pkg?.basicDetails?.location}
+                        </p>
+                        
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {/* Show You Might Also Like only if there are packages and either no search or no results */}
+            {(!query || relatedPackages.length === 0) && packages && packages.length > 0 && (
+              <>
+                <h2 className="mt-4 text-xl font-medium mb-2 font-barlow">You Might Also Like</h2>
+                <ul className="border rounded-md shadow-sm bg-white max-h-[25rem] overflow-y-auto">
+                  {packages.map((pkg, index) => (
+                    <li
+                      key={index}
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center space-x-4"
+                      onClick={() => handlePackageClick(pkg?._id, pkg?.packageName)}
+                    >
+                      <Image
+                        src={typeof pkg?.basicDetails?.thumbnail?.url === "string" && pkg.basicDetails.thumbnail.url.trim() !== "" ? pkg.basicDetails.thumbnail.url : "/placeholder.jpg"}
+                        width={1280} height={720} quality={50}
+                        alt={pkg?.packageName}
+                        className="w-20 h-20 rounded-md object-cover"
+                      />
+                      <div className="flex items-end gap-4 w-full">
+                        <div>
+                          <p className="font-semibold text-lg">{pkg?.packageName}</p>
+                          <p className="flex flex-row items-center justify-between gap-2 font-barlow text-blue-600 text-sm font-semibold">
+                            <span className="flex items-center gap-2">
+                              <MapPin className="h-4 w-4" />
+                              {pkg?.basicDetails?.location}
+                            </span>
+                            <span className="flex items-center gap-2">
+                              <CalendarClock className="h-4 w-4" />
+                              {pkg?.basicDetails?.duration} Days {pkg?.basicDetails?.duration - 1} Nights
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {/* Recent Searches */}
+            {recentSearches.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm text-gray-500">Recent Packages</p>
+                <ul className="mt-2 border rounded-md shadow-sm bg-white">
+                  {recentSearches.map((search, index) => (
+                    <li
+                      key={index}
+                      className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handlePackageClick(search.id, search.name)}
+                    >
+                      <span>{search.name}</span>
+                      <X className="h-4 w-4 text-gray-400 hover:text-red-500" onClick={(e) => {
+                        e.stopPropagation();
+                        const filteredSearches = recentSearches.filter(item => item.id !== search.id);
+                        setRecentSearches(filteredSearches);
+                        localStorage.setItem("recentSearches", JSON.stringify(filteredSearches));
+                      }} />
+                    </li>
+                  ))}
+                </ul>
+                <button onClick={clearRecentSearches} className="text-sm text-red-500 mt-2 hover:underline">
+                  Clear recent searches
+                </button>
+              </div>
+            )}
+            <div className="sticky bottom-4 pb-4 translate-y-1/2  w-full bg-white">
+              <Button onClick={handleSubmit} className="w-full uppercase text-base mt-4 bg-blue-600 hover:bg-blue-700 mx-auto">Search</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
+
     </section>
   );
 };
