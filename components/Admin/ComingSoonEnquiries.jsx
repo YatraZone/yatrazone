@@ -38,10 +38,22 @@ const ComingSoonEnquiries = () => {
             try {
                 const response = await fetch("/api/comingSoonEnquiry");
                 const data = await response.json();
-                setAllEnquiry(data);
-                setFilteredEnquiry(data);
+                if (Array.isArray(data)) {
+                    setAllEnquiry(data);
+                    setFilteredEnquiry(data);
+                } else if (data && data.error) {
+                    toast.error("Failed to fetch enquiries: " + data.error, { style: { borderRadius: "10px", border: "2px solid red" } });
+                    setAllEnquiry([]);
+                    setFilteredEnquiry([]);
+                } else {
+                    toast.error("Unexpected response from server", { style: { borderRadius: "10px", border: "2px solid red" } });
+                    setAllEnquiry([]);
+                    setFilteredEnquiry([]);
+                }
             } catch (error) {
                 toast.error("Something went wrong", { style: { borderRadius: "10px", border: "2px solid red" } });
+                setAllEnquiry([]);
+                setFilteredEnquiry([]);
             }
         };
         fetchEnquiries();
