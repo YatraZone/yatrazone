@@ -191,7 +191,7 @@
 
 /* Custom slow spin animation for loader border */
 .animate-spin-slow {
-  animation: spin 2s linear infinite;
+  animation: spin 3s linear infinite;
 }
 @keyframes spin {
   to { transform: rotate(360deg); }

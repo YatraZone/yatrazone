@@ -50,10 +50,10 @@ const CategoryPage = async ({ params }) => {
                 </div> */}
 
                 {/* Packages Section */}
-                <div className="container mx-auto px-1 md:px-4 py-12">
+                <div className="container mx-auto px-1 md:px-4 py-5 md:py-12">
 
                     {visiblePackages.length === 0 ? (
-                        <div className="text-center py-12">
+                        <div className="text-center py-8">
                             <h3 className="text-xl font-medium text-gray-600">No packages found for this category</h3>
                             <p className="mt-2 text-gray-500">Please try another category</p>
                         </div>

@@ -239,12 +239,16 @@ const HeroSection = () => {
       </div>
 
       <div className="block xl:hidden w-full h-full px-4 mt-[20%] relative max-h-[90vh]">
+      <h2 className="text-2xl font-bold text-center mb-1">Search Where to Go</h2>
+            <p className="text-gray-600 text-center w-[80%] mx-auto mb-4">Every soul has a path—find yours. From sacred mountains to hidden shrines, your spiritual journey begins with a single search. Discover destinations that inspire, heal, and uplift. Start now—your path to peace and purpose awaits.</p>
         <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
           <DialogTrigger asChild>
+            
             <div
               className="w-full border-2 border-blue-600 rounded-full px-6 py-4 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer text-left text-gray-700 flex items-center gap-2"
               onClick={() => setIsSearchOpen(true)}
             >
+            
               <Search className="h-6 w-6 text-gray-600" />
               <span className={query ? "text-gray-900" : "text-gray-400"}>
                 {query ? query : "Destination, Attraction"}

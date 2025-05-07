@@ -158,7 +158,7 @@ const RandomTourPackageSection = () => {
     return (
         <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full px-8 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
             <div className=" w-full h-full overflow-hidden max-w-screen ">
-                <div className="w-full py-9 px-2 md:px-8">
+                <div className="w-full py-9 px-1 md:px-8">
                     <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mt-10">Trending Packages: The Best, Today</h1>
                     <p className=" text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Discover the hottest deals with our Trending Packages! Curated daily, these top-rated picks offer the best value and quality — handpicked for professionals who demand the best, today. Don’t miss out — elevate your experience now!</p>
                     <Carousel className={`w-full md:w-[95%] drop-shadow-xl mx-auto my-4 ${packages.length > 0 ? "block" : "hidden"}`}>
@@ -181,7 +181,7 @@ const RandomTourPackageSection = () => {
                                                         className="rounded-t-xl w-full h-full object-fill"
                                                     />
                                                 </div>
-                                                <div className="p-2 flex flex-col gap-2">
+                                                <div className="px-2 py-4 flex flex-col gap-2">
                                                     <div className="flex gap-2 xl:items-center justify-between font-barlow">
                                                         <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
                                                             <MapPin size={20} /> {item?.basicDetails?.location}

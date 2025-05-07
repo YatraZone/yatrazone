@@ -38,6 +38,7 @@ const ComingSoonEnquiries = () => {
             try {
                 const response = await fetch("/api/comingSoonEnquiry");
                 const data = await response.json();
+                console.log(data)
                 if (Array.isArray(data)) {
                     setAllEnquiry(data);
                     setFilteredEnquiry(data);
@@ -133,7 +134,7 @@ const ComingSoonEnquiries = () => {
                     <TableRow className={"border-blue-600"}>
                         <TableHead className="w-[150px]">Date</TableHead>
                         <TableHead>Package</TableHead>
-                        <TableHead>Name</TableHead>
+                        <TableHead>Full Name</TableHead>
                         <TableHead>Contact</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Travel Date</TableHead>
@@ -145,7 +146,7 @@ const ComingSoonEnquiries = () => {
                         <TableRow key={enquiry._id} className="border-blue-400">
                             <TableCell>{new Date(enquiry.createdAt).toLocaleDateString('en-In', { day: 'numeric', month: 'long', year: 'numeric', })}</TableCell>
                             <TableCell>{enquiry.packageId?.title || '-'}</TableCell>
-                            <TableCell>{enquiry.name}</TableCell>
+                            <TableCell>{enquiry.firstName + " " + enquiry.lastName}</TableCell>
                             <TableCell>+91 {enquiry.phone}</TableCell>
                             <TableCell>{enquiry.email}</TableCell>
                             <TableCell>{enquiry.travelDate ? new Date(enquiry.travelDate).toLocaleDateString('en-In', { day: 'numeric', month: 'long', year: 'numeric', }) : '-'}</TableCell>
@@ -239,7 +240,7 @@ const ComingSoonEnquiries = () => {
                             <div className="flex flex-col items-center sm:flex-row sm:items-center gap-2 sm:gap-4">
                                 <div className="flex items-center justify-between w-full">
                                     <div>
-                                        <h2 className="text-xl sm:text-2xl font-bold">{selectedEnquiry.name}</h2>
+                                        <h2 className="text-xl sm:text-2xl font-bold">{selectedEnquiry.firstName + " " + selectedEnquiry.lastName}</h2>
                                         <div className="flex items-center gap-2 text-gray-600 pt-5">
                                             <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
                                             <span className="text-xs sm:text-sm truncate max-w-[200px] sm:max-w-none">{selectedEnquiry.email}</span>

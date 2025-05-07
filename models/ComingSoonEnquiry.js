@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 const ComingSoonEnquirySchema = new mongoose.Schema({
   packageId: { type: mongoose.Schema.Types.ObjectId, ref: "ComingSoon", required: true },
-  name: String,
+  firstName: String,
+  lastName: String,
   phone: String,
   email: String,
   address: String,

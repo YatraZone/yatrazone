@@ -18,7 +18,7 @@ const PackageCard = async ({ pkg }) => {
 
   return (
     <div className="bg-white shadow-xl border-2 rounded-xl transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 font-barlow flex flex-col h-full justify-between p-4 relative overflow-hidden group">
-      <div className="relative w-full h-40 sm:h-48 mb-3 rounded-lg overflow-hidden">
+      <div className="relative w-full h-48 md:h-42 mb-3  rounded-lg overflow-hidden">
         {pkg?.basicDetails?.thumbnail?.url ? (
           <Image
             src={pkg?.basicDetails?.thumbnail?.url}
@@ -38,7 +38,7 @@ const PackageCard = async ({ pkg }) => {
           ₹<span className="font-bold text-lg">{formatNumber(pkg?.price)}*</span>
         </div>
       </div>
-      <div className="p-4 flex flex-col gap-2 flex-1">
+      <div className="p-2 flex flex-col gap-2 flex-1">
         <h3 className="font-bold md:text-lg text-xl line-clamp-2 font-gilda mb-1">{pkg?.packageName}</h3>
         <div className="flex xl:flex-row flex-col xl:items-center justify-between gap-2 font-barlow mb-2">
           <p className="flex items-center gap-2 text-blue-600 text-sm font-semibold">

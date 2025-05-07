@@ -78,7 +78,7 @@ const getComingSoonById = async (id) => {
     try {
         await connectDB();
         const pkg = await ComingSoon.findById(id).lean();
-        console.log(pkg)
+        // console.log(pkg)
         return pkg || null;
     } catch (e) {
         return null;
@@ -201,8 +201,7 @@ const PackageDetailsPage = async ({ params }) => {
                         </div>
                     </div>
                     {/* ENQUIRY FORM */}
-                    <div className="bg-gray-100 rounded-lg p-8 mt-10 max-w-3xl mx-auto">
-                        
+                    <div className="rounded-lg p-8 mt-10 max-w-3xl mx-auto">
                         <ComingSoonEnquiryForm packageId={packageDetails._id?.toString()} />
                     </div>
                 </div>

@@ -23,7 +23,7 @@ const CustomEnquiry = ({ packages = [] }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         adults: '1',
-        children: '',
+        children: '0',
         name: "",
         phone: "",
         email: "",
@@ -117,7 +117,7 @@ const CustomEnquiry = ({ packages = [] }) => {
         // Prepare the data to send
         const payload = {
             adults: formData.adults,
-            children: formData.children === '' ? '0' : formData.children,
+            children: Number(formData.children) || 0, // Always send a number, default to 0 if empty or not set
             name: formData.name,
             phone: formData.phone,
             email: formData.email,
@@ -151,7 +151,7 @@ const CustomEnquiry = ({ packages = [] }) => {
                 setFormData({
                     name: "",
                     adults: '1',
-                    children: '',
+                    children: '0',
                     phone: "",
                     email: "",
                     address: "",
@@ -220,14 +220,14 @@ const CustomEnquiry = ({ packages = [] }) => {
                             <div>
                                 <label className="block text-sm font-medium mb-1">Total No. of Children</label>
                                 <Select
-                                    value={formData.children !== undefined ? formData.children.toString() : ''}
+                                    value={formData.children !== undefined ? formData.children.toString() : '0'}
                                     onValueChange={(value) => setFormData({ ...formData, children: value })}
                                 >
                                     <SelectTrigger className="outline-none border-2 border-blue-600 bg-transparent focus-visible:ring-0 focus:ring-0 focus-visible:outline-none focus:outline-none">
-                                        <SelectValue placeholder={formData.children === '0' ? 'Select' : formData.children || 'Select'} />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent className="outline-none border-2 border-blue-600 bg-blue-100 focus-visible:ring-0 focus:ring-0 focus-visible:outline-none focus:outline-none">
-                                        {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                                        {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                                             <SelectItem className="hover:bg-blue-600" key={num} value={num.toString()}>
                                                 {num}
                                             </SelectItem>
@@ -385,13 +385,10 @@ const CustomEnquiry = ({ packages = [] }) => {
                                 <label className="block text-sm font-medium mb-1">
                                     From which location (city) Bus/Rail/Airport would you like to leave?
                                 </label>
-                                <Input
-                                    type="text"
-                                    className="resize-none outline-none border-2 border-blue-600 bg-transparent focus-visible:ring-0 focus:ring-0 focus-visible:outline-none focus:outline-none"
+                                <Textarea
+                                    className="resize-none h-24 outline-none border-2 border-blue-600 bg-transparent focus-visible:ring-0 focus:ring-0 focus-visible:outline-none focus:outline-none"
                                     value={bookingDetails.pickupLocation}
-                                    onChange={(e) =>
-                                        setBookingDetails({ ...bookingDetails, pickupLocation: e.target.value })
-                                    }
+                                    onChange={(e) => setBookingDetails({ ...bookingDetails, pickupLocation: e.target.value })}
                                     required
                                 />
                             </div>
