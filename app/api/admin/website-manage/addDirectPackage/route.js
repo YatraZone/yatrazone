@@ -8,9 +8,10 @@ export async function POST(req) {
         
         const body = await req.json();
         const { packages } = body;
+        // console.log(packages)
 
         // Validate required fields
-        if (!packages?.packageName || !packages?.price || !packages?.priceUnit) {
+        if (!packages?.packageName || packages?.price === undefined || packages?.price === null || !packages?.priceUnit) {
             return NextResponse.json(
                 { success: false, message: "Package name, price and price unit are required" },
                 { status: 400 }

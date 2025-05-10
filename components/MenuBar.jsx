@@ -207,18 +207,18 @@ const MenuBar = (props) => {
                                             >
                                                 <div className={
                                                     singleCategory
-                                                        ? "flex flex-col items-center justify-center px-6 py-4"
+                                                        ? "flex flex-col items-start justify-center p-4"
                                                         : "grid gap-4 p-6 grid-cols-2 lg:grid-cols-3"
                                                 }>
                                                     {activeSubCats.map((category, idx) => (
-                                                        <div key={idx} className={singleCategory ? "flex flex-col items-center w-full" : "flex flex-col"}>
-                                                            <h3 className={singleCategory ? "font-medium text-gray-700 mb-3 text-start w-full" : "font-medium text-gray-700 mb-3"}>{category.title}</h3>
-                                                            <ul className={singleCategory ? "space-y-1 flex flex-col items-center w-full" : "space-y-2"}>
+                                                        <div key={idx} className={singleCategory ? "flex flex-col items-start w-full" : "flex flex-col"}>
+                                                            <h3 className={singleCategory ? "font-medium text-gray-700 mb-2 text-start w-full px-2" : "font-medium text-gray-700 mb-2"}>{category.title}</h3>
+                                                            <ul className={singleCategory ? "space-y-1 flex flex-col items-start w-full px-2" : "space-y-2"}>
                                                                 {category.subCatPackage
                                                                     .filter(pkg => pkg.active)
                                                                     .map((item, itemIdx) => (
                                                                         <li key={itemIdx} className={singleCategory ? "w-full" : undefined}>
-                                                                            <Link href={item.url} className={singleCategory ? "text-gray-600 hover:text-blue-600 text-sm text-center w-full block" : "text-gray-600 hover:text-blue-600 text-sm"}>
+                                                                            <Link href={item.url} className={singleCategory ? "text-gray-600 hover:text-blue-600 text-sm text-start w-full block" : "text-gray-600 hover:text-blue-600 text-sm"}>
                                                                                 {item.title}
                                                                             </Link>
                                                                         </li>
