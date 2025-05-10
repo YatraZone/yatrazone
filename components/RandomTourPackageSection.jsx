@@ -158,7 +158,7 @@ const RandomTourPackageSection = () => {
     return (
         <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full px-8 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
             <div className=" w-full h-full overflow-hidden max-w-screen ">
-                <div className="w-full py-9 px-1 md:px-8">
+                <div className="w-full py-9 px-1 md:px-12">
                     <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mt-10">Trending Packages: The Best, Today</h1>
                     <p className=" text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">Discover the hottest deals with our Trending Packages! Curated daily, these top-rated picks offer the best value and quality — handpicked for professionals who demand the best, today. Don’t miss out — elevate your experience now!</p>
                     <Carousel className={`w-full md:w-[95%] drop-shadow-xl mx-auto my-4 ${packages.length > 0 ? "block" : "hidden"}`}>
@@ -199,7 +199,11 @@ const RandomTourPackageSection = () => {
                                                         <p className="text-sm">
                                                             Starting From:{" "}
                                                             <span className="font-bold text-blue-600">
-                                                                ₹<span className="text-xl">{formatNumeric(item?.price)}*</span>
+                                                                {item?.price === 0 ? (
+                                                                    <span className="text-xl">XXXX*</span>
+                                                                ) : (
+                                                                    <>₹<span className="text-xl">{formatNumeric(item?.price)}*</span></>
+                                                                )}
                                                             </span>
                                                         </p>
                                                         <p className="text-xs font-semibold">Onwards</p>

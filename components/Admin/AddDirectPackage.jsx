@@ -97,11 +97,13 @@ const AddDirectPackage = () => {
 
     const onSubmit = async (data) => {
 
-        if (!data.packages.packageName || !data.packages.price || !data.packages.priceUnit) {
+        if (!data.packages.packageName) {
             toast.error("All fields are required", { style: { borderRadius: "10px", border: "2px solid red" } })
-            return
+            return;
         }
 
+        // Always send price as 0, regardless of what admin enters
+        data.packages.price = 0;
         data.packages.link = packageCode;
         data.packages.packageCode = packageCode;
 
@@ -115,6 +117,7 @@ const AddDirectPackage = () => {
             });
 
             const res = await response.json();
+            // console.log(res)
 
             if (response.ok) {
                 toast.success("Package added successfully!", { style: { borderRadius: "10px", border: "2px solid green" } })

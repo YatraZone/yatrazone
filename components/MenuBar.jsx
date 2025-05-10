@@ -194,34 +194,42 @@ const MenuBar = (props) => {
                             </NavigationMenu.Trigger>
                             <AnimatePresence>
                                 <NavigationMenu.Content asChild>
-                                    <motion.div
-                                         initial={{ opacity: 0, y: -10 }}
-                                       animate={{ opacity: 1, y: 0 }}
-                                         exit={{ opacity: 0, y: -10 }}
-                                         transition={{ duration: 0.2, ease: "easeInOut" }}
-                                         className="absolute top-full mt-2 -translate-x-1/2 bg-white text-black shadow-lg rounded-md w-[400px] lg:w-[600px]"
-                                     >
-                                         <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 p-6">
-                                             {cat.subCat
-                                             .filter(subCat => subCat.active)
-                                             .map((category, idx) => (
-                                                <div key={idx} className="flex flex-col">
-                                                     <h3 className="font-medium text-gray-700 mb-3">{category.title}</h3>
-                                                     <ul className="space-y-2">
-                                                         {category.subCatPackage
-                                                         .filter(pkg => pkg.active)
-                                                         .map((item, itemIdx) => (
-                                                             <li key={itemIdx}>
-                                                                 <Link href={item.url} className="text-gray-600 hover:text-blue-600 text-sm">
-                                                                     {item.title}
-                                                                 </Link>
-                                                             </li>
-                                                         ))}
-                                                     </ul>
-                                                 </div>
-                                             ))}
-                                         </div>
-                                   </motion.div>
+                                    {(() => {
+                                        const activeSubCats = cat.subCat.filter(subCat => subCat.active);
+                                        const singleCategory = activeSubCats.length === 1;
+                                        return (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                className={`absolute top-full mt-2 -translate-x-1/2 bg-white text-black shadow-lg rounded-md ${singleCategory ? 'w-52' : 'w-[400px] lg:w-[600px]'}`}
+                                            >
+                                                <div className={
+                                                    singleCategory
+                                                        ? "flex flex-col items-center justify-center px-6 py-4"
+                                                        : "grid gap-4 p-6 grid-cols-2 lg:grid-cols-3"
+                                                }>
+                                                    {activeSubCats.map((category, idx) => (
+                                                        <div key={idx} className={singleCategory ? "flex flex-col items-center w-full" : "flex flex-col"}>
+                                                            <h3 className={singleCategory ? "font-medium text-gray-700 mb-3 text-start w-full" : "font-medium text-gray-700 mb-3"}>{category.title}</h3>
+                                                            <ul className={singleCategory ? "space-y-1 flex flex-col items-center w-full" : "space-y-2"}>
+                                                                {category.subCatPackage
+                                                                    .filter(pkg => pkg.active)
+                                                                    .map((item, itemIdx) => (
+                                                                        <li key={itemIdx} className={singleCategory ? "w-full" : undefined}>
+                                                                            <Link href={item.url} className={singleCategory ? "text-gray-600 hover:text-blue-600 text-sm text-center w-full block" : "text-gray-600 hover:text-blue-600 text-sm"}>
+                                                                                {item.title}
+                                                                            </Link>
+                                                                        </li>
+                                                                    ))}
+                                                            </ul>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        );
+                                    })()}
                                 </NavigationMenu.Content>
                             </AnimatePresence>
                         </NavigationMenu.Item>

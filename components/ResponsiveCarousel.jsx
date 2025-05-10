@@ -77,7 +77,11 @@ const ResponsiveCarousel = ({ packages, formatNumericStr }) => {
                                                 <p className="text-sm">
                                                     Starting From:{" "}
                                                     <span className="font-bold text-blue-600">
-                                                        ₹<span className="text-xl">{formatNumeric(item?.price)}*</span>
+                                                        {item?.price === 0 ? (
+                                                            <span className="text-xl">XXXX*</span>
+                                                        ) : (
+                                                            <>₹<span className="text-xl">{formatNumeric(item?.price)}*</span></>
+                                                        )}
                                                     </span>
                                                 </p>
                                                 <p className="text-xs font-semibold">Onwards</p>

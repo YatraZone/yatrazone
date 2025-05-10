@@ -190,11 +190,17 @@ const PackageDetailsPage = async ({ params }) => {
                                 </div>
                             </div>
                             <div className="md:text-right w-fit">
-                                <div className="text-2xl font-bold text-primary">₹<span className="text-4xl text-blue-600">XXXX*</span></div>
+                                <div className="text-2xl font-bold text-primary">
+                                    {packageDetails.price === 0 ? (
+                                        <span className="text-4xl text-blue-600">XXXX*</span>
+                                    ) : (
+                                        <>₹<span className="text-4xl text-blue-600">{formatNumber(packageDetails.price)}*</span></>
+                                    )}
+                                </div>
                                 <div className="text-sm text-gray-600 font-medium">Per Person</div>
                                 <div className="flex items-center md:justify-end mt-1">
                                         <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                                        <span className="ml-1 text-sm font-medium">0</span>
+                                        <span className="ml-1 text-sm font-medium">{avgRating}</span>
                                          <span className="ml-1 text-sm text-gray-500 font-medium">reviews</span>
                                     </div>
                             </div>
@@ -311,7 +317,13 @@ const PackageDetailsPage = async ({ params }) => {
                                     </div>
                                 </div>
                                 <div className="md:text-right w-fit">
-                                    <div className="text-2xl font-bold text-primary">₹<span className="text-4xl text-blue-600">{formatNumber(packageDetails.price)}*</span></div>
+                                    <div className="text-2xl font-bold text-primary">
+                                        {packageDetails.price === 0 ? (
+                                            <span className="text-4xl text-blue-600">XXXX*</span>
+                                        ) : (
+                                            <>₹<span className="text-4xl text-blue-600">{formatNumber(packageDetails.price)}*</span></>
+                                        )}
+                                    </div>
                                     <div className="text-sm text-gray-600 font-medium">{packageDetails.priceUnit}</div>
                                     <div className="flex items-center md:justify-end mt-1">
                                         <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />

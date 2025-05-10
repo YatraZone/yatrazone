@@ -96,11 +96,11 @@ const AddPackage = ({ id }) => {
 
     const onSubmit = async (data) => {
 
-        if (!data.packages.packageName || !data.packages.price || !data.packages.priceUnit) {
+        if (!data.packages.packageName || !data.packages.priceUnit) {
             toast.error("All fields are required", { style: { borderRadius: "10px", border: "2px solid red" } })
             return
         }
-
+        data.packages.price = 0;
         data.packages.link = packageCode
         data.packages.active = true
         data.packages.order = (subMenuItems?.packages?.length || 0) + 1
