@@ -218,7 +218,7 @@ const MenuBar = (props) => {
                                                                     .filter(pkg => pkg.active)
                                                                     .map((item, itemIdx) => (
                                                                         <li key={itemIdx} className={singleCategory ? "w-full" : undefined}>
-                                                                            <Link href={item.url} className={singleCategory ? "text-gray-600 hover:text-blue-600 text-sm text-start w-full block" : "text-gray-600 hover:text-blue-600 text-sm"}>
+                                                                            <Link href={item.url} className={singleCategory ? "text-gray-600 hover:text-blue-600 text-sm text-start w-full block py-1" : "text-gray-600 hover:text-blue-600 text-sm"}>
                                                                                 {item.title}
                                                                             </Link>
                                                                         </li>

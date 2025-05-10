@@ -344,12 +344,22 @@ const PackageDetailsPage = async ({ params }) => {
                         {/* Action Buttons */}
                         <div className="p-6 bg-blue-100 border-b">
                             <div className="flex flex-col sm:flex-row gap-3 justify-center mx-auto">
-                                <Link href={`/checkout/${packageDetails._id}`} className="flex-1">
-                                    <button className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                            {packageDetails.price === 0 ? (
+                                    <button
+                                        className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 bg-blue-600 text-white rounded-lg opacity-50 cursor-not-allowed flex-1"
+                                        disabled
+                                    >
                                         <ShoppingCart className="mr-2 !h-6 !w-6" />
                                         Package Checkout
                                     </button>
-                                </Link>
+                                ) : (
+                                    <Link href={`/checkout/${packageDetails._id}`} className="flex-1">
+                                        <button className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                                            <ShoppingCart className="mr-2 !h-6 !w-6" />
+                                            Package Checkout
+                                        </button>
+                                    </Link>
+                                )}
                                 <Link href={`/customEnquiry/${packageDetails._id}`} className="flex-1">
                                     <button className="w-full flex items-center justify-center !py-4 text-lg border-2 border-blue-600 hover:bg-white rounded-lg" variant="outline">
                                         <MessageSquare className="mr-2 !h-6 !w-6" />
