@@ -62,12 +62,18 @@ export default function RootLayout({ children }) {
             gtag('config', 'AW-16449940407');
           `}
         </Script>
+        <script>
+          gtag('event', 'ads_conversion_Contact_Us_1', {
+            // <event_parameters>
+          });
+        </script>
+
       </head>
       <body className={`font-gilda`}>
         {isPaid ? (
           <>
             <NextTopLoader color="#006eff" height={3} showSpinner={false} zIndex={1600} />
-            <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 , style: { fontFamily: "var(--font-GildaDisplay)" } }} />
+            <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000, style: { fontFamily: "var(--font-GildaDisplay)" } }} />
             <SessionWrapper>
               <SearchProvider>
                 <Header />
