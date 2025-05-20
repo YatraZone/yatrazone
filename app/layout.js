@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from "next/script";
 import Header from "@/components/Header";
 import SessionWrapper from "@/components/SessionWrapper";
 import Footer from "@/components/Footer";
@@ -48,6 +49,20 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-16449940407"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-16449940407');
+          `}
+        </Script>
+      </head>
       <body className={`font-gilda`}>
         {isPaid ? (
           <>

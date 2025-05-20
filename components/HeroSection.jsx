@@ -28,7 +28,7 @@ const HeroSection = () => {
     {
       title: "Welcome",
       subTitle: "Explore Our Collection",
-      image: { url: "https://dummyimage.com/1280x720/000/fff" },
+      image: { url: "https://utfs.io/f/vtWblnMZy4lrXOs0GGiAOpxnLHyjcgAlwvQU6da2qibu0okI" },
       link: "/"
     },
     {
@@ -190,8 +190,8 @@ const HeroSection = () => {
                     <Image
                       src={item?.image?.url}
                       alt={item?.title || "Banner Image"}
-                      width={1280}
-                      height={720}
+                      width={1250}
+                      height={750}
                       quality={100}
                       priority
                       className="h-[100vh] w-full object-cover"
@@ -280,7 +280,7 @@ const HeroSection = () => {
                     >
                       <Image
                         src={typeof pkg?.basicDetails?.thumbnail?.url === "string" && pkg.basicDetails.thumbnail.url.trim() !== "" ? pkg.basicDetails.thumbnail.url : "/placeholder.jpg"}
-                        width={1280} height={720} quality={50}
+                        width={1280} height={720} quality={100}
                         alt={pkg?.packageName}
                         className="w-24 h-24 rounded-md object-cover"
                       />
@@ -310,7 +310,7 @@ const HeroSection = () => {
                     >
                       <Image
                         src={typeof pkg?.basicDetails?.thumbnail?.url === "string" && pkg.basicDetails.thumbnail.url.trim() !== "" ? pkg.basicDetails.thumbnail.url : "/placeholder.jpg"}
-                        width={1280} height={720} quality={50}
+                        width={1280} height={720} quality={100}
                         alt={pkg?.packageName}
                         className="w-20 h-20 rounded-md object-cover"
                       />

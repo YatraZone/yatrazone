@@ -20,7 +20,7 @@ const Navbar = ({ className }) => {
   const pathName = usePathname();
 
   useEffect(() => {
-    if (pathName.includes('admin') || pathName.includes('package')) return
+    if (pathName.includes('admin') || pathName.includes('package')) return;
 
     if (session?.user?.isAdmin) return
 

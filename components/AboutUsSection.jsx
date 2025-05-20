@@ -115,16 +115,16 @@ const AboutUsSection = () => {
                         <div key={item._id} className="rounded-2xl group flex flex-col justify-between relative overflow-hidden w-full h-96 p-0">
                             <Image
                                 src={item.image.url}
-                                width={1280}
-                                height={720}
+                                width={1450}
+                                height={750}
                                 priority
-                                quality={25}
+                                quality={100}
                                 alt={item.title}
                                 className="object-cover absolute inset-0 w-full h-96 group-hover:scale-105 transition-transform duration-500 ease-in-out"
                                 style={{ width: '100%', height: '100%' }}
                             />
                             {/* Overlay for lighter, full black shade on hover */}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                            <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
                             {/* Text slides up on hover */}
                             <div className="absolute bottom-0 left-0 text-center w-full z-20 translate-y-full group-hover:translate-y-[-30%] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                                 <h1 className="text-white text-xl xl:text-2xl mt-2 font-bold">{item.title}</h1>
