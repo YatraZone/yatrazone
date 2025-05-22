@@ -170,7 +170,7 @@ const RandomTourPackageSection = () => {
                                 >
                                     <div className="p-1">
                                         <Card>
-                                            <CardContent className="justify-between bg-white rounded-xl shadow p-4 flex flex-col h-full relative overflow-hidden group">
+                                            <CardContent className="justify-between bg-white rounded-xl shadow p-2 flex flex-col h-full relative overflow-hidden group">
                                                 <div className="relative w-full h-48 md:h-48 mb-3 rounded-lg overflow-hidden">
                                                     <Image
                                                         src={item?.basicDetails?.thumbnail?.url || "/RandomTourPackageImages/u1.jpg"}
