@@ -190,7 +190,7 @@ const RandomTourPackageSection = () => {
                                                             <CalendarClock size={20} /> {item?.basicDetails?.duration} Days {item?.basicDetails?.duration - 1} Nights
                                                         </p>
                                                     </div>
-                                                    <p className="font-bold md:text-lg text-md line-clamp-2">{item?.packageName}</p>
+                                                    <p className="font-bold text-md line-clamp-2">{item?.packageName}</p>
                                                 </div>
                                                 <div className="h-px bg-gray-200 my-1" />
 
