@@ -62,11 +62,13 @@ export default function RootLayout({ children }) {
             gtag('config', 'AW-16449940407');
           `}
         </Script>
-        <script>
-          gtag('event', 'ads_conversion_Contact_Us_1', {
-            // <event_parameters>
-          });
-        </script>
+        <Script id="gtag-conversion" strategy="afterInteractive">
+          {`
+            gtag('event', 'ads_conversion_Contact_Us_1', {
+              // <event_parameters>
+            });
+          `}
+        </Script>
 
       </head>
       <body className={`font-gilda`}>
