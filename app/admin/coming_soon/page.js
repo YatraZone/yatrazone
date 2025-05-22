@@ -1,3 +1,4 @@
+'use client'
 import ComingSoon from "@/components/Admin/ComingSoon"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 
