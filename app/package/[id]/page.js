@@ -214,6 +214,8 @@ const PackageDetailsPage = async ({ params }) => {
         );
     }
 
+    
+
     const formatNumeric = (number) => {
         return new Intl.NumberFormat('en-IN', {
             style: 'decimal',
