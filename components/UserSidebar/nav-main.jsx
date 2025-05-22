@@ -28,7 +28,7 @@ export function   NavMain({
         <SidebarGroup>
             <SidebarGroupLabel className="font-black">Category</SidebarGroupLabel>
             <SidebarMenu>
-                {items.map((item) => (
+                {items.filter(item => item.active).map((item) => (
                     <Collapsible
                         key={item.title}
                         asChild
@@ -72,7 +72,7 @@ export function   NavMain({
                             </CollapsibleTrigger>
                             <CollapsibleContent>
                                 <SidebarMenuSub className="border-blue-300 mt-2">
-                                    {item.subCat?.map((subItem) => (
+                                    {item.subCat?.filter(subItem => subItem.active).map((subItem) => (
                                         <Collapsible key={subItem.title} defaultOpen={subItem.isActive} className="group/nested">
                                             <SidebarMenuSubItem>
                                                 <CollapsibleTrigger asChild className="cursor-pointer py-2 hover:bg-blue-300 h-auto data-[state=open]:bg-blue-300">
@@ -84,7 +84,7 @@ export function   NavMain({
                                                 </CollapsibleTrigger>
                                                 <CollapsibleContent>
                                                     <SidebarMenuSub className="border-blue-300 mt-2 pl-4">
-                                                        {subItem.subCatPackage?.map((nestedItem) => (
+                                                        {subItem.subCatPackage?.filter(nestedItem => nestedItem.active).map((nestedItem) => (
                                                             <SidebarMenuSubItem key={nestedItem.title}>
                                                                 <a href={nestedItem.url} className="flex items-center  gap-2 rounded-sm py-2  hover:bg-blue-300">
                                                                     <CircleSmall className="!size-2 text-center" />
