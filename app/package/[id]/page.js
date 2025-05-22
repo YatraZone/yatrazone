@@ -6,7 +6,6 @@ import {
     Tag,
     Star,
     Check,
-    X,
     AlertTriangle,
     Calculator,
     MessageSquare,
