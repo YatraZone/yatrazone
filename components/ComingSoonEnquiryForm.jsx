@@ -126,7 +126,7 @@ export default function ComingSoonEnquiryForm({ packageId }) {
         </div>
       </div>
       <div className="flex justify-center mt-8">
-        <button type="submit" className="bg-orange-500 px-10 py-3 rounded-full text-white font-bold text-lg shadow hover:bg-orange-600 transition-all duration-200" disabled={loading}>
+        <button type="submit" className="bg-blue-600 px-10 py-3 rounded-full text-white font-bold text-lg shadow hover:bg-orange-600 transition-all duration-200" disabled={loading}>
           {loading ? "Submitting..." : "Submit Enquiry"}
         </button>
       </div>

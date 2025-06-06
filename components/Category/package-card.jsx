@@ -35,7 +35,7 @@ const PackageCard = async ({ pkg }) => {
           </div>
         )}
         <div className="absolute top-3 left-3 bg-blue-100 border-2 border-blue-600 text-black px-3 py-1 rounded-full font-semibold z-10">
-          ₹<span className="font-bold text-lg">{pkg?.price === 0 ? 'XXXX*' : `₹${formatNumber(pkg?.price)}*`}</span>
+          ₹<span className="font-bold text-lg">{pkg?.price === 0 ? 'XXXX*' : `${formatNumber(pkg?.price)}*`}</span>
         </div>
       </div>
       <div className="p-2 flex flex-col gap-2 flex-1">

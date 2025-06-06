@@ -219,7 +219,7 @@ const PackageDetailsPage = async ({ params }) => {
                                             </Link>
                                         </Button>
                                     </div>
-                                    <h2 className="text-2xl lg:text-4xl font-gilda font-bold w-full">Package Price Not Available Now</h2>
+                                    <h2 className="text-2xl lg:text-4xl font-gilda font-bold w-full">Price Currently Not Available</h2>
                                 </div>
                             </div>
                             <div className="md:text-right w-fit">

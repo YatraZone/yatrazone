@@ -14,7 +14,7 @@ const OverlayButton = () => {
         const options = {
             call: "+918006000325", // Call phone number
             whatsapp: "+918006000325", // WhatsApp number
-            call_to_action: "YatraZone", // Call to action
+            call_to_action: "", // Call to action
             button_color: "#2563eb", // Color of button
             position: "left", // Position may be 'right' or 'left'
             order: "call,whatsapp", // Order of buttons

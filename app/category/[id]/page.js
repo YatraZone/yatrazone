@@ -31,13 +31,16 @@ const getCategoryInfo = async (categoryId) => {
 
 const CategoryPage = async ({ params }) => {
     const { id } = await params
-    const { packages } = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPackages/byId/${id}`).then(res => res.json())
+    const packageData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPackages/byId/${id}`)
+  .then(res => res.json())
+  .catch(() => ({}));
+const packages = Array.isArray(packageData.packages) ? packageData.packages : [];
     const getCategory = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getCategoryBanner/${id}`).then(res => res.json())
 
     const categoryInfo = await getCategoryInfo(getCategory)
 
     // Only show packages that are active
-    const visiblePackages = packages.filter(pkg => pkg.active);
+    const visiblePackages = packages.filter(pkg => pkg && pkg.active);
 
     return (
         <SidebarInset>

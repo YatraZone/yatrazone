@@ -104,8 +104,8 @@ const AddDirectPackage = () => {
 
         // Always send price as 0, regardless of what admin enters
         if (!data.packages.price) {
-    data.packages.price = 0;
-}
+            data.packages.price = 0;
+        }
         data.packages.link = packageCode;
         data.packages.packageCode = packageCode;
 
