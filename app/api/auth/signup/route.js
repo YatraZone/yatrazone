@@ -85,7 +85,7 @@ export async function POST(req) {
                 <table class="container" role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
                     <!-- Header -->
                     <tr>
-                        <td style="padding: 30px 0; text-align: center; background-color: #4F46E5; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                        <td style="padding: 30px 0; text-align: center; background-color: #2563EB; border-top-left-radius: 8px; border-top-right-radius: 8px;">
                             <a href="https://yatrazone.vercel.app/" class="header">
             <img src="https://yatrazone.vercel.app/logo.png" alt="YatraZone Logo">
         </a>
@@ -96,9 +96,9 @@ export async function POST(req) {
                     <tr>
                         <td class="content" style="padding: 40px 30px;">
                             <p style="margin-top: 0; color: #333333; font-size: 16px; line-height: 1.5;">Hello, ${email}</p>
-                            <p style="color: #333333; font-size: 16px; line-height: 1.5;">Thank you for signing up with <span style="font-weight: 900; color: #4F46E5;">YatraZone!</span>. Please use the following verification code to complete your sign-in:</p>
+                            <p style="color: #333333; font-size: 16px; line-height: 1.5;">Thank you for signing up with <span style="font-weight: 900; color: #2563EB;">YatraZone!</span>. Please use the following verification code to complete your sign-in:</p>
                             <div style="background-color: #f8f9fa; border-radius: 4px; padding: 20px; margin: 30px 0; text-align: center;">
-                                <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #4F46E5;">${otp}</span>
+                                <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #2563EB;">${otp}</span>
                             </div>
                             <p style="color: #333333; font-size: 16px; line-height: 1.5;">This OTP is valid for the next 10 minutes. If you did not request this, please ignore this email.</p>
                         </td>
