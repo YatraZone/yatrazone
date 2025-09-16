@@ -8,6 +8,7 @@ import NextTopLoader from "nextjs-toploader";
 import { SearchProvider } from "@/context/SearchContext";
 import OverlayButton from "@/components/OverlayButton";
 import GoogleTranslate from "@/components/GoogleTranslate";
+import Link from "next/link";
 
 
 export const metadata = {
@@ -89,11 +90,39 @@ export default function RootLayout({ children }) {
             </SessionWrapper>
           </>
         ) : (
-          <div className="flex items-center justify-center h-screen">
-            <h1 className="text-2xl font-bold text-black text-center">
-              Payment Pending. Please Contact Admin.
+          <div className="flex flex-col items-center justify-center h-screen bg-white text-center px-6">
+            {/* Broken page icon */}
+            <div className="mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-16 h-16 text-gray-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 9h.01M15 9h.01M9 15h6m2-12H7a2 2 0 00-2 2v14l4-2 4 2 4-2 4 2V5a2 2 0 00-2-2z"
+                />
+              </svg>
+            </div>
+
+            <h1 className="text-2xl font-medium text-gray-800 mb-2">
+              This site can’t be reached
             </h1>
+
+            <p className="text-gray-600 mb-1">
+              Check if there is a typo in <strong>yatrazone.com</strong>.
+            </p>
+            <p className="text-gray-600 mb-6">
+              If spelling is correct, try running Windows Network Diagnostics.
+            </p>
+
+            <p className="text-gray-400 text-sm mb-8">DNS_PROBE_FINISHED_NXDOMAIN</p>
           </div>
+
         )}
       </body>
     </html>
