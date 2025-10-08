@@ -13,7 +13,11 @@ export async function GET(req) {
 
     try {
         const packages = await Package.find({
-            packageName: { $regex: query, $options: "i" } // Case-insensitive search
+            $or: [
+                { packageName: { $regex: query, $options: "i" } },
+                { 'info.selectionTitle': { $regex: query, $options: "i" } },
+                { 'info.selectionDesc': { $regex: query, $options: "i" } }
+            ]
         })
         .limit(5) // Limit results for dropdown
         .select("packageName _id basicDetails.thumbnail.url basicDetails.location"); // Return only necessary fields
