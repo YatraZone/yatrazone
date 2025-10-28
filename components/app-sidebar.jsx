@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   BarChart,
   Boxes,
@@ -19,15 +19,12 @@ import {
   StickyNote,
   User,
   Users,
-} from "lucide-react"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import {
-  Sidebar,
-  SidebarContent,
-} from "@/components/ui/sidebar"
-import { usePathname } from "next/navigation"
-import { useSession } from "next-auth/react"
+} from "lucide-react";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const data = {
   user: {
@@ -41,10 +38,19 @@ const data = {
       url: "/admin/create_user",
       icon: User,
     },
-    
-    // Space (empty item)
+
     { divider: true },
-    
+    {
+      name: "Create Artisan",
+      url: "/admin/create_artisan",
+      icon: User,
+    },
+    {
+      name: "View / Edit Artisan",
+      url: "/admin/edit_artisan",
+      icon: User,
+    },
+    { divider: true },
     // Second group: Basic setup
     {
       name: "Manage Banner",
@@ -66,38 +72,73 @@ const data = {
       url: "/admin/manage_city_plans",
       icon: Flame,
     },
-    
+    { divider: true },
+
+    {
+      name: "Top Advertisment Banner",
+      url: "/admin/top_advertisment_banner",
+      icon: Image,
+    },
+    // {
+    //   name: "Category Advertisment",
+    //   url: "/admin/category_advertisment",
+    //   icon: Image,
+    // },
+    // {
+    //   name: "PopUp Banner",
+    //   url: "/admin/popup_banner",
+    //   icon: Image,
+    // },
+    {
+      name: "Consultancy Banner",
+      url: "/admin/consultancy_banner",
+      icon: Image,
+    },
+    {
+      name: "Banner Section 1st",
+      url: "/admin/banner_section_1st",
+      icon: Image,
+    },
+    {
+      name: "Banner Section 2nd",
+      url: "/admin/banner_section_2nd",
+      icon: Image,
+    },
+    {
+      name: "Banner Section 3rd",
+      url: "/admin/banner_section_3rd",
+      icon: Image,
+    },
     // Space (empty item)
     { divider: true },
 
     {
-      name:"Insta or Facebook Post",
-      url:"/admin/insta_fb_post",
-      icon:Image
+      name: "Insta or Facebook Post",
+      url: "/admin/insta_fb_post",
+      icon: Image,
     },
     {
-      name:"Manage Blogs",
+      name: "Manage Blogs",
       url: "/admin/manage_blogs",
       icon: Rss,
     },
 
-   // Space (empty item)
-   { divider: true },
+    // Space (empty item)
+    { divider: true },
 
-       {
-         name:"Coming Soon",
-         url:"/admin/coming_soon",
-         icon:Image
-       },   
-       {
-        name:"Coming Soon Enquiries",
-        url:"/admin/coming_soon_enquiries",
-        icon:MessageCircleMore
-       },
-      // Space (empty item)
-      { divider: true },
+    {
+      name: "Coming Soon",
+      url: "/admin/coming_soon",
+      icon: Image,
+    },
+    {
+      name: "Coming Soon Enquiries",
+      url: "/admin/coming_soon_enquiries",
+      icon: MessageCircleMore,
+    },
+    // Space (empty item)
+    { divider: true },
 
-    
     // Third group: Content management
     {
       name: "Manage Featured Packages",
@@ -129,20 +170,20 @@ const data = {
       url: "/admin/manage_reviews",
       icon: Star,
     },
-    
+
     // Space (empty item)
     { divider: true },
-    
+
     // Fourth group: Blog & pages
     {
       name: "Manage Webpages",
       url: "/admin/manage_webpage",
       icon: StickyNote,
     },
-    
+
     // Space (empty item)
     { divider: true },
-    
+
     // Fifth group: Enquiries
     {
       name: "Contact Page Enquiry",
@@ -154,10 +195,10 @@ const data = {
       url: "/admin/chat",
       icon: MessageCircleMore,
     },
-    
+
     // Space (empty item)
     { divider: true },
-    
+
     // Sixth group: Reports & tools
     {
       name: "Sales Section",
@@ -185,7 +226,7 @@ const data = {
       icon: Users,
     },
   ],
-}
+};
 
 const dataManager = {
   user: {
@@ -209,25 +250,26 @@ const dataManager = {
       icon: Send,
     },
   ],
-}
+};
 
-export function AppSidebar({
-  ...props
-}) {
+export function AppSidebar({ ...props }) {
   const { data: session } = useSession();
 
-  const pathName = usePathname()
+  const pathName = usePathname();
 
   return (
-    (
-      pathName !== "/admin/login" && (
-        <Sidebar variant="inset"  {...props}>
-          <NavUser user={session} />
-          <SidebarContent {...props}>
-            {session?.user?.isSubAdmin && <NavProjects projects={dataManager.projects} />}
-            {(!session?.user?.isSubAdmin && session?.user?.isAdmin) && <NavProjects projects={data.projects} />}
-          </SidebarContent>
-        </Sidebar>
-      ))
+    pathName !== "/admin/login" && (
+      <Sidebar variant="inset" {...props}>
+        <NavUser user={session} />
+        <SidebarContent {...props}>
+          {session?.user?.isSubAdmin && (
+            <NavProjects projects={dataManager.projects} />
+          )}
+          {!session?.user?.isSubAdmin && session?.user?.isAdmin && (
+            <NavProjects projects={data.projects} />
+          )}
+        </SidebarContent>
+      </Sidebar>
+    )
   );
 }

@@ -93,14 +93,15 @@ const LanguageSelector = () => {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-2 rounded-lg border border-blue-200 transition-colors"
+                className="flex items-center gap-2  text-black px-3 py-2 rounded-lg border border-blue-200 transition-colors"
             >
                 <Globe size={20} />
+                <span className='text-sm font-bold'>Language</span>
                 <ChevronDown size={16} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isOpen && (
-                <div className="absolute top-12 right-0 mt-1 w-48 text-black bg-white shadow-lg rounded-lg border z-50">
+                <div className="absolute top-12 right-0 mt-1 w-48 text-black bg-white shadow-lg rounded-lg border z-[999]">
                     <div className="py-1">
                         {languages.map((language) => (
                             <button
