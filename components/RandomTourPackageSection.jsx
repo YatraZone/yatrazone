@@ -64,7 +64,6 @@ const RandomTourPackageSection = () => {
           <div className="w-full py-10">
             <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold"></h2>
             <h1 className="font-bold text-xl md:text-3xl lg:text-4xl uppercase text-center">
-              {" "}
               Trending Packages: The Best, Today
             </h1>
             <Carousel className="w-[75%] md:w-[95%] drop-shadow-xl mx-auto xl:w-full my-6 md:my-12">
@@ -114,7 +113,7 @@ const RandomTourPackageSection = () => {
 
   return (
     <>
-      <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full px-8 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
+      <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
         <div className=" w-full h-full overflow-hidden max-w-screen ">
           <div className="w-full py-9 px-1 md:px-12">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mt-10">

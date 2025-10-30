@@ -49,7 +49,7 @@ const Banner = () => {
           <p className="text-gray-600 text-center py-4 mx-auto md:w-[50%]">
             Traverse the spiritual heart of India where divinity flows, through every river and prayer echoes in every breeze, This all-India spiritual tour is designed for seekers fo peace , prupose and presence, From Himalayan shrine to souhtern ashrams, discover timeless traditions, guieded practices and sacred wisdom that nurture both body and soul.
           </p>
-          <Carousel className="w-full px-5 md:px-20 mx-auto">
+          <Carousel className="w-full md:px-20 mx-auto">
             <CarouselContent>
               {consultancyBanner.map((item, idx) => (
                 <CarouselItem

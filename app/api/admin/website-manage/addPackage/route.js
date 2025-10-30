@@ -58,6 +58,7 @@ export async function PUT(req) {
             priceUnit: body.priceUnit ?? existingPackage.priceUnit,
             link: body.link ?? existingPackage.link,
             active: body.active ?? existingPackage.active,
+            isTrending: body.isTrending ?? existingPackage.isTrending,
             order: body.order ?? existingPackage.order,
             packageCode: body.packageCode ?? existingPackage.packageCode,
 
@@ -86,14 +87,31 @@ export async function PATCH(req) {
     const body = await req.json();
 
     try {
-        const updatedPackage = await Package.findByIdAndUpdate(body.pkgId, { active: body.active }, { new: true });
+        // Create update object with only the fields that are provided
+        const updateFields = {};
+        if (body.active !== undefined) updateFields.active = body.active;
+        if (body.isTrending !== undefined) updateFields.isTrending = body.isTrending;
+
+        if (Object.keys(updateFields).length === 0) {
+            return NextResponse.json({ message: "No valid fields to update" }, { status: 400 });
+        }
+
+        const updatedPackage = await Package.findByIdAndUpdate(
+            body.pkgId, 
+            { $set: updateFields }, 
+            { new: true, runValidators: true }
+        );
 
         if (!updatedPackage) {
             return NextResponse.json({ message: "Package not found" }, { status: 404 });
         }
 
-        return NextResponse.json({ message: "Package updated successfully!", package: updatedPackage });
+        return NextResponse.json({ 
+            message: "Package updated successfully!", 
+            package: updatedPackage 
+        });
     } catch (error) {
+        console.error("Error updating package:", error);
         return NextResponse.json({ message: error.message }, { status: 500 });
     }
 }

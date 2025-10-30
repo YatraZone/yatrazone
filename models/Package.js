@@ -61,7 +61,8 @@ const PackageSchema = new Schema({
             price3: { type: String },
             vehicleType: [String],
         }
-    }
+    },
+    isTrending: { type: Boolean, default: false },
 });
 
 export default models.Package || model("Package", PackageSchema);

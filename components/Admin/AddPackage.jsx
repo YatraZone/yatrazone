@@ -93,6 +93,29 @@ const AddPackage = ({ id }) => {
             console.error("Error updating submenu status:", error);
         }
     };
+    const toggleIsTrending = async (pkgId, currentStatus) => {
+        try {
+            const response = await fetch(`/api/admin/website-manage/addPackage`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pkgId, isTrending: !currentStatus }),
+            });
+
+            if (response.ok) {
+                setSubMenuItems((prevSubMenu) => ({
+                    ...prevSubMenu,
+                    packages: prevSubMenu.packages.map((pkg) =>
+                        pkg._id === pkgId ? { ...pkg, isTrending: !pkg.isTrending } : pkg
+                    ),
+                }));
+                toast.success("Package status updated successfully!", { style: { borderRadius: "10px", border: "2px solid green" } });
+            } else {
+                toast.error("Failed to update submenu status", { style: { borderRadius: "10px", border: "2px solid red" } });
+            }
+        } catch (error) {
+            console.error("Error updating submenu status:", error);
+        }
+    };
 
     const onSubmit = async (data) => {
 
@@ -168,9 +191,10 @@ const AddPackage = ({ id }) => {
                 <Table className="w-full min-w-max lg:min-w-0">
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="text-center !text-black w-1/3">Package Name</TableHead>
-                            <TableHead className="text-center !text-black w-1/3">Order</TableHead>
-                            <TableHead className="w-1/3 !text-black text-center">Action</TableHead>
+                            <TableHead className="text-center !text-black w-1/2">Package Name</TableHead>
+                            <TableHead className="text-center !text-black w-1/4">Order</TableHead>
+                            <TableHead className="text-center !text-black w-1/2">isTrending</TableHead>
+                            <TableHead className="w-1/2 !text-black text-center">Action</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -179,6 +203,16 @@ const AddPackage = ({ id }) => {
                                 <TableRow key={pkg._id}>
                                     <TableCell className="border font-semibold border-blue-600">{pkg.packageName}</TableCell>
                                     <TableCell className="border font-semibold border-blue-600">{pkg.order}</TableCell>
+                                    <TableCell className="border font-semibold border-blue-600">
+                                        <div className="flex items-center justify-center gap-6">
+                                            <Switch
+                                                id={`switch-${pkg._id}`}
+                                                checked={pkg.isTrending}
+                                                onCheckedChange={() => toggleIsTrending(pkg._id, pkg.isTrending)}
+                                                className={`rounded-full transition-colors ${pkg.isTrending ? "!bg-green-500" : "!bg-red-500"}`}
+                                            />
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="border font-semibold border-blue-600">
                                         <div className="flex items-center justify-center gap-6">
                                             <Button size="icon" variant="outline" asChild>
@@ -206,7 +240,7 @@ const AddPackage = ({ id }) => {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan="3" className="text-center border font-semibold border-blue-600">
+                                <TableCell colSpan="4" className="text-center border font-semibold border-blue-600">
                                     No packages available.
                                 </TableCell>
                             </TableRow>

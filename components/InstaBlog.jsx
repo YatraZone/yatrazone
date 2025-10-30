@@ -278,11 +278,11 @@ const InstaBlog = () => {
       )}
 
       {allPosts.length > 0 && (
-        <div className="w-full flex flex-col items-center md:py-12 py-10 px-4">
+        <div className="w-full flex flex-col items-center md:py-12 py-10">
           <h2 className="text-center font-bold text-xl md:text-3xl lg:text-4xl uppercase">
             Don’t just watch the trends — live them!
           </h2>
-          <p className="text-gray-600 py-4 text-center font-barlow w-full md:w-[90%] mx-auto">
+          <p className="text-gray-600 py-4 text-center font-barlow w-full md:w-[90%] mx-auto px-5">
             Follow us on social media for your daily dose of Trending Packages,
             exclusive offers, behind-the-scenes peeks, and real-time updates.
             Join our community of trendsetters and be the first to explore

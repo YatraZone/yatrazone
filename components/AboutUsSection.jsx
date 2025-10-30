@@ -123,7 +123,7 @@ const AboutUsSection = () => {
 
   return (
     <>
-      <section className="relative py-1 w-full px-10 md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
+      <section className="relative py-1 w-full md:px-10 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
         <div className="w-full">
           <h2 className="font-bold text-2xl md:text-4xl text-center mt-7">
             Be a part of a spiritual journey.
@@ -138,7 +138,7 @@ const AboutUsSection = () => {
             we ensure transformative experiences.
           </p>
           <p className="flex items-center text-gray-600 font-barlow font-bold text-sm md:text-lg xl:text-xl mb-4"></p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 p-2">
             {featuredPackages.map((item) => (
               <div
                 key={item._id}

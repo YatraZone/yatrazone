@@ -20,7 +20,11 @@ const SearchSection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [checkInDate, setCheckInDate] = useState('');
   const [guestCount, setGuestCount] = useState(1);
-
+  const [menuItems, setMenuItems] = useState([]);
+  const [fixedMenuItems, setFixedMenuItems] = useState([]);
+  const [selectedPackages, setSelectedPackages] = useState([]);
+  // console.log(menuItems)
+  // console.log(fixedMenuItems)
   // Reusable Number Input Component
   const NumberInput = ({ value, onChange, min = 1, max = 10, className = '' }) => {
     const increment = () => {
@@ -65,147 +69,103 @@ const SearchSection = () => {
   };
 
   // console.log(trendingSearches)
-  // Property types for the second dropdown
-  const propertyForOptions = [
-    { value: 'residential', label: 'Residential' },
-    { value: 'commercial', label: 'Commercial' }
-  ];
-  const accommodationType = [
-    { value: 'Hotel', label: 'Hotel' },
-    { value: 'Homestay', label: 'Homestay' }
-  ];
-  const pilgrimType = [
-    { value: 'Badrinath', label: 'Badrinath' },
-    { value: 'Yamunotri', label: 'Yamunotri' }
-  ]
-  const yatraType = [
-    { value: 'Group_Tour', label: 'Group Tour' },
-    { value: 'Solo_Traveller', label: 'Solo Traveller' }
-  ]
+  // Memoize the property options to prevent unnecessary recalculations
+  const propertyForOptions = React.useMemo(() =>
+    fixedMenuItems.flatMap(category =>
+      category.subCat?.map(subCategory => ({
+        value: subCategory._id,
+        label: subCategory.title,
+        packages: subCategory.subCatPackage || []
+      })) || []
+    ), [fixedMenuItems]);
+
+  // Update selected packages when category changes
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
+    if (!propertyFor) {
+      setSelectedPackages([]);
+      return;
+    }
 
-        // Fetch property types
-        try {
-          const propResponse = await fetch("/api/createProperty");
-          if (!propResponse.ok) {
-            throw new Error(`HTTP error! status: ${propResponse.status}`);
-          }
-          const propData = await propResponse.json();
-          // Handle both response formats
-          if (Array.isArray(propData)) {
-            setPropertyTypes(propData);
-          } else if (propData && propData.success && Array.isArray(propData.data)) {
-            setPropertyTypes(propData.data);
-          } else {
-            console.error("Unexpected property types response format:", propData);
-          }
-        } catch (error) {
-          console.error("Error fetching property types:", error);
-          // toast.error("Failed to load property types");
-        }
+    const selectedCategory = propertyForOptions.find(option => option.value === propertyFor);
+    setSelectedPackages(selectedCategory?.packages || []);
+  }, [propertyFor, propertyForOptions]);
 
-        // Fetch locations
-        try {
-          const locResponse = await fetch("/api/createLocation");
-          if (!locResponse.ok) {
-            throw new Error(`HTTP error! status: ${locResponse.status}`);
-          }
-          const locData = await locResponse.json();
-          // Handle both response formats
-          if (Array.isArray(locData)) {
-            setLocations(locData);
-          } else if (locData && locData.success && Array.isArray(locData.data)) {
-            setLocations(locData.data);
-          } else {
-            console.error("Unexpected location types response format:", locData);
-          }
-        } catch (error) {
-          console.error("Error fetching location types:", error);
-          // toast.error("Failed to load location types");
-        }
-        //fetch Treding property
-        try {
-          const locResponse = await fetch("/api/createPropertyDetails/getTrending");
-          // if (!locResponse.ok) {
-          //   throw new Error(`HTTP error! status: ${locResponse.status}`);
-          // }
-          const locData = await locResponse.json();
-          // Handle both response formats
-          if (Array.isArray(locData)) {
-            setTrendingSearches(locData);
-          } else if (locData && locData.success && Array.isArray(locData.data)) {
-            setTrendingSearches(locData.data);
-          } else {
-            console.error("Unexpected location types response format:", locData);
-          }
-        } catch (error) {
-          console.error("Error fetching location types:", error);
-          // toast.error("Failed to load location types");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // toast.error("Failed to fetch data");
-      } finally {
-        setIsLoading(false);
+  const yatraType = [
+    { value: 'Solo', label: 'Solo' },
+    { value: 'Family', label: 'Family' },
+    { value: 'Group', label: 'Group' },
+    { value: 'Helicopter', label: 'Helicopter' },
+    { value: 'Cruise', label: 'Cruise' }
+
+  ]
+  const fetchTrendingSearches = async () => {
+    try {
+      const locResponse = await fetch("/api/getTrendingPackages");
+      if (!locResponse.ok) {
+        throw new Error(`HTTP error! status: ${locResponse.status}`);
       }
-    };
-
-    fetchData();
+      const locData = await locResponse.json();
+      // console.log(locData)
+      // Handle both response formats
+      if (Array.isArray(locData)) {
+        setTrendingSearches(locData);
+      } else if (locData && locData.success && Array.isArray(locData.data)) {
+        setTrendingSearches(locData.data);
+      } else {
+        console.error("Unexpected location types response format:", locData);
+      }
+    } catch (error) {
+      console.error("Error fetching location types:", error);
+      toast.error("Failed to load location types");
+    }
+  }
+  useEffect(() => {
+    fetch("/api/getAllMenuItems")
+      .then((res) => res.json())
+      .then((data) => setMenuItems(data));
+    fetch("/api/subMenuFixed")
+      .then(res => res.json())
+      .then(data => {
+        let arr = Array.isArray(data) ? data : (Array.isArray(data.packages) ? data.packages : []);
+        setFixedMenuItems(arr.filter(item => item.active));
+      });
+    fetchTrendingSearches();
   }, []);
 
-  // Handle search form submission
   const handleSearch = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    // Validate inputs first
+    if (!propertyFor || !propertyType) {
+      toast.error('Please select Yatra Type and Package Type');
+      return; // Exit early if validation fails
+    }
+
+    setIsLoading(true); // Set loading state only after validation passes
 
     try {
-      // Build query parameters
-      const params = new URLSearchParams();
+      const selectedCategory = propertyForOptions.find(opt => opt.value === propertyFor);
+      const selectedPackage = selectedCategory?.packages.find(pkg => pkg.title === propertyType);
 
-      // Add only non-empty values to the query params
-      if (location) params.append('location', location);
-      if (propertyFor) params.append('propertyFor', propertyFor);
-      if (propertyType) params.append('propertyType', propertyType);
-      if (checkInDate) {
-        const formattedDate = new Date(checkInDate).toISOString().split('T')[0];
-        params.append('checkInDate', formattedDate);
+      if (selectedPackage?.url) {
+        window.location.href = selectedPackage.url;
+      } else {
+        toast.error('No Package Found with this Yatra Type');
       }
-      if (guestCount && guestCount > 1) params.append('guests', guestCount);
-
-      // Always use window.location for navigation to avoid hook issues
-      window.location.href = `/property?${params.toString()}`;
-
     } catch (error) {
-      console.error('Search error:', error);
-      toast.error('Failed to perform search. Please try again.');
+      console.error('Error:', error);
+      toast.error('Failed to navigate to package');
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Handle input changes to update state
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name === 'location') setLocation(value);
-    if (name === 'checkInDate') setCheckInDate(value);
-  };
-
-  // Handle select changes
-  const handleSelectChange = (name, value) => {
-    if (name === 'propertyFor') setPropertyFor(value);
-    if (name === 'propertyType') setPropertyType(value);
-  };
-
   // Add useEffect to handle initial load with URL params
   useEffect(() => {
     // Parse URL params on component mount
     const params = new URLSearchParams(window.location.search);
     if (params.get('location')) setLocation(params.get('location'));
-    if (params.get('propertyFor')) setPropertyFor(params.get('propertyFor'));
-    if (params.get('propertyType')) setPropertyType(params.get('propertyType'));
+    if (params.get('category')) setPropertyFor(params.get('category'));
+    if (params.get('subcategory')) setPropertyType(params.get('subcategory'));
     if (params.get('checkInDate')) setCheckInDate(params.get('checkInDate'));
     if (params.get('guests')) setGuestCount(parseInt(params.get('guests')));
   }, []);
@@ -219,7 +179,7 @@ const SearchSection = () => {
           className="w-full"
           onValueChange={setActiveTab}
         >
-          <div className="text-2xl font-semibold py-2">Search Package: Sacred India - One Journey, Infinite Blessings.</div>
+          <div className="text-md md:text-2xl font-semibold py-2">Search Package: Sacred India - One Journey, Infinite Blessings.</div>
           <TabsContent value="property">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-6 gap-4">
@@ -234,9 +194,9 @@ const SearchSection = () => {
                       <SelectValue placeholder="Yatra Type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {locations.map((loc, index) => (
-                        <SelectItem key={`loc-${index}`} value={loc.locationType}>
-                          {loc.locationType || `Location ${index + 1}`}
+                      {yatraType.map((loc, index) => (
+                        <SelectItem key={`loc-${index}`} value={loc.value}>
+                          {loc.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -249,14 +209,20 @@ const SearchSection = () => {
                   onValueChange={(value) => setPropertyFor(value)}
                 >
                   <SelectTrigger className="">
-                    <SelectValue placeholder="Category" />
+                    <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {propertyForOptions.map((option, index) => (
-                      <SelectItem key={`for-${index}`} value={option.value}>
-                        {option.label}
+                    {propertyForOptions.length > 0 ? (
+                      propertyForOptions.map((option, index) => (
+                        <SelectItem key={`cat-${index}`} value={option.value || 'all'}>
+                          {option.label || 'Loading...'}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="loading" disabled>
+                        Loading categories...
                       </SelectItem>
-                    ))}
+                    )}
                   </SelectContent>
                 </Select>
 
@@ -265,17 +231,23 @@ const SearchSection = () => {
                   <Select
                     value={propertyType}
                     onValueChange={(value) => setPropertyType(value)}
-                    disabled={isLoading}
+                    disabled={!propertyFor || isLoading}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Packages" />
+                      <SelectValue placeholder={propertyFor ? "Select Package" : "Select a category first"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {propertyTypes.map((type, index) => (
-                        <SelectItem key={`type-${index}`} value={type.propertyType}>
-                          {type.propertyType || `Type ${index + 1}`}
+                      {selectedPackages.length > 0 ? (
+                        selectedPackages.map((pkg, index) => (
+                          <SelectItem key={`pkg-${pkg._id || index}`} value={pkg.title || `pkg-${index}`}>
+                            {pkg.title}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-packages" disabled>
+                          {propertyFor ? "No packages available" : "Select a category first"}
                         </SelectItem>
-                      ))}
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -312,27 +284,29 @@ const SearchSection = () => {
                 </Button>
               </form>
               <div className="mt-8">
+                {trendingSearches.length > 0 ? (
+                  <div className="flex items-center gap-2 text-gray-700 mb-4">
+                    <Star className="h-5 w-5 text-yellow-500" />
+                    <h3 className="text-lg font-semibold">Trending Divine India</h3>
+                  </div>
+                ) : null}
                 <div className="flex flex-wrap gap-2">
                   {trendingSearches.length > 0 ? (
                     <>
-                      <div className="flex items-center gap-2 text-gray-700 mb-4">
-                        <Star className="h-5 w-5 text-yellow-500" />
-                        <h3 className="text-lg font-semibold">Trending Divine India</h3>
-                      </div>
-                    {trendingSearches.map((property, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        className="rounded-full px-4 py-1 text-sm hover:bg-blue-50 hover:text-blue-600 border-gray-200"
-                        asChild
-                      >
-                        <Link href={`/properties/${property.propertyNameSlug}`}>
-                          {property.propertyName}
-                        </Link>
-                      </Button>
-                    ))}
-                  </>
-                  ) :null}
+                      {trendingSearches.map((property, index) => (
+                        <Button
+                          key={index}
+                          variant="outline"
+                          className="rounded-full px-4 py-1 text-sm hover:bg-blue-50 hover:text-blue-600 border-gray-200"
+                          asChild
+                        >
+                          <Link href={`/package/${property._id}`}>
+                            {property.packageName}
+                          </Link>
+                        </Button>
+                      ))}
+                    </>
+                  ) : null}
                 </div>
               </div>
             </div>
