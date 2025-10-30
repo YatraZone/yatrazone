@@ -6,8 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "react-hot-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import Link from "next/link";
-
-
+import { statesIndia } from "@/lib/IndiaStates";
 
 export default function EditArtisan({ artisan }) {
   const router = useRouter();
@@ -18,7 +17,7 @@ export default function EditArtisan({ artisan }) {
 
   // Filter states
   const [filterName, setFilterName] = useState('');
-  const [filterNumber, setFilterNumber] = useState('');
+  const [filterState, setFilterState] = useState('');
   const [filterPhone, setFilterPhone] = useState('');
   const handleDeleteClick = (artisan) => {
     setArtisanToDelete(artisan);
@@ -48,11 +47,11 @@ export default function EditArtisan({ artisan }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: artisanToDelete._id, imageKey: artisanToDelete.profileImage?.key || undefined })
       });
-      if (!res.ok) throw new Error("Failed to delete artisan");
-      toast.success("Artisan deleted successfully");
+      if (!res.ok) throw new Error("Failed to delete Destination");
+      toast.success("Destination deleted successfully");
       if (onDeleted) onDeleted(artisanToDelete._id);
     } catch (err) {
-      toast.error("Failed to delete artisan");
+      // toast.error("Failed to delete Destination");
     } finally {
       setShowDeleteModal(false);
       setArtisanToDelete(null);
@@ -69,13 +68,20 @@ export default function EditArtisan({ artisan }) {
 
   // Filtered users
   const filteredUsers = users.filter(artisan => {
-    const matchesName = `${artisan.firstName} ${artisan.lastName}`.toLowerCase().includes(filterName.toLowerCase());
-    const matchesNumber = !filterNumber || (artisan.artisanNumber || '').toLowerCase().includes(filterNumber.toLowerCase());
+    const fullName = `${artisan.firstName || ''} ${artisan.lastName || ''}`.toLowerCase().trim();
+    const matchesName = fullName.includes(filterName.toLowerCase().trim());
+    
+    // Check if the artisan's state matches the selected state filter
+    const artisanState = (artisan.address?.state || '').toLowerCase().trim();
+    const matchesState = !filterState || artisanState === filterState.toLowerCase().trim();
+    
+    // Check phone numbers if filter is active
     const matchesPhone = !filterPhone || (
-      (artisan.contact.callNumber && artisan.contact.callNumber.toLowerCase().includes(filterPhone.toLowerCase())) ||
-      (artisan.contact.whatsappNumber && artisan.contact.whatsappNumber.toLowerCase().includes(filterPhone.toLowerCase()))
+      (artisan.contact?.callNumber && artisan.contact.callNumber.toLowerCase().includes(filterPhone.toLowerCase())) ||
+      (artisan.contact?.whatsappNumber && artisan.contact.whatsappNumber.toLowerCase().includes(filterPhone.toLowerCase()))
     );
-    return matchesName && matchesNumber && matchesPhone;
+    
+    return matchesName && matchesState && matchesPhone;
   });
 
   return (
@@ -92,30 +98,24 @@ export default function EditArtisan({ artisan }) {
             placeholder="Search by name"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Artisan Number</label>
-          <input
-            type="text"
-            value={filterNumber}
-            onChange={e => setFilterNumber(e.target.value)}
-            className="border rounded px-2 py-1"
-            placeholder="Search by number"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Phone Number</label>
-          <input
-            type="text"
-            value={filterPhone}
-            maxLength={10}
-            onChange={e => setFilterPhone(e.target.value)}
-            className="border rounded px-2 py-1"
-            placeholder="Search by phone"
-          />
+        <div className="w-full md:w-48">
+          <label className="block text-sm font-medium mb-1">Filter by State</label>
+          <select
+            value={filterState}
+            onChange={e => setFilterState(e.target.value)}
+            className="w-full border rounded px-2 py-1.5 text-sm"
+          >
+            <option value="">All States</option>
+            {statesIndia.map((state, index) => (
+              <option key={index} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
         </div>
         <button
           className="ml-4 px-3 py-1 bg-gray-300 rounded"
-          onClick={() => { setFilterName(''); setFilterNumber(''); setFilterPhone(''); }}
+          onClick={() => { setFilterName(''); setFilterState(''); setFilterPhone(''); }}
         >
           Reset Filters
         </button>
@@ -125,8 +125,8 @@ export default function EditArtisan({ artisan }) {
           <TableHeader>
             <TableRow className="bg-gray-100">
               <TableHead className="px-4 py-3">S.No.</TableHead>
-              <TableHead className="px-4 py-3">Artisan Name</TableHead>
-              <TableHead className="px-4 py-3">Artisan Number</TableHead>
+              <TableHead className="px-4 py-3">Destination Name</TableHead>
+              <TableHead className="px-4 py-3">Destination State</TableHead>
               <TableHead className="px-4 py-3">Edit Info</TableHead>
               <TableHead className="px-4 py-3">Actions</TableHead>
             </TableRow>
@@ -144,12 +144,12 @@ export default function EditArtisan({ artisan }) {
               filteredUsers.map((artisan, idx) => (
                 <TableRow key={artisan._id} className="hover:bg-gray-200 transition">
                   <TableCell className="px-4 py-3 font-medium">{idx + 1}</TableCell>
-                  <TableCell className="px-4 py-3">{artisan.firstName} {artisan.lastName}</TableCell>
-                  <TableCell className="px-4 py-3">{artisan.artisanNumber}</TableCell>
+                  <TableCell className="px-4 py-3">{artisan.firstName}</TableCell>
+                  <TableCell className="px-4 py-3">{artisan.address.state}</TableCell>
                   <TableCell className="px-4 py-3">
 
                     <Link
-                      href={`/admin/artisan/${artisan._id}`}
+                      href={`/admin/destination/${artisan._id}`}
                       onClick={() => {
                         if (typeof window !== 'undefined') {
                           sessionStorage.setItem(`artisan_${artisan._id}`, JSON.stringify(artisan));
@@ -177,9 +177,9 @@ export default function EditArtisan({ artisan }) {
       <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Artisan</DialogTitle>
+            <DialogTitle>Delete Destination</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this artisan?</p>
+          <p>Are you sure you want to delete this Destination?</p>
           <DialogFooter>
             <Button variant="secondary" onClick={cancelDelete}>Cancel</Button>
             <Button variant="destructive" onClick={confirmDelete}>Delete</Button>

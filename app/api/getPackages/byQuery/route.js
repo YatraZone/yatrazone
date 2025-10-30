@@ -19,6 +19,8 @@ export async function GET(request) {
       $or: [
         { packageCode: { $regex: query, $options: "i" } },
         { packageName: { $regex: query, $options: "i" } },
+        { 'info.selectionTitle': { $regex: query, $options: "i" } },
+        { 'info.selectionDesc': { $regex: query, $options: "i" } },
         { "basicDetails.location": { $regex: query, $options: "i" } },
         { "vehiclePlan.pickup.city": { $regex: query, $options: "i" } }, // Search city in pickup
         { "vehiclePlan.pickup.state": { $regex: query, $options: "i" } }, // Search state in pickup

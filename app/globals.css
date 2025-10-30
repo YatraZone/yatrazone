@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prose styles for better typography */
+.prose {
+  a {
+    @apply text-[#2563eb] underline underline-offset-2 decoration-1 hover:text-[#3b82f6] transition-colors duration-200;
+  }
+  /* Ensure links are visible in dark mode */
+  .dark a {
+    @apply text-[#60a5fa] hover:text-[#93c5fd];
+  }
+}
+
+
 @layer base {
   :root {
     --font-Barlow: 'Barlow', sans-serif;
@@ -198,16 +210,16 @@
 }
 
 /* Tiptap editor styles */
-.ProseMirror {
-  min-height: 300px;
-  padding: 1rem;
+.ProseMirror1 {
+  min-height: 100px;
+  padding: 0.5rem;
   overflow-y: auto;
   word-break: break-word;
   white-space: pre-wrap;
   background-color: transparent;
 }
 
-.ProseMirror p {
+.ProseMirror1 p {
   margin: 0.5em 0;
 }
 
@@ -231,12 +243,13 @@
 }
 
 /* Ensure styles are properly inherited */
-.ProseMirror [style] {
+.ProseMirror1 [style] {
   margin: inherit;
   line-height: inherit;
 }
 
-.tiptap-editor .ProseMirror {
+.tiptap-editor .ProseMirror1 {
+  
   min-height: 200px;
   max-height: none;
   border: 1px solid transparent;
@@ -257,51 +270,81 @@
   border-bottom: 1px solid var(--border);
 }
 
-.ProseMirror h1 {
+.ProseMirror1 h1 {
   font-size: 2em;
   font-weight: bold;
   margin-bottom: 0.5em;
 }
-
-.ProseMirror h2 {
+.ProseMirror1 a {
+  text-decoration: underline;
+  color:#2563eb
+}
+.ProseMirror1 a:hover {
+  text-decoration: underline;
+  color:#2563eb
+}
+.ProseMirror1 h2 {
   font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 0.5em;
+  margin: 1em 0 0.5em;
+  line-height: 1.3;
+  font-weight: 600;
 }
 
-.ProseMirror h3 {
+.ProseMirror1 p {
+  margin: 0.5em 0;
+  line-height: 1.6;
+}
+
+.ProseMirror1 p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror1 p:last-child {
+  margin-bottom: 0;
+}
+
+.ProseMirror1 strong {
+  font-weight: 600;
+}
+.ProseMirror1 h3 {
   font-size: 1.17em;
   font-weight: bold;
   margin-bottom: 0.5em;
 }
 
-.ProseMirror blockquote {
+.ProseMirror1 blockquote {
   border-left: 3px solid #b4b4b4;
   padding-left: 1em;
+  margin: 1em 0;
+
   margin-left: 0;
   font-style: italic;
 }
 
-.ProseMirror ul {
+.ProseMirror1 ul {
   list-style-type: disc;
   padding-left: 1.5em;
 }
 
-.ProseMirror ol {
+.ProseMirror1 ol {
   list-style-type: decimal;
   padding-left: 1.5em;
 }
 
-.ProseMirror code {
+.ProseMirror1 code {
   background-color: #f5f5f5;
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-family: monospace;
 }
 
-.ProseMirror a {
-  color: #2563eb;
-  text-decoration: underline;
+.ProseMirror1 a {
+  color: #2563eb !important;
+  text-decoration: underline !important;
+}
+
+.ProseMirror1 a:hover {
+  color: #2563eb !important;
 }
 
 .custom-desc-list {
@@ -382,4 +425,18 @@
 
 .custom-desc-list tr:hover {
   background-color: #edf2f7;
+}
+/* Status Badges */
+.status-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+/* Order Item Card */
+.order-item {
+  @apply p-6 flex border-b last:border-b-0 hover:bg-gray-50 transition-colors;
+}
+
+/* Action Buttons */
+.action-btn {
+  @apply flex items-center justify-center w-full py-2 px-4 border rounded-md text-sm font-medium transition-colors;
 }

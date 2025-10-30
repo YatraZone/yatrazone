@@ -1,26 +1,32 @@
 import { NextResponse } from "next/server";
-import Package from "@/models/Package"; // Assuming you have a Package model
+import Package from "@/models/Package";
 import connectDB from "@/lib/connectDB";
 
 export async function GET(req) {
-    await connectDB(); // Connect to MongoDB
+    await connectDB();
     const { searchParams } = new URL(req.url);
-    const query = searchParams.get("q");
+    const query = searchParams.get("q")?.trim();
 
     if (!query || query.length < 2) {
         return NextResponse.json([], { status: 200 });
     }
 
     try {
-        const packages = await Package.find({
+        // Create a search string that requires all words to match
+        const searchTerms = query.split(/\s+/).filter(term => term.length > 0);
+        const searchQueries = searchTerms.map(term => ({
             $or: [
-                { packageName: { $regex: query, $options: "i" } },
-                { 'info.selectionTitle': { $regex: query, $options: "i" } },
-                { 'info.selectionDesc': { $regex: query, $options: "i" } }
+                { packageName: { $regex: term, $options: "i" } },
+                { 'info.selectionTitle': { $regex: term, $options: "i" } },
+                { 'info.selectionDesc': { $regex: term, $options: "i" } }
             ]
+        }));
+
+        const packages = await Package.find({
+            $and: searchQueries
         })
-        .limit(5) // Limit results for dropdown
-        .select("packageName _id basicDetails.thumbnail.url basicDetails.location"); // Return only necessary fields
+        .limit(5)
+        .select("packageName _id basicDetails.thumbnail.url basicDetails.location");
 
         return NextResponse.json(packages, { status: 200 });
     } catch (error) {

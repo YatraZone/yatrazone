@@ -115,15 +115,16 @@ const Header = () => {
   return (
     <>
       <header
-        className={`print:hidden ${
-          pathName.includes("admin") ||
+        className={`print:hidden ${pathName.includes("admin") ||
           pathName.includes("page") ||
           pathName.includes("sign-up") ||
           pathName.includes("sign-in") ||
-          pathName.includes("customEnquiry")
-            ? "hidden"
-            : "block"
-        } bg-[#fcf7f1] text-black border-b font-barlow tracking-wider w-full`}
+          pathName.includes("customEnquiry") ||
+          pathName.includes("search")
+          || pathName.includes("package")
+          ? "hidden"
+          : "block"
+          } bg-[#fcf7f1] text-black border-b font-barlow tracking-wider w-full`}
       >
         <div className="hidden md:flex items-center">
           <TopAdvertisementMarquee />
@@ -132,15 +133,15 @@ const Header = () => {
           <div className="flex items-center justify-center bg-black w-[35%] py-[2px]">
             <div className="text-white flex items-center gap-2 px-2">
               <Link
-              className="text-nowrap"
-              href={"mailto:info@yatrazone.com"}
+                className="text-nowrap"
+                href={"mailto:info@yatrazone.com"}
               >
-              info@yatrazone.com
+                info@yatrazone.com
               </Link>
               <div className="w-[2px] h-5 bg-white"></div>
               <Link
-              className="text-nowrap"
-              href={"tel:+918006000325"}
+                className="text-nowrap"
+                href={"tel:+918006000325"}
               >
                 +91 8006000325
               </Link>
@@ -308,20 +309,29 @@ const Header = () => {
       </header>
       {/* Show only on md and larger screens, and only if not in admin section */}
       <div className="hidden md:block sticky top-0 z-40">
-        {!pathName.includes("admin") && (
-          <div className="w-full print:hidden">
-            <div
-              className={`bg-white py-2 border-b border-gray-200 transition-all duration-300 ${
-                showHeader ? "translate-y-0" : "-translate-y-full"
-              }`}
-            >
-              <div className="container mx-auto px-4">
-                <MenuBar menuItems={menuItems} />
-              </div>
-            </div>
+
+      <div className={`print:hidden ${pathName.includes("admin") ||
+        pathName.includes("page") ||
+        pathName.includes("sign-up") ||
+        pathName.includes("sign-in") ||
+        pathName.includes("customEnquiry")
+        || pathName.includes("search")
+        || pathName.includes("package")
+        ? "hidden"
+        : "block"
+        }`}>
+        <div
+          className={`bg-white py-2 border-b border-gray-200 transition-all duration-300 ${showHeader ? "translate-y-0" : "-translate-y-full"
+            }`}
+        >
+          <div className="container mx-auto px-4">
+            <MenuBar menuItems={menuItems} />
           </div>
-        )}
+        </div>
       </div>
+      </div>
+
+
 
       <div className="lg:hidden flex items-center justify-between md:justify-between py-1 px-2">
         <div className="relative flex items-center">

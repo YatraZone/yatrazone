@@ -6,11 +6,6 @@ const artisanSchema = new mongoose.Schema({
     default: true
   },
   order: { type: Number, required: true },
-  title: {
-    type: String,
-    required: true,
-    enum: ['Mr.', 'Mrs.', 'Ms.']
-  },
   slug: {
     type: String,
     required: true,
@@ -22,46 +17,6 @@ const artisanSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  lastName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  fatherHusbandType: {
-    type: String,
-    required: true,
-    enum: ['Father', 'Husband']
-  },
-  fatherHusbandTitle: {
-    type: String,
-    required: true,
-    enum: ['Mr.', 'Late']
-  },
-  fatherHusbandName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  fatherHusbandLastName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  shgName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  artisanNumber: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
-  },
-  yearsOfExperience: {
-    type: Number,
-    required: true
-  },
   specializations: [{
     type: String,
     trim: true
@@ -70,38 +25,7 @@ const artisanSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ArtisanBanner'
   },
-  contact: {
-    callNumber: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    whatsappNumber: {
-      type: String,
-      trim: true
-    },
-    email: {
-      type: String,
-      trim: true,
-      lowercase: true
-    }
-  },
   address: {
-    fullAddress: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    city: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    pincode: {
-      type: String,
-      required: true,
-      trim: true
-    },
     state: {
       type: String,
       required: true,
@@ -116,6 +40,10 @@ const artisanSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Promotion'
   }],
+  artisanGallery: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ArtisanGallery'
+  },
   artisanBlogs: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ArtisanBlog'
@@ -125,16 +53,16 @@ const artisanSchema = new mongoose.Schema({
     ref: 'Story',
     default: null
   },
-  certificates: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'ArtisanCertificate'
-  }],
   socialPlugin: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ArtisanPlugin',
     default: null
   },
-  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
+  artisanHighlights:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ArtisanHighlights',
+    default: null
+  },
 }, {
   timestamps: true
 });

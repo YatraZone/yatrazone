@@ -2,11 +2,12 @@ import connectDB from "@/lib/connectDB";
 import mongoose from 'mongoose';
 import Artisan from '@/models/Artisan';
 import '@/models/ArtisanStory';
-import '@/models/ArtisanCertificate';
 import '@/models/ArtisanPlugin';
 import '@/models/ArtisanBanner';
 import '@/models/ArtisanBlog';
 import '@/models/Promotion'
+import '@/models/ArtisanGallery'
+import '@/models/ArtisanHighlights'
 
 // Ensures all subcomponent models are registered for cascading delete
 import { addSpecializationIfNotExists } from "@/lib/specialization";
@@ -18,9 +19,7 @@ export async function POST(req) {
     const data = await req.json();
 
     // Validate required fields
-    if (!data.title || !data.firstName || !data.lastName || !data.fatherHusbandType || !data.fatherHusbandTitle || !data.fatherHusbandName ||
-      !data.fatherHusbandLastName || !data.shgName || !data.artisanNumber || !data.yearsOfExperience ||
-      !data.callNumber || !data.address || !data.city || !data.pincode || !data.state) {
+    if (!data.firstName ||!data.state) {
       return new Response(JSON.stringify({ message: 'Missing required fields' }), { status: 400 });
     }
     // Find the highest order number
@@ -28,41 +27,11 @@ export async function POST(req) {
     const nextOrder = lastBanner ? lastBanner.order + 1 : 1; // Auto-increment order
     // Accept profileImage as a URL (and optionally key)
     const profileImage = data.profileImage ? data.profileImage : null;
-
-    const slugify = (str) => {
-      if (!str) return '';
-      return String(str)
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-')
-        .replace(/^-+/, '')
-        .replace(/-+$/, '');
-    };
-
     const artisan = new Artisan({
-      title: data.title,
       slug: data.slug,
       firstName: data.firstName,
-      lastName: data.lastName,
-      fatherHusbandType: data.fatherHusbandType,
-      fatherHusbandTitle: data.fatherHusbandTitle,
-      fatherHusbandName: data.fatherHusbandName,
-      fatherHusbandLastName: data.fatherHusbandLastName,
-      shgName: data.shgName,
-      artisanNumber: data.artisanNumber,
-      yearsOfExperience: Number(data.yearsOfExperience),
       specializations: data.specializations,
-      contact: {
-        callNumber: data.callNumber,
-        whatsappNumber: data.whatsappNumber,
-        email: data.email
-      },
       address: {
-        fullAddress: data.address,
-        city: data.city,
-        pincode: data.pincode,
         state: data.state
       },
       order: nextOrder,
@@ -91,21 +60,56 @@ export async function GET(req) {
     await connectDB();
     const url = new URL(req.url, `http://${req.headers.get('host') || 'localhost'}`);
     const excludeId = url.searchParams.get('exclude');
+    
+    // Build base query
     const query = { active: true };
     if (excludeId) {
       query._id = { $ne: excludeId };
     }
-    const artisans = await Artisan.find(query)
-      .populate('promotions')
-      .populate('artisanBlogs')
-      .populate('artisanStories')
-      .populate('certificates')
-      .populate('socialPlugin')
-      .populate('artisanBanner')
-      .sort({ order: 1 });
-    return new Response(JSON.stringify(artisans), { status: 200 });
+
+    // First, try to get just the basic artisan data without populating
+    let artisans = await Artisan.find(query).sort({ order: 1 });
+    
+    // If no artisans found, return empty array
+    if (!artisans || artisans.length === 0) {
+      return new Response(JSON.stringify([]), { status: 200 });
+    }
+
+    // Define the fields we want to populate
+    const populateFields = [
+      'promotions',
+      'artisanBlogs',
+      'artisanStories',
+      'socialPlugin',
+      'artisanBanner',
+      'artisanGallery',
+      'artisanHighlights'  
+    ];
+
+    // Apply population for each field with error handling
+    for (const field of populateFields) {
+      try {
+        artisans = await Artisan.populate(artisans, { path: field });
+      } catch (populateError) {
+        console.error(`Error populating ${field}:`, populateError.message);
+        // Continue with other fields even if one fails
+      }
+    }
+
+    return new Response(JSON.stringify(artisans), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
   } catch (error) {
-    return new Response(JSON.stringify({ message: 'Error fetching artisans', error: error.message }), { status: 500 });
+    console.error('Error in GET /api/createArtisan:', error);
+    return new Response(JSON.stringify({ 
+      message: 'Error fetching artisans', 
+      error: error.message 
+    }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
 
@@ -190,10 +194,12 @@ export async function DELETE(req) {
     // Cascade delete subcomponents and their images
     const modelsToDelete = [
       { name: 'ArtisanStory', field: 'artisan', imageField: 'images' },
-      { name: 'ArtisanCertificate', field: 'artisan', imageField: 'imageUrl' },
       { name: 'ArtisanPlugin', field: 'artisan' },
       { name: 'ArtisanBanner', field: 'artisan', imageField: 'image' },
       { name: 'ArtisanBlog', field: 'artisan', imageField: 'images' },
+      { name: 'ArtisanGallery', field: 'artisan', imageField: 'images' },
+      {name:'ArtisanHighlights',field:'artisan'}
+      
     ];
 
     for (const modelDef of modelsToDelete) {

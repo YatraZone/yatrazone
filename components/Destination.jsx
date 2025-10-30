@@ -396,7 +396,7 @@ const RandomTourPackageSection = () => {
                               />
 
                               <Link
-                                href={`/artisan/${card.slug}`}
+                                href={`/destination/${card.slug}`}
                                 className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                               >
                                 <span className="bg-white text-black font-medium px-4 py-2 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -408,7 +408,7 @@ const RandomTourPackageSection = () => {
                             <div className="absolute left-0 bottom-0 w-full flex justify-between items-end p-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
                               <div className="flex flex-col">
                                 <Link
-                                  href={`/artisan/${card.slug}`}
+                                  href={`/destination/${card.slug}`}
                                   className="font-bold text-2xl text-white mb-2 leading-tight drop-shadow-md hover:underline hover:decoration-2 hover:underline-offset-4 transition cursor-pointer"
                                   title={card.name}
                                 >
@@ -503,7 +503,7 @@ const RandomTourPackageSection = () => {
                                 })()}
                               </div>
                               <span className="ml-2 hover:underline text-black flex flex-row text-md">
-                                {card.promotions?.length || 0} Reviews
+                              Based on {card.promotions?.length || 0} Reviews
                               </span>
                             </button>
                           </div>
@@ -661,7 +661,7 @@ const RandomTourPackageSection = () => {
                                     style={{ objectFit: "cover" }}
                                   />
                                   <Link
-                                    href={`/artisan/${card.slug}`}
+                                    href={`/destination/${card.slug}`}
                                     className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                                   >
                                     <span className="bg-white text-black font-medium px-4 py-2 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -673,7 +673,7 @@ const RandomTourPackageSection = () => {
                                 <div className="absolute left-0 bottom-0 w-full flex justify-between items-end p-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
                                   <div className="flex flex-col">
                                     <Link
-                                      href={`/artisan/${card.slug}`}
+                                      href={`/destination/${card.slug}`}
                                       className="font-bold text-xl text-white mb-2 leading-tight drop-shadow-md hover:underline hover:decoration-2 hover:underline-offset-4 transition cursor-pointer"
                                       title={card.name}
                                     >
@@ -770,7 +770,7 @@ const RandomTourPackageSection = () => {
                                     })()}
                                   </div>
                                   <span className="ml-2 hover:underline text-black flex flex-row text-md">
-                                    {card.promotions?.length || 0} Reviews
+                                    Based On{card.promotions?.length || 0} Reviews
                                   </span>
                                 </button>
                               </div>
@@ -935,7 +935,7 @@ const RandomTourPackageSection = () => {
                                     style={{ objectFit: "cover" }}
                                   />
                                   <Link
-                                    href={`/artisan/${card.slug}`}
+                                    href={`/destination/${card.slug}`}
                                     className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                                   >
                                     <span className="bg-white text-black font-medium px-4 py-2 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -947,7 +947,7 @@ const RandomTourPackageSection = () => {
                                 <div className="absolute left-0 bottom-0 w-full flex justify-between items-end p-4 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
                                   <div className="flex flex-col">
                                     <Link
-                                      href={`/artisan/${card.slug}`}
+                                      href={`/destination/${card.slug}`}
                                       className="font-bold text-2xl text-white mb-2 leading-tight drop-shadow-md hover:underline hover:decoration-2 hover:underline-offset-4 transition cursor-pointer"
                                       title={card.name}
                                     >
@@ -1044,7 +1044,7 @@ const RandomTourPackageSection = () => {
                                     })()}
                                   </div>
                                   <span className="ml-2 hover:underline text-black flex flex-row text-md">
-                                    {card.promotions?.length || 0} Reviews
+                                    Based On {card.promotions?.length || 0} Reviews
                                   </span>
                                 </button>
                               </div>

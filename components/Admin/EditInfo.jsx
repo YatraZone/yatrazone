@@ -6,9 +6,10 @@ import CreatePromotional from './CreatePromotional';
 import ManageArtisanBlogs from './ManageArtisanBlogs';
 import ArtisonStory from './ArtisonStory';
 import SocialPlugins from './SocialPlugins';
-import Certificate from './Certificate';
 import ArtisanBanner from './ArtisanBanner';
 import { ArrowLeftIcon } from 'lucide-react';
+import ArtisanGallery from "./ArtisanGallery"
+import ArtisanHighlights from "./ArtisanHighlights"
 // import ProductCatalog from './ProductCatalog';
 
 const sectionConfig = [
@@ -19,29 +20,36 @@ const sectionConfig = [
   },
   {
     key: 'artisanBlogs',
-    label: 'Artisan Blogs / Experience',
+    label: 'Destination Blogs/Experience',
     component: ManageArtisanBlogs,
   },
   {
     key: 'artisanStory',
-    label: 'Artisan Story',
+    label: 'Destination Detail',
     component: ArtisonStory,
   },
   {
     key: 'social',
-    label: 'Social Plugins',
+    label: 'Social URL If Have',
     component: SocialPlugins,
-  },
-  {
-    key: 'certifications',
-    label: 'Certifications',
-    component: Certificate,
   },
   {
     key: 'banner',
     label: 'Add Banner',
     component: ArtisanBanner,
   },
+  {
+    key: 'gallery',
+    label: 'Create Gallery',
+    component: ArtisanGallery,
+  },
+  {
+    key: 'highlights',
+    label: 'Create Highlights',
+    component: ArtisanHighlights,
+  },
+  
+  
 ];
 
 const EditInfo = () => {
@@ -76,21 +84,20 @@ const EditInfo = () => {
       {/* Show artisan details at the top if present */}
       <div className="back mb-2">
         <button className='px-4 py-1 bg-gray-500 text-white rounded flex items-center' onClick={() => router.back()}>
-          <ArrowLeftIcon className="w-4 h-4 mr-2" /> Back to View Artisan
+          <ArrowLeftIcon className="w-4 h-4 mr-2" /> Back to View Destination
         </button>
       </div>
       {artisanDetails && (
         <div className="mb-4 p-4 bg-blue-50 rounded shadow flex gap-8 items-center">
           <div>
-            <div className="font-bold text-lg">Artisan Name: {artisanDetails.title} {artisanDetails.firstName} {artisanDetails.lastName}</div>
-            <div className="font-semibold text-md">Artisan Number: {artisanDetails.artisanNumber}</div>
+            <div className="font-bold text-lg">Destination Name: {artisanDetails.firstName}</div>
           </div>
         </div>
       )}
       <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full h-full">
         <div className="flex h-full">
           {/* Sidebar Tabs */}
-          <TabsList className="flex flex-col gap-2 min-w-[220px] w-[220px] bg-gray-300 border-r border-gray-200 py-4 px-2 rounded-l-lg shadow-sm h-fit">
+          <TabsList className="flex flex-col gap-2 min-w-[220px] w-[250px] bg-gray-300 border-r border-gray-200 py-4 px-2 rounded-l-lg shadow-sm h-fit">
             {sectionConfig.map(section => (
               <TabsTrigger
                 key={section.key}

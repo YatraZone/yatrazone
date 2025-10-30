@@ -31,11 +31,10 @@ import {
 } from "../ui/dialog";
 import { Textarea } from "../ui/textarea";
 import toast from "react-hot-toast";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 const CreateArtisan = () => {
   // ...existing state
-  const [fatherHusbandType, setFatherHusbandType] = useState("Father");
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null); // { url, key }
   // ...other state
@@ -101,18 +100,23 @@ const CreateArtisan = () => {
     // Delete from Cloudinary in the background
     if (uploadedImage && uploadedImage.key) {
       try {
-        const res = await fetch('/api/cloudinary', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("/api/cloudinary", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ publicId: uploadedImage.key }),
         });
         const data = await res.json();
         if (!res.ok) {
-          toast.error('Cloudinary error: ' + (data.error || 'Failed to delete image from Cloudinary'));
+          toast.error(
+            "Cloudinary error: " +
+              (data.error || "Failed to delete image from Cloudinary")
+          );
           // console.error('Cloudinary deletion error:', data.error);
         }
       } catch (err) {
-        toast.error('Failed to delete image from Cloudinary (network or server error)');
+        toast.error(
+          "Failed to delete image from Cloudinary (network or server error)"
+        );
         // console.error('Cloudinary deletion network/server error:', err);
       }
     } else {
@@ -156,19 +160,27 @@ const CreateArtisan = () => {
       const res = await fetch("/api/createArtisan");
       if (!res.ok) throw new Error("Failed to fetch artisans");
       const data = await res.json();
+      console.log(data)
       setUsers(data);
     } catch (err) {
-      //  console.error("Error in fetchUsers:", err);
+      console.error("Error in fetchUsers:", err.message);
       toast.error("Failed to fetch users. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
-  const { register, handleSubmit, setValue, reset, watch, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
-      pincode: '',
-      city: '',
+      pincode: "",
+      city: "",
       title: "Mr.",
       fatherHusbandType: "Father",
       fatherHusbandTitle: "Mr.",
@@ -194,7 +206,6 @@ const CreateArtisan = () => {
         setAllSpecializations(data.map((s) => s.name));
       } else if (Array.isArray(data) && data.length === 0) {
         setAllSpecializations([]);
-        toast.error("No specializations found.");
       } else {
         setAllSpecializations([]);
         toast.error("Specialization API returned unexpected data.");
@@ -205,15 +216,15 @@ const CreateArtisan = () => {
     }
   };
   function slugify(str) {
-    if (!str) return '';
+    if (!str) return "";
     return String(str)
       .toLowerCase()
       .trim() // Remove leading/trailing spaces
-      .replace(/\s+/g, '-') // Replace spaces with -
-      .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-      .replace(/\-\-+/g, '-') // Replace multiple - with single -
-      .replace(/^-+/, '') // Trim - from start of text
-      .replace(/-+$/, ''); // Trim - from end of text
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+      .replace(/\-\-+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, ""); // Trim - from end of text
   }
   const onSubmit = async (data) => {
     if (imageUploading) {
@@ -223,23 +234,9 @@ const CreateArtisan = () => {
     // Always use selectedSpecs for specializations
     const payload = {
       title: data.title,
-      slug: slugify(`${data.firstName} ${data.lastName}`),
+      slug: slugify(`${data.firstName}`),
       firstName: data.firstName,
-      lastName: data.lastName,
-      fatherHusbandType: data.fatherHusbandType,
-      fatherHusbandTitle: data.fatherHusbandTitle,
-      fatherHusbandName: data.fatherHusbandName,
-      fatherHusbandLastName: data.fatherHusbandLastName,
-      shgName: data.shgName,
-      artisanNumber: data.artisanNumber,
-      yearsOfExperience: data.yearsOfExperience,
       specializations: selectedSpecs,
-      callNumber: data.callNumber,
-      whatsappNumber: data.whatsappNumber,
-      email: data.email,
-      address: data.address,
-      city: data.city,
-      pincode: data.pincode,
       state: data.state,
       profileImage:
         uploadedImage && uploadedImage.url && uploadedImage.key
@@ -259,21 +256,21 @@ const CreateArtisan = () => {
         if (
           (err.error && err.error.includes("duplicate key")) ||
           err.code === 11000 ||
-          (err.message && err.message.includes("Artisan number already exists"))
+          (err.message &&
+            err.message.includes("Destination number already exists"))
         ) {
-          toast.error("Artisan number already exists");
+          toast.error("Destination number already exists");
         } else {
-          toast.error(err.message || "Failed to create artisan");
+          toast.error(err.message || "Failed to create Destination");
           toast.error(err.message || "Data not submitted! Please try again.");
         }
       }
       await fetchUsers();
-      toast.success("Artisan created successfully!");
+      toast.success("Destination created successfully!");
       // Reset form and clear image state after successful creation
       reset();
       setUploadedImage(null);
       setSelectedImage(null);
-      setFatherHusbandType("Father");
       setSelectedSpecs([]);
       setEditForm({});
       setEditingUser(null);
@@ -289,9 +286,12 @@ const CreateArtisan = () => {
   };
 
   // Helper to show error messages for each field
-  const renderError = (field) => errors[field] && (
-    <span style={{ color: 'red', fontSize: '0.9em' }}>{errors[field].message || 'This field is required'}</span>
-  );
+  const renderError = (field) =>
+    errors[field] && (
+      <span style={{ color: "red", fontSize: "0.9em" }}>
+        {errors[field].message || "This field is required"}
+      </span>
+    );
 
   const handleAddSpecialization = async () => {
     if (!newSpecialization.trim()) return;
@@ -324,7 +324,9 @@ const CreateArtisan = () => {
           a._id === artisan._id ? { ...a, active: !a.active } : a
         )
       );
-      toast.success(`Artisan ${!artisan.active ? 'activated' : 'deactivated'} successfully!`);
+      toast.success(
+        `Destination ${!artisan.active ? "activated" : "deactivated"} successfully!`
+      );
     } catch (err) {
       toast.error("Failed to update status");
     }
@@ -345,12 +347,6 @@ const CreateArtisan = () => {
     setEditingUser(artisan);
     setEditForm({
       ...artisan,
-      callNumber: artisan.contact?.callNumber || "",
-      whatsappNumber: artisan.contact?.whatsappNumber || "",
-      email: artisan.contact?.email || "",
-      address: artisan.address?.fullAddress || "",
-      city: artisan.address?.city || "",
-      pincode: artisan.address?.pincode || "",
       state: artisan.address?.state || "",
       profileImage: artisan.profileImage || "",
       order: artisan.order || 1,
@@ -365,29 +361,13 @@ const CreateArtisan = () => {
     setSelectedSpecs(specs);
     setValue("specializations", specs, { shouldValidate: true });
     // Populate form fields
-    setValue("title", artisan.title || "Mr.");
-    setValue("order", artisan.order || 1, { shouldValidate: true });
     setValue("firstName", artisan.firstName || "");
-    setValue("lastName", artisan.lastName || "");
-    setValue("fatherHusbandType", artisan.fatherHusbandType || "Father");
-    setValue("fatherHusbandTitle", artisan.fatherHusbandTitle || "Mr.");
-    setValue("fatherHusbandName", artisan.fatherHusbandName || "");
-    setValue("fatherHusbandLastName", artisan.fatherHusbandLastName || "");
-    setValue("shgName", artisan.shgName || "");
-    setValue("artisanNumber", artisan.artisanNumber || "");
-    setValue("yearsOfExperience", artisan.yearsOfExperience || "");
     setValue(
       "specialization",
       Array.isArray(artisan.specializations)
         ? artisan.specializations[0]
         : artisan.specializations || ""
     );
-    setValue("callNumber", artisan.contact?.callNumber || "");
-    setValue("whatsappNumber", artisan.contact?.whatsappNumber || "");
-    setValue("email", artisan.contact?.email || "");
-    setValue("address", artisan.address?.fullAddress || "");
-    setValue("city", artisan.address?.city || "");
-    setValue("pincode", artisan.address?.pincode || "");
     setValue("state", artisan.address?.state || "");
     setSelectedImage(artisan.profileImage?.url || "");
     setValue("order", artisan.order || 1, { shouldValidate: true });
@@ -398,7 +378,6 @@ const CreateArtisan = () => {
         : null
     );
   };
-
 
   // Edit form change handler
   const handleEditFormChange = (e) => {
@@ -416,8 +395,8 @@ const CreateArtisan = () => {
     setUploadProgress(0);
     setSelectedSpecs([]); // <-- Clear specialization UI state
     // Set order to next available for new artisan
-    setValue('order', users.length + 1, { shouldValidate: true });
-    setValue('specializations', [], { shouldValidate: true });
+    setValue("order", users.length + 1, { shouldValidate: true });
+    setValue("specializations", [], { shouldValidate: true });
   };
 
   const clearEditState = () => {
@@ -430,8 +409,8 @@ const CreateArtisan = () => {
     setUploadProgress(0);
     reset();
     // Set order to next available for new artisan
-    setValue('order', users.length + 1, { shouldValidate: true });
-    setValue('specializations', [], { shouldValidate: true });
+    setValue("order", users.length + 1, { shouldValidate: true });
+    setValue("specializations", [], { shouldValidate: true });
   };
 
   const handleEditSubmit = async (e) => {
@@ -441,32 +420,15 @@ const CreateArtisan = () => {
     const formData = watch();
     const payload = {
       id: editingUser._id,
-      title: formData.title,
       firstName: formData.firstName,
-      lastName: formData.lastName,
-      fatherHusbandType: formData.fatherHusbandType,
-      fatherHusbandTitle: formData.fatherHusbandTitle,
-      fatherHusbandName: formData.fatherHusbandName,
-      fatherHusbandLastName: formData.fatherHusbandLastName,
-      shgName: formData.shgName,
-      artisanNumber: formData.artisanNumber,
-      yearsOfExperience: formData.yearsOfExperience,
       specializations: selectedSpecs,
-      contact: {
-        callNumber: formData.callNumber || "",
-        whatsappNumber: formData.whatsappNumber || "",
-        email: formData.email || "",
-      },
       address: {
-        fullAddress: formData.address || "",
-        city: formData.city || "",
-        pincode: formData.pincode || "",
         state: formData.state || "",
       },
       order: formData.order,
       ...(uploadedImage && uploadedImage.url && uploadedImage.key
         ? { profileImage: uploadedImage }
-        : {})
+        : {}),
     };
     try {
       const res = await fetch("/api/createArtisan", {
@@ -476,14 +438,14 @@ const CreateArtisan = () => {
       });
       if (!res.ok) {
         const err = await res.json();
-        toast.error(err.message || "Failed to update artisan");
+        toast.error(err.message || "Failed to update Destination");
         return;
       }
       await fetchUsers();
       clearEditState();
-      toast.success("Artisan updated successfully!");
+      toast.success("Destination updated successfully!");
     } catch (e) {
-      toast.error("Failed to update artisan. Please try again.");
+      toast.error("Failed to update Destination. Please try again.");
     }
   };
 
@@ -514,11 +476,11 @@ const CreateArtisan = () => {
           imageKey: artisanToDelete.profileImage?.key || undefined,
         }),
       });
-      if (!res.ok) throw new Error("Failed to delete artisan");
-      toast.success("Artisan deleted successfully");
+      if (!res.ok) throw new Error("Failed to delete Destination");
+      toast.success("Destination deleted successfully");
       setUsers((prev) => prev.filter((a) => a._id !== artisanToDelete._id));
     } catch (err) {
-      toast.error("Failed to delete artisan");
+      toast.error("Failed to delete Destination");
     } finally {
       setShowDeleteModal(false);
       setArtisanToDelete(null);
@@ -530,20 +492,16 @@ const CreateArtisan = () => {
     fetchSpecializations();
   }, []);
 
-  const [order, setOrder] = useState(users.length + 1);
-
   // Only set order for new artisan when not editing and edit modal is closed
   useEffect(() => {
     if (!editingUser && !showEditModal) {
-      setValue('order', users.length + 1, { shouldValidate: true });
+      setValue("order", users.length + 1, { shouldValidate: true });
     }
     // When entering edit mode, set order to artisan's order
     if (editingUser && showEditModal) {
-      setValue('order', editingUser.order || 1, { shouldValidate: true });
+      setValue("order", editingUser.order || 1, { shouldValidate: true });
     }
   }, [users, editingUser, showEditModal, setValue]);
-
-
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 py-10">
@@ -555,112 +513,22 @@ const CreateArtisan = () => {
         <div className="flex-1 space-y-4">
           {/* Artisan Name & Father/Husband Info */}
           <div>
-            <div className="font-semibold mb-1">Artisan Name</div>
+            <div className="font-semibold mb-1">Destination Name</div>
             {/* Name/Title Row */}
             <div className="flex gap-2 mb-3">
-              <Select
-                value={watch("title") || ""}
-                onValueChange={(val) =>
-                  setValue("title", val, { shouldValidate: true })
-                }
-              >
-                <SelectTrigger className="w-24">
-                  <SelectValue placeholder="Mr." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Mr.">Mr.</SelectItem>
-                  <SelectItem value="Mrs.">Mrs.</SelectItem>
-                  <SelectItem value="Ms.">Ms.</SelectItem>
-                </SelectContent>
-              </Select>
               <Input
-                placeholder="First Name"
-                {...register("firstName", { required: "First Name is required" })}
+                placeholder="Destination Name"
+                {...register("firstName", {
+                  required: "Destination Name is required",
+                })}
               />
-              {renderError("firstName")}
-              <Input
-                placeholder="Last Name"
-                {...register("lastName", { required: "Last Name is required" })}
-              />
-              {renderError("lastName")}
-            </div>
-            <div className="font-semibold mb-1">Father/Husband Details</div>
-            {/* Father/Husband Row */}
-            <div className="flex gap-2 mb-2">
-              <Select
-                value={watch("fatherHusbandType") || fatherHusbandType}
-                onValueChange={(val) => {
-                  setFatherHusbandType(val);
-                  setValue("fatherHusbandType", val, { shouldValidate: true });
-                }}
-              >
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder="Father/Husband" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Father">Father</SelectItem>
-                  <SelectItem value="Husband">Husband</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            {/* Father/Husband Details Row */}
-            <div className="flex gap-2 mb-2">
-              <Select
-                value={watch("fatherHusbandTitle") || ""}
-                onValueChange={(val) =>
-                  setValue("fatherHusbandTitle", val, { shouldValidate: true })
-                }
-              >
-                <SelectTrigger className="w-24">
-                  <SelectValue placeholder="Mr." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Mr.">Mr.</SelectItem>
-                  <SelectItem value="Mrs.">Late.</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                placeholder={
-                  fatherHusbandType === "Husband"
-                    ? "Husband First Name"
-                    : "Father First Name"
-                }
-                {...register("fatherHusbandName", { required: "Father/Husband Name is required" })}
-              />
-              {renderError("fatherHusbandName")}
-              <Input
-                placeholder={
-                  fatherHusbandType === "Husband"
-                    ? "Husband Last Name"
-                    : "Father Last Name"
-                }
-                {...register("fatherHusbandLastName", { required: "Father/Husband Last Name is required" })}
-              />
-              {renderError("fatherHusbandLastName")}
+              {renderError("destinationName")}
             </div>
           </div>
-          {/* Artisan Detail */}
+          {/* Destination Detail */}
           <div>
-            <div className="font-semibold mb-1">Artisan Detail</div>
-            <div className="flex gap-2 mb-2">
-              <Input
-                placeholder="SHG Name"
-                {...register("shgName", { required: "SHG Name is required" })}
-              />
-              {renderError("shgName")}
-              <Input
-                placeholder="Artisan Number"
-                {...register("artisanNumber", { required: "Artisan Number is required" })}
-              />
-              {renderError("artisanNumber")}
-            </div>
+            <div className="font-semibold mb-1">Destination Detail</div>
             <div className="flex gap-2">
-              <Input
-                placeholder="Year's Of Experience"
-                type="number"
-                {...register("yearsOfExperience", { required: "Year's Of Experience is required" })}
-              />
-              {renderError("yearsOfExperience")}
               {/* Multi-specialization select and chips */}
               <div className="flex flex-col gap-2 w-full">
                 <div className="flex gap-2 w-full">
@@ -670,20 +538,24 @@ const CreateArtisan = () => {
                       if (!selectedSpecs.includes(val)) {
                         const updated = [...selectedSpecs, val];
                         setSelectedSpecs(updated);
-                        setValue("specializations", updated, { shouldValidate: true });
+                        setValue("specializations", updated, {
+                          shouldValidate: true,
+                        });
                       }
                     }}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Specialized In" />
+                      <SelectValue placeholder="Destination Famouns For " />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {allSpecializations.filter((spec) => !selectedSpecs.includes(spec)).map((spec, i) => (
-                          <SelectItem key={i} value={spec}>
-                            {spec}
-                          </SelectItem>
-                        ))}
+                        {allSpecializations
+                          .filter((spec) => !selectedSpecs.includes(spec))
+                          .map((spec, i) => (
+                            <SelectItem key={i} value={spec}>
+                              {spec}
+                            </SelectItem>
+                          ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -699,15 +571,22 @@ const CreateArtisan = () => {
                 {/* Chips for selected specializations */}
                 <div className="flex flex-wrap gap-2 mt-2">
                   {selectedSpecs.map((spec) => (
-                    <span key={spec} className="flex items-center bg-amber-100 px-3 py-1 rounded-full text-sm font-medium">
+                    <span
+                      key={spec}
+                      className="flex items-center bg-amber-100 px-3 py-1 rounded-full text-sm font-medium"
+                    >
                       {spec}
                       <button
                         type="button"
                         className="ml-2 text-red-500 hover:text-red-700"
                         onClick={() => {
-                          const updated = selectedSpecs.filter((s) => s !== spec);
+                          const updated = selectedSpecs.filter(
+                            (s) => s !== spec
+                          );
                           setSelectedSpecs(updated);
-                          setValue("specializations", updated, { shouldValidate: true });
+                          setValue("specializations", updated, {
+                            shouldValidate: true,
+                          });
                         }}
                       >
                         ×
@@ -718,77 +597,9 @@ const CreateArtisan = () => {
               </div>
             </div>
           </div>
-          {/* Contact Number */}
-          <div>
-            <div className="font-semibold mb-1">Contact Number</div>
-            <div className="flex flex-row gap-3 w-full">
-              <div className="flex items-center w-1/2">
-                <input
-                  type="text"
-                  value="+91"
-                  disabled
-                  className="w-12 p-2 bg-gray-100 border border-gray-300 rounded-l text-center text-sm"
-                  tabIndex={-1}
-                  style={{ pointerEvents: "none" }}
-                />
-                <Input
-                  placeholder="Call Number"
-                  maxLength={10}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  {...register("callNumber", { required: "Call Number is required" })}
-                  className="rounded-l-none w-full"
-                />
-                {renderError("callNumber")}
-              </div>
-              <div className="flex items-center w-1/2">
-                <input
-                  type="text"
-                  value="+91"
-                  disabled
-                  className="w-12 p-2 bg-gray-100 border border-gray-300 rounded-l text-center text-sm"
-                  tabIndex={-1}
-                  style={{ pointerEvents: "none" }}
-                />
-                <Input
-                  placeholder="Whats App Number"
-                  maxLength={10}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  {...register("whatsappNumber")}
-                  className="rounded-l-none w-full"
-                />
-              </div>
-            </div>
-          </div>
-          {/* Email */}
-          <div>
-            <div className="font-semibold mb-1">Email (Optional)</div>
-            <Input
-              placeholder="Type Email Here"
-              type="email"
-              {...register("email")}
-            />
-          </div>
-          {/* Address */}
-          <div>
-            <div className="font-semibold mb-1">Address</div>
-            <Textarea
-              placeholder="Full Address"
-              {...register("address", { required: "Address is required" })}
-            />
-            {renderError("address")}
-            <div className="flex gap-2 mt-2">
-              <Input
-                placeholder="City"
-                {...register("city", { required: "City is required" })}
-              />
-              {renderError("city")}
-              <Input
-                placeholder="Pincode"
-                {...register("pincode", { required: "Pincode is required" })}
-              />
-              {renderError("pincode")}
+          <div className="">
+            <div className="font-semibold">Select State</div>
+            <div className="flex gap-2 mt-1">
               <Select
                 value={watch("state") || ""}
                 onValueChange={(val) =>
@@ -808,6 +619,88 @@ const CreateArtisan = () => {
               </Select>
             </div>
           </div>
+
+          <div className="relative border rounded-lg p-4 mb-4 flex flex-col items-center justify-center gap-4">
+            <input
+              type="file"
+              onChange={handleImageChange}
+              accept="image/*"
+              className="hidden"
+              id="profileImage"
+              ref={fileInputRef}
+            />
+            <div className="flex flex-col items-center gap-4">
+              {selectedImage ? (
+                <div className="relative w-48 h-48">
+                  <img
+                    src={selectedImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+              ) : (
+                <div className="w-48 h-48 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                  <span className="text-gray-500">Image Preview</span>
+                </div>
+              )}
+              <Button
+                type="button"
+                variant={selectedImage ? "destructive" : "outline"}
+                size="sm"
+                className="flex items-center gap-2"
+                disabled={imageUploading}
+                onClick={async (e) => {
+                  if (selectedImage) {
+                    if (uploadedImage && uploadedImage.key) {
+                      try {
+                        // console.log('Attempting to delete from Cloudinary:', uploadedImage.key);
+                        const res = await fetch("/api/cloudinary", {
+                          method: "DELETE",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ publicId: uploadedImage.key }),
+                        });
+                        const data = await res.json();
+                        if (!res.ok) {
+                          toast.error(
+                            "Cloudinary error: " +
+                              (data.error ||
+                                "Failed to delete image from Cloudinary")
+                          );
+                          // console.error('Cloudinary deletion error:', data.error);
+                          return;
+                        }
+                        toast.success("Image deleted from Cloudinary");
+                      } catch (err) {
+                        toast.error(
+                          "Failed to delete image from Cloudinary (network or server error)"
+                        );
+                        // console.error('Cloudinary deletion network/server error:', err);
+                      }
+                    } else {
+                      toast.error("No Cloudinary key found for this image.");
+                      // console.error('No Cloudinary key found for image:', uploadedImage);
+                    }
+                    setSelectedImage("");
+                    setUploadedImage(null);
+                  } else {
+                    fileInputRef.current.click();
+                  }
+                }}
+              >
+                {selectedImage ? (
+                  "Remove Image"
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4" />
+                    Choose Image
+                  </>
+                )}
+              </Button>
+            </div>
+            {imageUploading && (
+           <p className="flex items-center gap-2"><Loader2 className="animate-spin"/> Uploading...</p>
+            )}
+          </div>
           <div>
             <label>Order</label>
             <Input
@@ -815,7 +708,9 @@ const CreateArtisan = () => {
               type="number"
               {...register("order", { required: "Order is required" })}
               value={watch("order") || ""}
-              onChange={e => setValue("order", e.target.value, { shouldValidate: true })}
+              onChange={(e) =>
+                setValue("order", e.target.value, { shouldValidate: true })
+              }
             />
           </div>
           {editingUser ? (
@@ -854,101 +749,16 @@ const CreateArtisan = () => {
           )}
         </div>
         {/* Right: Image Upload with Cloudinary */}
-        <div className="relative border rounded-lg p-4 mb-4 h-[400px] flex flex-col items-center justify-center gap-4">
-          <input
-            type="file"
-            onChange={handleImageChange}
-            accept="image/*"
-            className="hidden"
-            id="profileImage"
-            ref={fileInputRef}
-          />
-          <div className="flex flex-col items-center gap-4">
-            {selectedImage ? (
-              <div className="relative w-48 h-48">
-                <img
-                  src={selectedImage}
-                  alt="Profile"
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
-            ) : (
-              <div className="w-48 h-48 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
-                <span className="text-gray-500">Image Preview</span>
-              </div>
-            )}
-            <Button
-              type="button"
-              variant={selectedImage ? "destructive" : "outline"}
-              size="sm"
-              className="flex items-center gap-2"
-              disabled={imageUploading}
-              onClick={async (e) => {
-                if (selectedImage) {
-                  // toast.success('Image removal requested');
-                  // Remove image from Cloudinary if uploadedImage.key is present
-                  if (uploadedImage && uploadedImage.key) {
-                    try {
-                      // console.log('Attempting to delete from Cloudinary:', uploadedImage.key);
-                      const res = await fetch('/api/cloudinary', {
-                        method: 'DELETE',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ publicId: uploadedImage.key }),
-                      });
-                      const data = await res.json();
-                      if (!res.ok) {
-                        toast.error('Cloudinary error: ' + (data.error || 'Failed to delete image from Cloudinary'));
-                        // console.error('Cloudinary deletion error:', data.error);
-                        return;
-                      }
-                      toast.success('Image deleted from Cloudinary');
-                    } catch (err) {
-                      toast.error('Failed to delete image from Cloudinary (network or server error)');
-                      // console.error('Cloudinary deletion network/server error:', err);
-                    }
-                  } else {
-                    toast.error('No Cloudinary key found for this image.');
-                    // console.error('No Cloudinary key found for image:', uploadedImage);
-                  }
-                  setSelectedImage('');
-                  setUploadedImage(null);
-                } else {
-                  fileInputRef.current.click();
-                }
-              }}
-            >
-              {selectedImage ? (
-                "Remove Image"
-              ) : (
-                <>
-                  <Plus className="w-4 h-4" />
-                  Choose Image
-                </>
-              )}
-            </Button>
-          </div>
-          {imageUploading && (
-            <div className="mt-4 w-full max-w-xs">
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div
-                  className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
-                ></div>
-              </div>
-              <p className="text-sm text-center mt-1">{uploadProgress}%</p>
-            </div>
-          )}
-        </div>
       </form>
       <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Specialization</DialogTitle>
+            <DialogTitle>Add Destination Famous For</DialogTitle>
           </DialogHeader>
           <Input
             value={newSpecialization}
             onChange={(e) => setNewSpecialization(e.target.value)}
-            placeholder="Specialization Name"
+            placeholder="Destination Famous For Name"
             className="mb-4"
           />
           <DialogFooter>
@@ -967,10 +777,10 @@ const CreateArtisan = () => {
                   Order
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Artisan Name
+                  Destination Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Artisan Number
+                  State
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
@@ -987,18 +797,20 @@ const CreateArtisan = () => {
                     colSpan={4}
                     className="px-6 py-4 whitespace-nowrap text-center"
                   >
-                    No artisans found.
+                    No Destination found.
                   </td>
                 </tr>
               ) : (
                 users.map((artisan, idx) => (
                   <tr key={artisan._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">{artisan.order}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {artisan.firstName} {artisan.lastName}
+                      {artisan.order}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {artisan.artisanNumber}
+                      {artisan.firstName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {artisan.address.state}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Switch
@@ -1036,8 +848,10 @@ const CreateArtisan = () => {
           {showDeleteModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white rounded shadow-lg p-8">
-                <h2 className="text-lg font-semibold mb-4">Delete Artisan</h2>
-                <p>Are you sure you want to delete this artisan?</p>
+                <h2 className="text-lg font-semibold mb-4">
+                  Delete Destination
+                </h2>
+                <p>Are you sure you want to delete this Destination?</p>
                 <div className="flex justify-end mt-6 gap-3">
                   <button
                     className="px-4 py-2 border rounded"
@@ -1066,7 +880,7 @@ const CreateArtisan = () => {
             style={{ maxHeight: "90vh" }}
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Artisan Profile</h2>
+              <h2 className="text-xl font-bold">Destination Profile</h2>
               <button
                 onClick={closeUserModal}
                 className="text-gray-500 hover:text-black text-4xl leading-none focus:outline-none transition-transform duration-150 transform hover:scale-110"
@@ -1089,95 +903,33 @@ const CreateArtisan = () => {
                     <div className="text-gray-400">No Image</div>
                   )}
                 </div>
-                <div className="bg-white p-3 rounded shadow-sm mb-2">
-                  <div className="font-semibold text-gray-800">
-                    Full Address
-                  </div>
-                  <div className="text-gray-600">
-                    {selectedUser.address?.fullAddress || "-"}
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <div className="bg-white p-3 rounded shadow-sm w-1/2">
-                    <div className="font-semibold text-gray-800">City</div>
-                    <div className="text-gray-600">
-                      {selectedUser.address?.city || "-"}
-                    </div>
-                  </div>
-                  <div className="bg-white p-3 rounded shadow-sm w-1/2">
-                    <div className="font-semibold text-gray-800">Pincode</div>
-                    <div className="text-gray-600">
-                      {selectedUser.address?.pincode || "-"}
-                    </div>
-                  </div>
-                  <div className="bg-white p-3 rounded shadow-sm w-1/2">
-                    <div className="font-semibold text-gray-800">State</div>
-                    <div className="text-gray-600">
-                      {selectedUser.address?.state || "-"}
-                    </div>
-                  </div>
-                </div>
               </div>
               {/* Details Section */}
               <div className="md:w-2/3 w-full">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <DetailBox
-                    label="Full Name"
-                    value={`${selectedUser.title} ${selectedUser.firstName} ${selectedUser.lastName}`}
+                    label="Destination Name"
+                    value={`${selectedUser.firstName}`}
                   />
                   <DetailBox
-                    label="Relationship Type"
-                    value={selectedUser.fatherHusbandType}
-                  />
-                  <DetailBox
-                    label={`${selectedUser.fatherHusbandType} Name`}
-                    value={`${selectedUser.fatherHusbandTitle} ${selectedUser.fatherHusbandName} ${selectedUser.fatherHusbandLastName}`}
-                  />
-                  <DetailBox label="SHG Name" value={selectedUser.shgName} />
-                  <DetailBox
-                    label="Artisan Number"
-                    value={selectedUser.artisanNumber}
-                  />
-                  <DetailBox
-                    label="Years of Experience"
-                    value={selectedUser.yearsOfExperience}
-                  />
-                  <DetailBox
-                    label="Specializations"
+                    label="Destination Famous For"
                     value={
                       Array.isArray(selectedUser.specializations)
                         ? selectedUser.specializations.join(", ")
                         : selectedUser.specializations
                     }
                   />
+                  <div className="flex gap-2">
+                    <div className="bg-white rounded shadow-sm w-1/2">
+                      <div className="font-semibold text-gray-800">State</div>
+                      <div className="text-gray-600">
+                        {selectedUser.address?.state || "-"}
+                      </div>
+                    </div>
+                  </div>
                   <DetailBox
-                    label="Email"
-                    value={
-                      selectedUser.email || selectedUser.contact?.email || "-"
-                    }
-                  />
-                  <DetailBox
-                    label="Call Number"
-                    value={
-                      selectedUser.callNumber ||
-                      selectedUser.contact?.callNumber ||
-                      "-"
-                    }
-                  />
-                  <DetailBox
-                    label="WhatsApp Number"
-                    value={
-                      selectedUser.whatsappNumber ||
-                      selectedUser.contact?.whatsappNumber ||
-                      "-"
-                    }
-                  />
-                       <DetailBox
                     label="Order Number"
-                    value={
-                      selectedUser.order ||
-                      "-"
-                    }
+                    value={selectedUser.order || "-"}
                   />
                 </div>
               </div>
@@ -1202,7 +954,7 @@ const CreateArtisan = () => {
             style={{ maxHeight: "90vh" }}
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Edit Artisan</h2>
+              <h2 className="text-xl font-bold">Edit Destination</h2>
               <button
                 onClick={closeEditModal}
                 className="text-gray-500 hover:text-black"
@@ -1239,106 +991,24 @@ const CreateArtisan = () => {
                   accept="image/*"
                   ref={fileInputRef}
                   onChange={handleImageChange}
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                 />
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                  onClick={() =>
+                    fileInputRef.current && fileInputRef.current.click()
+                  }
                   disabled={imageUploading}
                 >
-                  {imageUploading ? 'Uploading...' : 'Upload Image'}
+                  {imageUploading ? "Uploading..." : "Upload Image"}
                 </Button>
-
               </div>
               <div>
                 <label className="font-semibold">First Name</label>
                 <Input
                   name="firstName"
                   value={editForm.firstName || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Last Name</label>
-                <Input
-                  name="lastName"
-                  value={editForm.lastName || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Title</label>
-                <Input
-                  name="title"
-                  value={editForm.title || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Father/Husband Type</label>
-                <Input
-                  name="fatherHusbandType"
-                  value={editForm.fatherHusbandType || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Father/Husband Title</label>
-                <Input
-                  name="fatherHusbandTitle"
-                  value={editForm.fatherHusbandTitle || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Father/Husband Name</label>
-                <Input
-                  name="fatherHusbandName"
-                  value={editForm.fatherHusbandName || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">
-                  Father/Husband Last Name
-                </label>
-                <Input
-                  name="fatherHusbandLastName"
-                  value={editForm.fatherHusbandLastName || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">SHG Name</label>
-                <Input
-                  name="shgName"
-                  value={editForm.shgName || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Artisan Number</label>
-                <Input
-                  name="artisanNumber"
-                  value={editForm.artisanNumber || ""}
-                  onChange={handleEditFormChange}
-                  required
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Years of Experience</label>
-                <Input
-                  name="yearsOfExperience"
-                  value={editForm.yearsOfExperience || ""}
                   onChange={handleEditFormChange}
                   required
                 />
@@ -1374,60 +1044,6 @@ const CreateArtisan = () => {
                 </Select>
               </div>
               <div>
-                <label className="font-semibold">Email</label>
-                <Input
-                  name="email"
-                  value={editForm.email || ""}
-                  onChange={handleEditFormChange}
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Call Number</label>
-                <Input
-                  name="callNumber"
-                  value={editForm.callNumber || ""}
-                  onChange={handleEditFormChange}
-                />
-              </div>
-              <div>
-                <label className="font-semibold">WhatsApp Number</label>
-                <Input
-                  name="whatsappNumber"
-                  value={editForm.whatsappNumber || ""}
-                  onChange={handleEditFormChange}
-                />
-              </div>
-              <div>
-                <label className="font-semibold">Address</label>
-                <Input
-                  name="address"
-                  value={editForm.address || ""}
-                  onChange={handleEditFormChange}
-                />
-              </div>
-              <div>
-                <label className="font-semibold">City</label>
-                <Input
-                  name="city"
-                  placeholder="Enter city"
-                  {...register("city", { required: "City is required" })}
-                  value={watch("city") || editForm.city || ""}
-                  onChange={handleEditFormChange}
-                />
-                {errors.city && <span className="text-red-500 text-xs">{errors.city.message}</span>}
-              </div>
-              <div>
-                <label className="font-semibold">Pincode</label>
-                <Input
-                  name="pincode"
-                  placeholder="Enter pincode"
-                  {...register("pincode", { required: "Pincode is required" })}
-                  value={watch("pincode") || editForm.pincode || ""}
-                  onChange={handleEditFormChange}
-                />
-                {errors.pincode && <span className="text-red-500 text-xs">{errors.pincode.message}</span>}
-              </div>
-              <div>
                 <label className="font-semibold">State</label>
                 <Select
                   value={editForm.state || ""}
@@ -1456,12 +1072,16 @@ const CreateArtisan = () => {
                   placeholder="Enter order"
                   {...register("order", { required: "Order is required" })}
                   value={watch("order") || editForm.order || ""}
-                  onChange={e => {
+                  onChange={(e) => {
                     handleEditFormChange(e);
                     setValue("order", e.target.value, { shouldValidate: true });
                   }}
                 />
-                {errors.order && <span className="text-red-500 text-xs">{errors.order.message}</span>}
+                {errors.order && (
+                  <span className="text-red-500 text-xs">
+                    {errors.order.message}
+                  </span>
+                )}
               </div>
               <div className="col-span-2 flex justify-end mt-4">
                 <Button type="submit">Update</Button>

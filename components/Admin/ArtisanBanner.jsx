@@ -54,7 +54,7 @@ const ArtisanBanner = ({ artisanId, artisanDetails = null }) => {
   const [id, setId] = useState(null);
   const [loadingBanners, setLoadingBanners] = useState(false);
   const [banners, setBanners] = useState([]);
-  
+
   const fetchBanners = async () => {
     setLoadingBanners(true);
     try {
@@ -142,14 +142,14 @@ const ArtisanBanner = ({ artisanId, artisanDetails = null }) => {
     );
     setIsEditMode(true);
     setId(banner._id);
-  };    
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     // Frontend validation
     if (!selectedArtisan) {
-      toast.error("Please select an artisan.");
+      toast.error("Please select an destination.");
       setLoading(false);
       return;
     }
@@ -186,8 +186,8 @@ const ArtisanBanner = ({ artisanId, artisanDetails = null }) => {
         data = await res.json();
         if (data.success) {
           toast.success('Banner created successfully!');
-        } else if (res.status === 400 && data.message === 'Banner already exists for this artisan.') {
-          toast.error('A banner already exists for this artisan. You can only have one banner per artisan.');
+        } else if (res.status === 400 && data.message === 'Banner already exists for this Destination.') {
+          toast.error('A banner already exists for this Destination. You can only have one banner per Destination.');
         } else {
           toast.error((data.message || 'Failed to create certificate') + (data.error ? (': ' + data.error) : ''));
         }
@@ -240,26 +240,26 @@ const ArtisanBanner = ({ artisanId, artisanDetails = null }) => {
       <div className="container-fluid">
         <div className="row justify-center">
           <div className="w-full max-w-5xl mx-auto">
-            <h3 className="my-4 text-center font-bold text-2xl">Upload Artisan Banner</h3>
+            <h3 className="my-4 text-center font-bold text-2xl">Upload Destination Banner</h3>
             <div className="bg-white rounded shadow p-6 mb-6">
               <form id="certificateForm" onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label className="block font-semibold mb-1">Artisan User</label>
+                  <label className="block font-semibold mb-1">Destination Name</label>
                   <input
                     type="text"
                     className="w-full border rounded px-3 py-2 bg-gray-100"
                     value={
                       artisanDetails
-                        ? `${artisanDetails.title ? artisanDetails.title + ' ' : ''}${artisanDetails.firstName} ${artisanDetails.lastName}`
+                        ? `${artisanDetails.firstName}`
                         : (() => {
                           const found = artisans.find(a => a._id === selectedArtisan);
-                          return found ? `${found.title ? found.title + ' ' : ''}${found.firstName} ${found.lastName}` : '';
+                          return found ? `${found.firstName}` : '';
                         })()
                     }
                     readOnly
-                    placeholder="Artisan Name"
+                    placeholder="Destination Name"
                   />
-                </div>               
+                </div>
                 <div className="mb-4">
                   <label className="block mb-1">Banner Image</label>
                   <div className="border rounded p-4 text-center">
@@ -363,7 +363,7 @@ const ArtisanBanner = ({ artisanId, artisanDetails = null }) => {
                           <TableCell className="px-4 py-3 text-center">{idx + 1}</TableCell>
                           <TableCell className="px-4 py-3 items-center flex justify-center">
                             {banner.image && banner.image.url ? (
-                              <img src={banner?.image?.url} alt="Banner"  style={{ width: 200, objectFit: 'cover', borderRadius: 4 }} />
+                              <img src={banner?.image?.url} alt="Banner" style={{ width: 200, objectFit: 'cover', borderRadius: 4 }} />
                             ) : 'No Image'}
                           </TableCell>
                           <TableCell className="px-4 py-3 text-center gap-2">
@@ -383,71 +383,71 @@ const ArtisanBanner = ({ artisanId, artisanDetails = null }) => {
                 </Table>
               </div>
             </div>
-        
-              {/* Delete Modal */}
-              {showDeleteModal && (
-                <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Delete Certificate</DialogTitle>
-                    </DialogHeader>
-                    <p>Are you sure you want to delete this certificate?</p>
-                    <DialogFooter>
-                      <Button variant="secondary" onClick={cancelDelete}>Cancel</Button>
-                      <Button variant="destructive" onClick={() => handleDelete(deleteId)}>Delete</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              )}
 
-              {/* View Modal */}
-              {viewModal && selectedBanner && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                  <div className="bg-white rounded shadow-lg max-w-lg w-full p-8 relative">
-                    <h4 className="font-bold text-lg mb-4">Banner Details</h4>
-                    <h4 className="font-bold text-lg mb-4">Certificate Details</h4>
-                    <div className="grid grid-cols-1 gap-4 mb-2">
-                      <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
-                        <div className="font-semibold text-gray-800">Artisan</div>
-                        <div className="text-gray-600">{selectedCertificate.artisan ? `${selectedCertificate.artisan.title ? selectedCertificate.artisan.title + ' ' : ''}${selectedCertificate.artisan.firstName} ${selectedCertificate.artisan.lastName}` : '-'}</div>
+            {/* Delete Modal */}
+            {showDeleteModal && (
+              <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Delete Certificate</DialogTitle>
+                  </DialogHeader>
+                  <p>Are you sure you want to delete this certificate?</p>
+                  <DialogFooter>
+                    <Button variant="secondary" onClick={cancelDelete}>Cancel</Button>
+                    <Button variant="destructive" onClick={() => handleDelete(deleteId)}>Delete</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
+
+            {/* View Modal */}
+            {viewModal && selectedBanner && (
+              <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                <div className="bg-white rounded shadow-lg max-w-lg w-full p-8 relative">
+                  <h4 className="font-bold text-lg mb-4">Banner Details</h4>
+                  <h4 className="font-bold text-lg mb-4">Certificate Details</h4>
+                  <div className="grid grid-cols-1 gap-4 mb-2">
+                    <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
+                      <div className="font-semibold text-gray-800">Destination</div>
+                      <div className="text-gray-600">{selectedCertificate.artisan ? `${selectedCertificate.artisan.title ? selectedCertificate.artisan.title + ' ' : ''}${selectedCertificate.artisan.firstName} ${selectedCertificate.artisan.lastName}` : '-'}</div>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
+                      <div className="font-semibold text-gray-800">Certificate Name</div>
+                      <div className="text-gray-600">{selectedCertificate.title}</div>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2 w-1/2">
+                        <div className="font-semibold text-gray-800">Year of Issue</div>
+                        <div className="text-gray-600">{selectedCertificate.issueDate}</div>
                       </div>
-                      <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
-                        <div className="font-semibold text-gray-800">Certificate Name</div>
-                        <div className="text-gray-600">{selectedCertificate.title}</div>
-                      </div>
-                      <div className="flex gap-2">
-                        <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2 w-1/2">
-                          <div className="font-semibold text-gray-800">Year of Issue</div>
-                          <div className="text-gray-600">{selectedCertificate.issueDate}</div>
-                        </div>
-                        <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2 w-1/2">
-                          <div className="font-semibold text-gray-800">Specialized In</div>
-                          <div className="text-gray-600">{selectedCertificate.description}</div>
-                        </div>
-                      </div>
-                      <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
-                        <div className="font-semibold text-gray-800">Issued By</div>
-                        <div className="text-gray-600">{selectedCertificate.issuedBy}</div>
-                      </div>
-                      <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
-                        <div className="font-semibold text-gray-800">Image</div>
-                        <div className="text-gray-600"><img src={selectedCertificate.imageUrl} alt="Certificate" className="w-56 h-36 object-cover rounded mt-2" /></div>
+                      <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2 w-1/2">
+                        <div className="font-semibold text-gray-800">Specialized In</div>
+                        <div className="text-gray-600">{selectedCertificate.description}</div>
                       </div>
                     </div>
-                    <button className=" absolute w-8 h-8 top-2 right-2 text-gray-700 hover:text-red-600" onClick={handleCloseViewModal}>
-                      X
-                    </button>
-                    <button className=" absolute px-4 py-1 bottom-2 right-2 border border-gray-200 rounded  bg-red-500 text-white" onClick={handleCloseViewModal}>
-                      Close
-                    </button>
+                    <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
+                      <div className="font-semibold text-gray-800">Issued By</div>
+                      <div className="text-gray-600">{selectedCertificate.issuedBy}</div>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
+                      <div className="font-semibold text-gray-800">Image</div>
+                      <div className="text-gray-600"><img src={selectedCertificate.imageUrl} alt="Certificate" className="w-56 h-36 object-cover rounded mt-2" /></div>
+                    </div>
                   </div>
+                  <button className=" absolute w-8 h-8 top-2 right-2 text-gray-700 hover:text-red-600" onClick={handleCloseViewModal}>
+                    X
+                  </button>
+                  <button className=" absolute px-4 py-1 bottom-2 right-2 border border-gray-200 rounded  bg-red-500 text-white" onClick={handleCloseViewModal}>
+                    Close
+                  </button>
                 </div>
-              )}
+              </div>
+            )}
 
-            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

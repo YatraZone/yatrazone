@@ -110,11 +110,7 @@ const ArtisanDashboard = () => {
         setStories(stories.filter(s => s._id !== deleteModal.id));
         deleted = true;
       }
-      else if (deleteModal.type === 'certificate') {
-        await fetch(`/api/artisanCertificates`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: deleteModal.id }) });
-        setCertificates(certificates.filter(c => c._id !== deleteModal.id));
-        deleted = true;
-      } else if (deleteModal.type === 'plugin') {
+      else if (deleteModal.type === 'plugin') {
         await fetch(`/api/artisanPlugins`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: deleteModal.id }) });
         setSocialPlugin((prev) => Array.isArray(prev) ? prev.filter(p => p._id !== deleteModal.id) : null);
         deleted = true;
@@ -132,14 +128,14 @@ const ArtisanDashboard = () => {
     <div className="flex flex-col items-center justify-center my-10">
       <div className="flex items-center gap-2">
         <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <span className="text-lg text-gray-700 font-medium">Loading artisan details...</span>
+        <span className="text-lg text-gray-700 font-medium">Loading Destination details...</span>
       </div>
     </div>
   );
   if (!artisan) return (
     <div className="flex flex-col items-center justify-center my-10">
-      <div className="text-center text-lg mb-2">Artisan not found.</div>
-      <Button href="/admin/create_artisan" className="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Create New Artisan</Button>
+      <div className="text-center text-lg mb-2">Destination not found.</div>
+      <Button href="/admin/create_destination" className="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Create New Destination</Button>
     </div>
   );
 
@@ -148,7 +144,7 @@ const ArtisanDashboard = () => {
       {/* Sidebar */}
       <div className="absolute -top-5 z-10 ">
         <button className='px-4 py-1 bg-gray-500 text-white rounded flex items-center' onClick={() => router.back()}>
-          <ArrowLeftIcon className="w-4 h-4 mr-2" /> Back to View Artisan
+          <ArrowLeftIcon className="w-4 h-4 mr-2" /> Back to View Destination
         </button>
       </div>
       <div className="h-fit me-4" style={{ border: '1px solid #ced4da', borderRadius: '8px', background: '#fff', overflowY: 'auto', padding: '15px' }}>
@@ -170,17 +166,8 @@ const ArtisanDashboard = () => {
         {/* Profile Section */}
         {activeKey === 'Profile' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div style={boxStyle}><b>Name: &nbsp;</b>{artisan.title} {artisan.firstName} {artisan.lastName}</div>
-            <div style={boxStyle}><b>{artisan.fatherHusbandType || 'Father/Husband'}'s Name: &nbsp;</b> {artisan.fatherHusbandTitle} {artisan.fatherHusbandName} {artisan.fatherHusbandLastName}</div>
-            <div style={boxStyle}><b>Artisan Number: &nbsp;</b> {artisan.artisanNumber || 'N/A'}</div>
-            <div style={boxStyle}><b>SHG Name: &nbsp;</b> {artisan.shgName || 'N/A'}</div>
-            <div style={boxStyle}><b>Mobile: &nbsp;</b> {artisan.contact?.callNumber || artisan.contact?.whatsappNumber || 'N/A'}</div>
-            <div style={boxStyle}><b>Email: &nbsp;</b> {artisan.contact?.email || artisan.email || 'N/A'}</div>
-            <div style={boxStyle}><b>Years of Experience: &nbsp;</b> {artisan.yearsOfExperience || 'N/A'}</div>
+            <div style={boxStyle}><b>Name: &nbsp;</b>{artisan.title} {artisan.firstName}</div>
             <div style={boxStyle}><b>Specializations: &nbsp;</b> {artisan.specializations && artisan.specializations.length > 0 ? artisan.specializations.join(', ') : 'N/A'}</div>
-            <div style={boxStyle}><b>Address: &nbsp;</b><span className="text-gray-600 pt-5 max-h-24 overflow-y-auto">{artisan.address ? artisan.address.fullAddress : 'N/A'}</span></div>
-            <div style={boxStyle}><b>City: &nbsp;</b> {artisan.address?.city || 'N/A'}</div>
-            <div style={boxStyle}><b>Pincode: &nbsp;</b> {artisan.address?.pincode || 'N/A'}</div>
             <div style={boxStyle}><b>State: &nbsp;</b> {artisan.address?.state || 'N/A'}</div>
             <div className="col-span-2 text-center"><div style={{ ...boxStyle, background: '#fff', display: 'flex', justifyContent: 'center' }}>
               {artisan.profileImage?.url ? (
@@ -195,7 +182,7 @@ const ArtisanDashboard = () => {
         {activeKey === 'Promotions Reviews' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {promotions.length === 0 ? (
-              <div className="col-span-3 text-center">No promotions found for this artisan.</div>
+              <div className="col-span-3 text-center">No promotions found for this Destination.</div>
             ) : (
               promotions.map((promotion, idx) => (
                 <div key={promotion._id || idx} className="relative bg-white rounded-xl shadow-lg p-6 flex flex-col items-start min-h-[260px]">
@@ -226,49 +213,11 @@ const ArtisanDashboard = () => {
             )}
           </div>
         )}
-        {/* Catalog Section */}
-        {activeKey === 'Catalog' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {catalogLoading ? (
-              <div className="col-span-3 text-center">Loading products...</div>
-            ) : products.length === 0 ? (
-              <div className="col-span-3 text-center">No products found for this artisan.</div>
-            ) : (
-              products.map((product, idx) => (
-                <div
-                  key={product._id || idx}
-                  className="flex flex-col overflow-hidden"
-                >
-                  {/* Image Section */}
-                  <div className="w-full h-48 bg-gray-100">
-                    <img
-                      src={product.gallery?.mainImage?.url || '/placeholder.jpeg'}
-                      alt={product.title || 'Product Image'}
-                      className="w-full h-full object-cover rounded-xl"
-                      onError={e => { e.target.onerror = null; e.target.src = '/placeholder.jpeg'; }}
-                    />
-                  </div>
-                  {/* Info Section */}
-                  <div className="flex items-center justify-between gap-1 p-3">
-                    <Link
-                      href={`/product/${product._id}`}
-                    >
-                      <div className="font-semibold text-base text-gray-900 truncate hover:underline cursor-pointer">{product.title || 'Product'}</div>
-                    </Link>
-                    <div className="text-green-700 font-bold text-lg">
-                      {product.quantity?.variants[0] ? `₹${product.quantity.variants[0].price}` : 'No price'}
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        )}
         {/* Blogs Section */}
         {activeKey === 'Blog' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {blogs.length === 0 ? (
-              <div className="col-span-3 text-center">No blogs found for this artisan.</div>
+              <div className="col-span-3 text-center">No blogs found for this Destination.</div>
             ) : (
               blogs.map((blog, idx) => (
                 <div key={blog._id || idx} className="relative bg-white rounded-xl shadow-lg p-6 flex flex-col items-start min-h-[260px]">
@@ -359,40 +308,6 @@ const ArtisanDashboard = () => {
             </div>
           </div>
         )}
-        {/*Certificates*/}
-        {activeKey === 'Certificates' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {(!certificates || certificates.length === 0) ? (
-              <div className="text-center">No certificates found for this artisan.</div>
-            ) : (
-              certificates.map((cert, idx) => (
-                <div key={cert._id || idx} className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center min-h-[220px]">
-                  {/* Certificate Image */}
-                  <img
-                    src={cert.imageUrl || '/certificate-placeholder.png'}
-                    alt={cert.title || 'Certificate Image'}
-                    style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '8px', marginBottom: '10px' }}
-                    onError={e => { e.target.onerror = null; e.target.src = '/certificate-placeholder.png'; }}
-                  />
-                  {/* Certificate Title */}
-                  <div className="font-semibold text-lg mb-1 text-center">{cert.title || 'Certificate'}</div>
-                  {/* Issuer and Date */}
-                  <div className="text-gray-700 mb-2">{cert.issuedBy ? `Issued by: ${cert.issuedBy}` : '-'}</div>
-                  <div className="text-gray-600 text-xs mb-2">{cert.issueDate ? `Date: ${cert.issueDate}` : ''}</div>
-                  {/* Actions */}
-                  <div className="flex gap-2 mt-2">
-                    <Button size="sm" variant="default" onClick={() => { setSelectedCertificate(cert); setShowCertificateModal(true); }}>View</Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete('certificate', cert._id)}>Delete</Button>
-                  </div>
-                </div>
-              ))
-
-            )}
-          </div>
-        )}
-
-        {/* VIEW MODEL START */}
-
         {/* Promotion Modal */}
         {showPromotionModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
@@ -548,62 +463,6 @@ const ArtisanDashboard = () => {
               </div>
               <div className="flex justify-end mt-4">
                 <Button variant="secondary" onClick={() => setShowStoryModal(false)}>Close</Button>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Certificates Modal */}
-        {showCertificateModal && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
-            <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-lg relative">
-              <button className="absolute top-2 right-2 text-xl" onClick={() => setShowCertificateModal(false)}>×</button>
-              <h3 className="mb-4 text-lg font-semibold">Certificate Details</h3>
-              {selectedCertificate && (
-                <div>
-                  <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
-                    <div className="font-semibold text-gray-800">Certificate Name</div>
-                    <div className="text-gray-600">{selectedCertificate.title || '-'}</div>
-                  </div>
-                  <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2">
-                    <div className="font-semibold text-gray-800">Issued By</div>
-                    <div className="text-gray-600">{selectedCertificate.issuedBy || '-'}</div>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2 w-1/2">
-                      <div className="font-semibold text-gray-800">Issued Date</div>
-                      <div className="text-gray-600">{selectedCertificate.issueDate || 'N/A'}</div>
-                    </div>
-                    <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2 w-1/2">
-                      <div className="font-semibold text-gray-800">Specialization In</div>
-                      <div className="text-gray-600">{selectedCertificate.description || 'N/A'}</div>
-                    </div>
-                  </div>
-                  <div className="bg-white p-3 rounded border border-gray-200 shadow-md mb-2 max-h-48 overflow-y-auto">
-                    <div className="font-semibold text-gray-800">Images</div>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {selectedCertificate.imageUrl
-                        ? (Array.isArray(selectedCertificate.imageUrl)
-                          ? selectedCertificate.imageUrl
-                          : [selectedCertificate.imageUrl]
-                        ).map((url, idx) => (
-                          typeof url === 'string' && url.trim() && url !== 'undefined' ? (
-                            <img
-                              key={url + idx}
-                              src={url}
-                              alt={`Certificate Image ${idx + 1}`}
-                              className="w-28 h-20 object-cover rounded"
-                              onError={e => { e.target.style.display = 'none'; }}
-                            />
-                          ) : null
-                        ))
-                        : <span className="text-gray-400">No images</span>
-                      }
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div className="flex justify-end mt-4">
-                <Button variant="destructive" onClick={() => setShowCertificateModal(false)}>Close</Button>
               </div>
             </div>
           </div>

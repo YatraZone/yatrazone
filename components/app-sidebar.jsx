@@ -41,13 +41,13 @@ const data = {
 
     { divider: true },
     {
-      name: "Create Artisan",
-      url: "/admin/create_artisan",
+      name: "Create Destination",
+      url: "/admin/create_destination",
       icon: User,
     },
     {
-      name: "View / Edit Artisan",
-      url: "/admin/edit_artisan",
+      name: "View / Edit Destination",
+      url: "/admin/edit_destination",
       icon: User,
     },
     { divider: true },

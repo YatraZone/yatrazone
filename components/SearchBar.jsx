@@ -112,8 +112,8 @@ export default function SearchBar({ placeholder }) {
                     />
                 </div>
 
-                {/* Random  Packages Dropdown */}
-                {packages && packages.length > 0 && (
+                {/* Random Packages - Only show when there's no search query */}
+                {!query && packages && packages.length > 0 && (
                     <>
                         <h2 className="mt-4 text-xl font-medium mb-2 font-barlow">You Might Also Like</h2>
                         <ul className="border rounded-md shadow-sm bg-white max-h-[25rem] overflow-y-auto">
@@ -124,7 +124,7 @@ export default function SearchBar({ placeholder }) {
                                     onClick={() => handlePackageClick(pkg?._id, pkg?.packageName)}
                                 >
                                     <Image
-                                        src={pkg?.basicDetails?.thumbnail?.url}
+                                        src={pkg?.basicDetails?.thumbnail?.url || ""}
                                         width={1280} height={720} quality={50}
                                         alt={pkg?.packageName}
                                         className="w-24 h-24 rounded-md object-cover"
@@ -161,7 +161,7 @@ export default function SearchBar({ placeholder }) {
                                     onClick={() => handlePackageClick(pkg?._id, pkg?.packageName)}
                                 >
                                     <Image
-                                        src={pkg?.basicDetails?.thumbnail?.url}
+                                        src={pkg?.basicDetails?.thumbnail?.url || ""}
                                         width={1280} height={720} quality={50}
                                         alt={pkg?.packageName}
                                         className="w-24 h-24 rounded-md object-cover"

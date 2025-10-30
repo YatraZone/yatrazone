@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 import "@/models/Promotion";
 import "@/models/ArtisanBlog";
 import "@/models/ArtisanStory";
-import "@/models/ArtisanCertificate";
 import "@/models/ArtisanPlugin";
 import "@/models/ArtisanBanner";
+import '@/models/ArtisanGallery'
+import '@/models/ArtisanHighlights'
 import Artisan from '@/models/Artisan';
 
 export async function GET(req, { params }) {
@@ -16,9 +17,10 @@ export async function GET(req, { params }) {
     .populate('promotions')
     .populate('artisanBlogs')
     .populate('artisanStories')
-    .populate('certificates')
     .populate('socialPlugin')
     .populate('artisanBanner')
+    .populate('artisanGallery')
+    .populate('artisanHighlights')
   if (!artisan || artisan.active !== true) {
     // console.log('Artisan not found for id:', id, 'Result:', artisan);
     return new Response(JSON.stringify({ message: 'Artisan not found', debug: { slug, artisan } }), { status: 404 });

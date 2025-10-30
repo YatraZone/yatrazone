@@ -73,7 +73,7 @@ const SocialPlugins = ({ artisanId, artisanDetails = null }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedArtisan) {
-      toast.error('Please select an artisan.');
+      toast.error('Please select an Destination.');
       return;
     }
     setIsSubmitting(true);
@@ -170,24 +170,24 @@ const SocialPlugins = ({ artisanId, artisanDetails = null }) => {
   return (
     <div className="page-content flex justify-center">
       <div className="w-full max-w-4xl mx-auto">
-        <h4 className="text-center my-4 font-bold text-2xl">Artisan Social Plugin</h4>
+        <h4 className="text-center my-4 font-bold text-2xl">Destination Social URL</h4>
         <div className="bg-white rounded shadow p-6 mb-6">
           <form id="socialPluginForm" onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block font-semibold mb-1">Artisan User</label>
+              <label className="block font-semibold mb-1">Destination Name</label>
               <input
                 type="text"
                 className="w-full border rounded px-3 py-2 bg-gray-100"
                 value={
                   artisanDetails
-                    ? `${artisanDetails.title ? artisanDetails.title + ' ' : ''}${artisanDetails.firstName} ${artisanDetails.lastName}`
+                    ? `${artisanDetails.firstName}`
                     : (() => {
                       const found = artisans.find(a => a._id === selectedArtisan);
-                      return found ? `${found.title ? found.title + ' ' : ''}${found.firstName} ${found.lastName}` : '';
+                      return found ? `${found.firstName}` : '';
                     })()
                 }
                 readOnly
-                placeholder="Artisan Name"
+                placeholder="Destination Name"
               />
             </div>
             {/* Facebook */}
@@ -231,8 +231,8 @@ const SocialPlugins = ({ artisanId, artisanDetails = null }) => {
               <TableHeader>
                 <TableRow className="bg-gray-100">
                   <TableHead className="px-4 py-3 text-center">S.No</TableHead>
-                  <TableHead className="px-4 py-3 text-center">Artisan Name</TableHead>
-                  <TableHead className="px-4 py-3 text-center">Artisan Number</TableHead>
+                  <TableHead className="px-4 py-3 text-center">Destination Name</TableHead>
+                  <TableHead className="px-4 py-3 text-center">Destination State</TableHead>
                   <TableHead className="px-4 py-3 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -245,8 +245,8 @@ const SocialPlugins = ({ artisanId, artisanDetails = null }) => {
                   Object.values(groupedPlugins).map((group, idx) => (
                     <TableRow key={group.artisan._id}>
                       <TableCell className="px-4 py-3 text-center font-medium">{idx + 1}</TableCell>
-                      <TableCell className="px-4 py-3 text-center whitespace-nowrap ">{group.artisan.title} {group.artisan.firstName} {group.artisan.lastName}</TableCell>
-                      <TableCell className="px-4 py-3 text-center whitespace-nowrap ">{group.artisan.artisanNumber}</TableCell>
+                      <TableCell className="px-4 py-3 text-center whitespace-nowrap ">{group.artisan.firstName}</TableCell>
+                      <TableCell className="px-4 py-3 text-center whitespace-nowrap ">{group.artisan.address.state}</TableCell>
                       <TableCell className="px-4 py-3 flex gap-2 justify-center">
                         <Button size="sm" variant="default" className="bg-blue-500 text-white px-3 py-1 rounded mr-2" onClick={() => {
                           setSelectedArtisanPlugins(group.plugins);
@@ -293,7 +293,7 @@ const SocialPlugins = ({ artisanId, artisanDetails = null }) => {
         {showPluginsModal && selectedArtisanPlugins && selectedArtisanInfo && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30">
             <div className="bg-white p-6 rounded shadow-lg max-w-xl w-full">
-              <h3 className="font-bold text-xl mb-4">All Social Plugins for {selectedArtisanInfo.title} {selectedArtisanInfo.firstName} {selectedArtisanInfo.lastName}</h3>
+              <h3 className="font-bold text-xl mb-4">All Social Plugins for{selectedArtisanInfo.firstName} </h3>
               <div className="space-y-4">
                 {selectedArtisanPlugins.map((plugin, idx) => (
                   <div key={plugin._id || idx} className="border rounded p-4">
