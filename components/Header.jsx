@@ -152,7 +152,7 @@ const Header = () => {
               <Link
                 target="_blank"
                 className="hover:scale-110 transition-all duration-300"
-                href={"https://share.google/RwYRUNBjlwGlwTxfL"}
+                href={"https://share.google/b7zc9xYSFnp6uDTOE"}
               >
                 <Image
                   priority
@@ -165,7 +165,7 @@ const Header = () => {
               <Link
                 className="hover:scale-110 transition-all duration-300"
                 target="_blank"
-                href={"https://www.instagram.com/rishikeshhandmade09/"}
+                href={"https://www.instagram.com/yatrazone_india/"}
               >
                 <Image
                   priority
@@ -176,7 +176,7 @@ const Header = () => {
                 />
               </Link>
               <Link
-                href={"https://www.facebook.com/profile.php?id=100076229983946"}
+                href={"https://www.facebook.com/p/Yatra-Zone-61556493608271/"}
                 target="_blank"
                 className="hover:scale-110 transition-all duration-300"
               >
