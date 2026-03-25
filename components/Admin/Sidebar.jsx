@@ -16,6 +16,12 @@ const Sidebar = ({ id }) => {
             <Link href={`/admin/editPackage/add-gallery/${id}`} className='w-52'>
                 <button className={`${pathname.includes('/add-gallery') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Add Gallery</button>
             </Link>
+            <Link href={`/admin/editPackage/add-hotels/${id}`} className='w-52'>
+                <button className={`${pathname.includes('/add-hotels') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Add Hotels</button>
+            </Link>
+            <Link href={`/admin/editPackage/summary/${id}`} className='w-52'>
+                <button className={`${pathname.includes('/summary') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Summary</button>
+            </Link>
             <Link href={`/admin/editPackage/create-plan-type/${id}`} className={`w-52`}>
                 <button className={`${pathname.includes('/create-plan-type') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Create Plan Type</button>
             </Link>

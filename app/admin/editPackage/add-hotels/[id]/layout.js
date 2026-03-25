@@ -22,25 +22,24 @@ export default async function RootLayout({
         gallery._id = gallery._id.toString();
         return gallery;
     });
-    // packages.info = packages.info.map(info => {
-    //     info?.selectionHighlight = info?.selectionHighlight?.map(selectionHighlight => {
-    //         selectionHighlight._id = selectionHighlight._id.toString();
-    //         return selectionHighlight;
-    //     });
-    //     return info;
-    // });
+    packages.hotels = (packages.hotels || []).map(hotel => {
+        hotel._id = hotel._id.toString();
+        return hotel;
+    });
     packages.createPlanType = packages.createPlanType.map(createPlanType => {
         createPlanType._id = createPlanType._id.toString();
         return createPlanType;
     });
+
     packages.reviews = packages.reviews.map(review => {
         review = review.toString();
         return review;
     });
+    
     return (
         <PackageProvider packages={packages}>
-            <div className="w-full">
-                <SidebarInset>
+            <div className=" w-full">
+                <SidebarInset >
                     <header className="flex h-16 shrink-0 items-center gap-2">
                         <div className="flex items-center gap-2 px-4">
                             <SidebarTrigger className="-ml-1" />

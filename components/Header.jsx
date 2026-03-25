@@ -121,7 +121,6 @@ const Header = () => {
           pathName.includes("sign-in") ||
           pathName.includes("customEnquiry") ||
           pathName.includes("search")
-          || pathName.includes("package")
           ? "hidden"
           : "block"
           } bg-[#fcf7f1] text-black border-b font-barlow tracking-wider w-full`}
@@ -310,25 +309,25 @@ const Header = () => {
       {/* Show only on md and larger screens, and only if not in admin section */}
       <div className="hidden md:block sticky top-0 z-40">
 
-      <div className={`print:hidden ${pathName.includes("admin") ||
-        pathName.includes("page") ||
-        pathName.includes("sign-up") ||
-        pathName.includes("sign-in") ||
-        pathName.includes("customEnquiry")
-        || pathName.includes("search")
-        || pathName.includes("package")
-        ? "hidden"
-        : "block"
-        }`}>
-        <div
-          className={`bg-white py-2 border-b border-gray-200 transition-all duration-300 ${showHeader ? "translate-y-0" : "-translate-y-full"
-            }`}
-        >
-          <div className="container mx-auto px-4">
-            <MenuBar menuItems={menuItems} />
+        <div className={`print:hidden ${pathName.includes("admin") ||
+          pathName.includes("page") ||
+          pathName.includes("sign-up") ||
+          pathName.includes("sign-in") ||
+          pathName.includes("customEnquiry")
+          || pathName.includes("search")
+          || pathName.includes("package")
+          ? "hidden"
+          : "block"
+          }`}>
+          <div
+            className={`bg-white py-2 border-b border-gray-200 transition-all duration-300 ${showHeader ? "translate-y-0" : "-translate-y-full"
+              }`}
+          >
+            <div className="container mx-auto px-4">
+              <MenuBar menuItems={menuItems} />
+            </div>
           </div>
         </div>
-      </div>
       </div>
 
 

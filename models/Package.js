@@ -27,11 +27,32 @@ const PackageSchema = new Schema({
         typeOfSelection: { type: String },
         selectionTitle: { type: String },
         selectionDesc: { type: String },
+        selectionHighlight: [
+            {
+                highlightName: { type: String },
+                highlightDesc: [{ type: String }],
+            }
+        ],
+        selectionTable: [
+            {
+                tableName: { type: String },
+                tableDesc: [{ type: String }],
+            }
+        ],
         order: { type: Number },
     }],
     gallery: [{
         url: { type: String },
         key: { type: String },
+    }],
+    hotels: [{
+        days: { type: String },
+        cityName: { type: String },
+        hotelName: { type: String },
+    }],
+    summary: [{
+        days: { type: String },
+        description: [{ type: String }],
     }],
     createPlanType: [{
         day: { type: String },

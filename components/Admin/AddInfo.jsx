@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import dynamic from "next/dynamic"
 import toast from "react-hot-toast"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Pencil, Trash2 } from "lucide-react"
+import { Pencil, Trash2, Plus, X } from "lucide-react"
 import { Badge } from "../ui/badge"
 
 import { useEditor, EditorContent } from '@tiptap/react'
@@ -426,6 +426,30 @@ const AddInfo = () => {
   const [editItem, setEditItem] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [editorContent, setEditorContent] = useState('');
+
+  // Highlights state: array of { highlightName: '', highlightDesc: [''] }
+  const [highlights, setHighlights] = useState([]);
+  const [editHighlights, setEditHighlights] = useState([]);
+
+  // Table state: array of { tableName: '', tableDesc: ['', ''] } (pairs of 2 columns)
+  const [tableData, setTableData] = useState([]);
+  const [editTableData, setEditTableData] = useState([]);
+
+  // --- Highlight Helpers ---
+  const addHighlight = (setter) => setter(prev => [...prev, { highlightName: '', highlightDesc: [''] }]);
+  const removeHighlight = (setter, idx) => setter(prev => prev.filter((_, i) => i !== idx));
+  const updateHighlightName = (setter, idx, val) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], highlightName: val }; return u; });
+  const addHighlightDesc = (setter, idx) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], highlightDesc: [...u[idx].highlightDesc, ''] }; return u; });
+  const removeHighlightDesc = (setter, hIdx, dIdx) => setter(prev => { const u = [...prev]; u[hIdx] = { ...u[hIdx], highlightDesc: u[hIdx].highlightDesc.filter((_, i) => i !== dIdx) }; return u; });
+  const updateHighlightDesc = (setter, hIdx, dIdx, val) => setter(prev => { const u = [...prev]; const d = [...u[hIdx].highlightDesc]; d[dIdx] = val; u[hIdx] = { ...u[hIdx], highlightDesc: d }; return u; });
+
+  // --- Table Helpers ---
+  const addTableEntry = (setter) => setter(prev => [...prev, { tableName: '', tableDesc: ['', ''] }]);
+  const removeTableEntry = (setter, idx) => setter(prev => prev.filter((_, i) => i !== idx));
+  const updateTableName = (setter, idx, val) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], tableName: val }; return u; });
+  const addTableRow = (setter, idx) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], tableDesc: [...u[idx].tableDesc, '', ''] }; return u; });
+  const removeTableRow = (setter, tIdx, rowStart) => setter(prev => { const u = [...prev]; const d = [...u[tIdx].tableDesc]; d.splice(rowStart, 2); u[tIdx] = { ...u[tIdx], tableDesc: d }; return u; });
+  const updateTableDesc = (setter, tIdx, dIdx, val) => setter(prev => { const u = [...prev]; const d = [...u[tIdx].tableDesc]; d[dIdx] = val; u[tIdx] = { ...u[tIdx], tableDesc: d }; return u; });
   const addEditor = useEditor({
     extensions: [
       StarterKit,
@@ -481,10 +505,12 @@ const AddInfo = () => {
   const otherInfo = packages.info.filter(info => info.typeOfSelection !== "Day Plan")
 
   useEffect(() => {
-    if (isOpen && !editItem&& addEditor) {
+    if (isOpen && !editItem && addEditor) {
       setEditorContent('');
       setValue('info.selectionDesc', '');
       if (addEditor) addEditor.commands.setContent('');
+      setHighlights([]);
+      setTableData([]);
     }
   }, [isOpen, editItem, setValue]);
 
@@ -498,6 +524,10 @@ const AddInfo = () => {
 
   const onSubmit = async (data) => {
     data.pkgId = packages._id
+
+    // Attach highlights and table data
+    data.info.selectionHighlight = highlights.filter(h => h.highlightName.trim() !== '');
+    data.info.selectionTable = tableData.filter(t => t.tableName.trim() !== '');
 
     if (!data.info.typeOfSelection || !data.info.selectionTitle || !data.info.selectionDesc) {
       toast.error("All fields are required", {
@@ -561,6 +591,9 @@ const AddInfo = () => {
 
   const handleUpdate = async (data) => {
     data.info._id = editItem._id;
+    // Attach highlights and table data
+    data.info.selectionHighlight = editHighlights.filter(h => h.highlightName.trim() !== '');
+    data.info.selectionTable = editTableData.filter(t => t.tableName.trim() !== '');
     try {
       const response = await fetch(`/api/admin/website-manage/addPackage/addInfo`, {
         method: "PATCH",
@@ -592,6 +625,14 @@ const AddInfo = () => {
     setValue("info.selectionTitle", item.selectionTitle);
     setValue("info.selectionDesc", item.selectionDesc);
     setValue("info.order", item.order);
+    // Initialize highlights
+    setEditHighlights(item.selectionHighlight?.length > 0
+      ? item.selectionHighlight.map(h => ({ highlightName: h.highlightName || '', highlightDesc: h.highlightDesc?.length > 0 ? [...h.highlightDesc] : [''] }))
+      : []);
+    // Initialize table data
+    setEditTableData(item.selectionTable?.length > 0
+      ? item.selectionTable.map(t => ({ tableName: t.tableName || '', tableDesc: t.tableDesc?.length > 0 ? [...t.tableDesc] : ['', ''] }))
+      : []);
   };
 
   const deleteMenuItem = async (InfoId) => {
@@ -710,7 +751,7 @@ const AddInfo = () => {
         {/* Add/Edit Info Dialogs */}
         {isOpen && (
           <Dialog open={!!isOpen} onOpenChange={() => { setIsOpen(false); window.location.reload(); }}>
-            <DialogContent className="md:!max-w-3xl font-barlow">
+            <DialogContent className="md:!max-w-3xl font-barlow overflow-y-auto max-h-[90vh]">
               <DialogHeader>
                 <DialogTitle>Add Info</DialogTitle>
               </DialogHeader>
@@ -756,12 +797,107 @@ const AddInfo = () => {
                     <Input {...register("info.selectionTitle")} className="border-2 border-blue-600 focus:border-dashed focus:border-blue-500 focus:outline-none focus-visible:ring-0 font-bold" />
                   </div>
                   <div className="flex flex-col gap-2 col-span-4">
-                    <label htmlFor="selectionDesc" className="font-semibold">Description</label>
+                    <label htmlFor="selectionDesc" className="font-semibold">Descriptions</label>
                     <MenuBar editor={addEditor} />
                     <EditorContent
                       editor={addEditor}
                       className="h-[250px] overflow-y-auto min-h-[100px] p-2 prose max-w-none bg-transparent border border-black rounded-2"
                     />
+                  </div>
+                  {/* ===== HIGHLIGHTS SECTION ===== */}
+                  <div className="col-span-4 border-t border-blue-300 pt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="font-semibold text-lg">Highlights</label>
+                      <Button type="button" size="sm" onClick={() => addHighlight(setHighlights)} className="bg-blue-600 hover:bg-blue-500 h-8 px-3">
+                        <Plus className="w-4 h-4 mr-1" /> Add Highlight
+                      </Button>
+                    </div>
+                    {highlights.map((hl, hIdx) => (
+                      <div key={hIdx} className="mb-4 border border-blue-200 rounded-lg p-3 bg-blue-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Input
+                            value={hl.highlightName}
+                            onChange={(e) => updateHighlightName(setHighlights, hIdx, e.target.value)}
+                            placeholder="Highlight Title"
+                            className="border-2 border-blue-600 focus:outline-none focus-visible:ring-0 font-bold"
+                          />
+                          <Button type="button" size="icon" variant="destructive" onClick={() => removeHighlight(setHighlights, hIdx)} className="shrink-0 h-9 w-9">
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        {hl.highlightDesc.map((desc, dIdx) => (
+                          <div key={dIdx} className="flex items-center gap-2 mb-1 ml-4">
+                            <Input
+                              value={desc}
+                              onChange={(e) => updateHighlightDesc(setHighlights, hIdx, dIdx, e.target.value)}
+                              placeholder={`Point ${dIdx + 1}`}
+                              className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm"
+                            />
+                            {hl.highlightDesc.length > 1 && (
+                              <Button type="button" size="icon" variant="ghost" onClick={() => removeHighlightDesc(setHighlights, hIdx, dIdx)} className="shrink-0 h-8 w-8 text-red-500 hover:text-red-700">
+                                <X className="w-3 h-3" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                        <Button type="button" size="sm" variant="ghost" onClick={() => addHighlightDesc(setHighlights, hIdx)} className="ml-4 mt-1 text-blue-600 hover:text-blue-800 hover:bg-red-700 h-7 text-xs  border border-blue-600 bg-red-400">
+                          <Plus className="w-3 h-3 mr-1" /> Add Point
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ===== TABLE SECTION ===== */}
+                  <div className="col-span-4 border-t border-blue-300 pt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="font-semibold text-lg">Table Data</label>
+                      <Button type="button" size="sm" onClick={() => addTableEntry(setTableData)} className="bg-blue-600 hover:bg-blue-500 h-8 px-3">
+                        <Plus className="w-4 h-4 mr-1" /> Add Table
+                      </Button>
+                    </div>
+                    {tableData.map((tbl, tIdx) => (
+                      <div key={tIdx} className="mb-4 border border-blue-200 rounded-lg p-3 bg-blue-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Input
+                            value={tbl.tableName}
+                            onChange={(e) => updateTableName(setTableData, tIdx, e.target.value)}
+                            placeholder="Table Title"
+                            className="border-2 border-blue-600 focus:outline-none focus-visible:ring-0 font-bold"
+                          />
+                          <Button type="button" size="icon" variant="destructive" onClick={() => removeTableEntry(setTableData, tIdx)} className="shrink-0 h-9 w-9">
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        {/* Rows of 2 columns */}
+                        {Array.from({ length: Math.ceil(tbl.tableDesc.length / 2) }, (_, rowIdx) => {
+                          const colStart = rowIdx * 2;
+                          return (
+                            <div key={rowIdx} className="flex items-center gap-2 mb-1 ml-4">
+                              <Input
+                                value={tbl.tableDesc[colStart] || ''}
+                                onChange={(e) => updateTableDesc(setTableData, tIdx, colStart, e.target.value)}
+                                placeholder="Column 1"
+                                className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm"
+                              />
+                              <Input
+                                value={tbl.tableDesc[colStart + 1] || ''}
+                                onChange={(e) => updateTableDesc(setTableData, tIdx, colStart + 1, e.target.value)}
+                                placeholder="Column 2"
+                                className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm"
+                              />
+                              {tbl.tableDesc.length > 2 && (
+                                <Button type="button" size="icon" variant="ghost" onClick={() => removeTableRow(setTableData, tIdx, colStart)} className="shrink-0 h-8 w-8 text-red-500 hover:text-red-700">
+                                  <X className="w-3 h-3" />
+                                </Button>
+                              )}
+                            </div>
+                          );
+                        })}
+                        <Button type="button" size="sm" variant="ghost" onClick={() => addTableRow(setTableData, tIdx)} className="ml-4 mt-1 text-blue-600 hover:text-blue-800 h-7 text-xs">
+                          <Plus className="w-3 h-3 mr-1" /> Add Row
+                        </Button>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="flex justify-end mt-4">
@@ -779,7 +915,7 @@ const AddInfo = () => {
 
         {editItem && (
           <Dialog open={!!editItem} onOpenChange={() => { setEditItem(null); window.location.reload(); }}>
-            <DialogContent className="md:!max-w-3xl font-barlow">
+            <DialogContent className="md:!max-w-3xl font-barlow overflow-y-auto max-h-[90vh]">
               <DialogHeader>
                 <DialogTitle>Edit Info</DialogTitle>
               </DialogHeader>
@@ -811,13 +947,108 @@ const AddInfo = () => {
                   </div>
                   <div className="flex flex-col gap-2 col-span-4">
                     <label htmlFor="selectionDesc" className="font-semibold">Description</label>
-                    <MenuBar editor={editEditor } />
+                    <MenuBar editor={editEditor} />
                     <EditorContent
-                      editor={editEditor }
+                      editor={editEditor}
                       className="h-[250px] overflow-y-auto min-h-[100px] p-2 prose max-w-none border border-black rounded-2"
                     />
                   </div>
-                                  </div>
+
+                  {/* ===== EDIT HIGHLIGHTS SECTION ===== */}
+                  <div className="col-span-4 border-t border-blue-300 pt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="font-semibold text-lg">Highlights</label>
+                      <Button type="button" size="sm" onClick={() => addHighlight(setEditHighlights)} className="bg-blue-600 hover:bg-blue-500 h-8 px-3">
+                        <Plus className="w-4 h-4 mr-1" /> Add Highlight
+                      </Button>
+                    </div>
+                    {editHighlights.map((hl, hIdx) => (
+                      <div key={hIdx} className="mb-4 border border-blue-200 rounded-lg p-3 bg-blue-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Input
+                            value={hl.highlightName}
+                            onChange={(e) => updateHighlightName(setEditHighlights, hIdx, e.target.value)}
+                            placeholder="Highlight Title"
+                            className="border-2 border-blue-600 focus:outline-none focus-visible:ring-0 font-bold"
+                          />
+                          <Button type="button" size="icon" variant="destructive" onClick={() => removeHighlight(setEditHighlights, hIdx)} className="shrink-0 h-9 w-9">
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        {hl.highlightDesc.map((desc, dIdx) => (
+                          <div key={dIdx} className="flex items-center gap-2 mb-1 ml-4">
+                            <Input
+                              value={desc}
+                              onChange={(e) => updateHighlightDesc(setEditHighlights, hIdx, dIdx, e.target.value)}
+                              placeholder={`Point ${dIdx + 1}`}
+                              className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm"
+                            />
+                            {hl.highlightDesc.length > 1 && (
+                              <Button type="button" size="icon" variant="ghost" onClick={() => removeHighlightDesc(setEditHighlights, hIdx, dIdx)} className="shrink-0 h-8 w-8 text-red-500 hover:text-red-700">
+                                <X className="w-3 h-3" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                        <Button type="button" size="sm" variant="ghost" onClick={() => addHighlightDesc(setEditHighlights, hIdx)} className="ml-4 mt-1 text-blue-600 hover:text-blue-800 h-7 text-xs">
+                          <Plus className="w-3 h-3 mr-1" /> Add Point
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ===== EDIT TABLE SECTION ===== */}
+                  <div className="col-span-4 border-t border-blue-300 pt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="font-semibold text-lg">Table Data</label>
+                      <Button type="button" size="sm" onClick={() => addTableEntry(setEditTableData)} className="bg-blue-600 hover:bg-blue-500 h-8 px-3">
+                        <Plus className="w-4 h-4 mr-1" /> Add Table
+                      </Button>
+                    </div>
+                    {editTableData.map((tbl, tIdx) => (
+                      <div key={tIdx} className="mb-4 border border-blue-200 rounded-lg p-3 bg-blue-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Input
+                            value={tbl.tableName}
+                            onChange={(e) => updateTableName(setEditTableData, tIdx, e.target.value)}
+                            placeholder="Table Title"
+                            className="border-2 border-blue-600 focus:outline-none focus-visible:ring-0 font-bold"
+                          />
+                          <Button type="button" size="icon" variant="destructive" onClick={() => removeTableEntry(setEditTableData, tIdx)} className="shrink-0 h-9 w-9">
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        {Array.from({ length: Math.ceil(tbl.tableDesc.length / 2) }, (_, rowIdx) => {
+                          const colStart = rowIdx * 2;
+                          return (
+                            <div key={rowIdx} className="flex items-center gap-2 mb-1 ml-4">
+                              <Input
+                                value={tbl.tableDesc[colStart] || ''}
+                                onChange={(e) => updateTableDesc(setEditTableData, tIdx, colStart, e.target.value)}
+                                placeholder="Column 1"
+                                className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm"
+                              />
+                              <Input
+                                value={tbl.tableDesc[colStart + 1] || ''}
+                                onChange={(e) => updateTableDesc(setEditTableData, tIdx, colStart + 1, e.target.value)}
+                                placeholder="Column 2"
+                                className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm"
+                              />
+                              {tbl.tableDesc.length > 2 && (
+                                <Button type="button" size="icon" variant="ghost" onClick={() => removeTableRow(setEditTableData, tIdx, colStart)} className="shrink-0 h-8 w-8 text-red-500 hover:text-red-700">
+                                  <X className="w-3 h-3" />
+                                </Button>
+                              )}
+                            </div>
+                          );
+                        })}
+                        <Button type="button" size="sm" variant="ghost" onClick={() => addTableRow(setEditTableData, tIdx)} className="ml-4 mt-1 text-blue-600 hover:text-blue-800 h-7 text-xs">
+                          <Plus className="w-3 h-3 mr-1" /> Add Row
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <div className="flex justify-end mt-4">
                   <Button className="bg-blue-600 hover:bg-blue-500" type="submit">Save</Button>
                 </div>
