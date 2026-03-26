@@ -1,15 +1,15 @@
 import { Suspense } from "react"
 
 import CategoryBanner from "@/components/Category/category-banner"
-import PackageCard from "@/components/Category/package-card"
+import CategoryClient from "@/components/Category/CategoryClient"
 import { Skeleton } from "@/components/ui/skeleton"
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { getReviewsById } from "@/actions/GetReviewsById"
 
 const formatCategoryId = (categoryId) => {
     return categoryId
         .split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
-        .join(' '); // Join words with space
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
 };
 
 export async function generateMetadata({ params }) {
@@ -19,7 +19,6 @@ export async function generateMetadata({ params }) {
     };
 }
 
-// Get category information
 const getCategoryInfo = async (categoryId) => {
     return (
         {
@@ -31,71 +30,119 @@ const getCategoryInfo = async (categoryId) => {
 
 const CategoryPage = async ({ params }) => {
     const { id } = await params
-    const packageData = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPackages/byId/${id}`)
-        .then(res => res.json())
-        .catch(() => ({}));
-    const packages = Array.isArray(packageData.packages) ? packageData.packages : [];
-    const getCategory = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getCategoryBanner/${id}`).then(res => res.json())
+    const [packageData, getCategory, menuItemsRaw] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPackages/byId/${id}`)
+            .then(res => res.json())
+            .catch(() => ({})),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getCategoryBanner/${id}`)
+            .then(res => res.json())
+            .catch(() => ({})),
+        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getAllMenuItems`)
+            .then(res => res.json())
+            .catch(() => []),
+    ]);
 
+    const packages = Array.isArray(packageData.packages) ? packageData.packages : [];
     const categoryInfo = await getCategoryInfo(getCategory)
 
     // Only show packages that are active
     const visiblePackages = packages.filter(pkg => pkg && pkg.active);
 
+    // Pre-compute reviews for all packages
+    const reviewsMap = {};
+    await Promise.all(
+        visiblePackages.map(async (pkg) => {
+            try {
+                const reviews = await getReviewsById(pkg._id);
+                const approved = reviews.filter(r => r.approved);
+                const total = approved.length;
+                const sum = approved.reduce((acc, r) => acc + r.rating, 0);
+                reviewsMap[pkg._id] = {
+                    avg: total > 0 ? parseFloat((sum / total).toFixed(1)) : 0,
+                    count: total,
+                };
+            } catch {
+                reviewsMap[pkg._id] = { avg: 0, count: 0 };
+            }
+        })
+    );
+
+    // Serialize packages for client component
+    const serializedPackages = visiblePackages.map(pkg => ({
+        _id: pkg._id?.toString() || pkg._id,
+        packageName: pkg.packageName,
+        price: pkg.price || 0,
+        basicDetails: {
+            thumbnail: pkg.basicDetails?.thumbnail || null,
+            location: pkg.basicDetails?.location || "",
+            duration: pkg.basicDetails?.duration || 0,
+            smallDesc: pkg.basicDetails?.smallDesc || "",
+        },
+    }));
+
+    // Serialize menuItems for client
+    const serializedMenuItems = (Array.isArray(menuItemsRaw) ? menuItemsRaw : []).map(item => ({
+        _id: item._id?.toString() || item._id,
+        title: item.title,
+        active: item.active,
+        subMenu: (item.subMenu || []).map(sub => ({
+            _id: sub._id?.toString() || sub._id,
+            title: sub.title,
+            url: sub.url || "",
+            active: sub.active,
+        })),
+    }));
+
     return (
-        <SidebarInset>
-            <div className="min-h-screen p-2">
-                {/* Fixed Banner Section */}
-                <CategoryBanner title={categoryInfo.title} bannerImage={categoryInfo.bannerImage} />
+        <div className="min-h-screen bg-gray-50 w-full mx-auto">
+            {/* Banner */}
+            <CategoryBanner title={categoryInfo.title} bannerImage={categoryInfo.bannerImage} />
 
-                {/* <div className="container mx-auto px-1 md:px-4 py-4">
-                    <h2 className="text-2xl xl:text-4xl font-semibold text-black">{categoryInfo.title}</h2>
-                </div> */}
-
-                {/* Packages Section */}
-                <div className="container mx-auto px-1 md:px-4 py-5 md:py-12">
-
-                    {visiblePackages.length === 0 ? (
-                        <div className="text-center py-8">
-                            <h3 className="text-xl font-medium text-gray-600">No packages found for this category</h3>
-                            <p className="mt-2 text-gray-500">Please try another category</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                            <Suspense fallback={<PackageCardSkeleton count={3} />}>
-                                {visiblePackages.map((pkg) => (
-                                    <PackageCard key={pkg._id} pkg={pkg} />
-                                ))}
-                            </Suspense>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </SidebarInset>
+            {/* Client-side filterable content */}
+            <Suspense fallback={<PackageCardSkeleton count={6} />}>
+                <CategoryClient
+                    packages={serializedPackages}
+                    reviews={reviewsMap}
+                    menuItems={serializedMenuItems}
+                    currentCategoryId={id}
+                />
+            </Suspense>
+        </div>
     )
 }
 
 const PackageCardSkeleton = ({ count = 3 }) => {
     return (
-        <>
-            {Array(count)
-                .fill(0)
-                .map((_, index) => (
-                    <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                        <Skeleton className="h-48 w-full" />
-                        <div className="p-5">
-                            <Skeleton className="h-6 w-3/4 mb-2" />
-                            <Skeleton className="h-4 w-full mb-1" />
-                            <Skeleton className="h-4 w-full mb-1" />
-                            <Skeleton className="h-4 w-2/3 mb-4" />
-                            <div className="flex justify-between items-center">
-                                <Skeleton className="h-6 w-1/3" />
-                                <Skeleton className="h-10 w-1/3 rounded-full" />
+        <div className="container mx-auto px-4 py-8">
+            <div className="bg-white rounded-xl p-4 mb-6">
+                <Skeleton className="h-10 w-full mb-4" />
+                <div className="flex gap-3">
+                    <Skeleton className="h-9 w-32 rounded-full" />
+                    <Skeleton className="h-9 w-24 rounded-full" />
+                    <Skeleton className="h-9 w-28 rounded-full" />
+                    <Skeleton className="h-9 w-28 rounded-full" />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {Array(count)
+                    .fill(0)
+                    .map((_, index) => (
+                        <div key={index} className="bg-white rounded-2xl overflow-hidden border">
+                            <Skeleton className="h-52 w-full" />
+                            <div className="p-4">
+                                <Skeleton className="h-5 w-3/4 mb-3" />
+                                <Skeleton className="h-4 w-1/2 mb-2" />
+                                <Skeleton className="h-3 w-full mb-1" />
+                                <Skeleton className="h-3 w-2/3 mb-4" />
+                                <div className="flex justify-between items-center pt-3 border-t">
+                                    <Skeleton className="h-4 w-20" />
+                                    <Skeleton className="h-4 w-24" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
-        </>
+                    ))}
+            </div>
+        </div>
     )
 }
 

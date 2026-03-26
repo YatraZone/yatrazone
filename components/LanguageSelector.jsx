@@ -15,52 +15,52 @@ const LanguageSelector = () => {
     const dropdownRef = useRef(null)
 
     // Initialize Google Translate
-    useEffect(() => {
-        const addScript = () => {
-            const script = document.createElement('script')
-            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
-            script.async = true
-            document.body.appendChild(script)
+//     useEffect(() => {
+//         const addScript = () => {
+//             const script = document.createElement('script')
+//             script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+//             script.async = true
+//             document.body.appendChild(script)
 
-            // @ts-ignore
-            window.googleTranslateElementInit = () => {
-                // @ts-ignore
-                new window.google.translate.TranslateElement({
-                    pageLanguage: 'en',
-                    autoDisplay: false,
-                    includedLanguages: languages.map(lang => lang.code).join(','),
-                }, 'google_translate_element')
-            }
-        }
+//             // @ts-ignore
+//             window.googleTranslateElementInit = () => {
+//                 // @ts-ignore
+//                 new window.google.translate.TranslateElement({
+//                     pageLanguage: 'en',
+//                     autoDisplay: false,
+//                     includedLanguages: languages.map(lang => lang.code).join(','),
+//                 }, 'google_translate_element')
+//             }
+//         }
 
-        // Add hidden div for Google Translate
-        if (!document.getElementById('google_translate_element')) {
-            const div = document.createElement('div')
-            div.id = 'google_translate_element'
-            div.style.display = 'none'
-            document.body.appendChild(div)
-            addScript()
-        }
+//         // Add hidden div for Google Translate
+//         if (!document.getElementById('google_translate_element')) {
+//             const div = document.createElement('div')
+//             div.id = 'google_translate_element'
+//             div.style.display = 'none'
+//             document.body.appendChild(div)
+//             addScript()
+//         }
 
-        // ✅ Hide the Google Translate top bar
-        const style = document.createElement('style');
-        style.innerHTML = `
-  iframe.skiptranslate { display: none !important; }
-  body { top: 0px !important; }
-  .goog-te-banner-frame, .goog-te-balloon-frame, #goog-gt-tt { display: none !important; }
-  .goog-te-gadget { display: none !important; }
-  .goog-te-spinner-pos { display: none !important; }
-  .goog-te-spinner-frame { display: none !important; } /* ✅ Hide spinner frame */
-  .goog-te-spinner { display: none !important; } /* ✅ Hide spinner */
-  .goog-tooltip, .goog-tooltip:hover { display: none !important; }
-  .goog-tooltip-content { display: none !important; }
-`;
-        document.head.appendChild(style);
+//         // ✅ Hide the Google Translate top bar
+//         const style = document.createElement('style');
+//         style.innerHTML = `
+//   iframe.skiptranslate { display: none !important; }
+//   body { top: 0px !important; }
+//   .goog-te-banner-frame, .goog-te-balloon-frame, #goog-gt-tt { display: none !important; }
+//   .goog-te-gadget { display: none !important; }
+//   .goog-te-spinner-pos { display: none !important; }
+//   .goog-te-spinner-frame { display: none !important; } /* ✅ Hide spinner frame */
+//   .goog-te-spinner { display: none !important; } /* ✅ Hide spinner */
+//   .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+//   .goog-tooltip-content { display: none !important; }
+// `;
+//         document.head.appendChild(style);
 
-        return () => {
-            document.head.removeChild(style);
-        };
-    }, [])
+//         return () => {
+//             document.head.removeChild(style);
+//         };
+//     }, [])
 
     // Handle click outside to close dropdown
     useEffect(() => {

@@ -51,6 +51,12 @@ const data = {
       icon: User,
     },
     { divider: true },
+    {
+      name: "Create Hotels",
+      url: "/admin/create_hotels",
+      icon: User,
+    },
+    { divider: true },
     // Second group: Basic setup
     {
       name: "Manage Banner",
@@ -92,6 +98,16 @@ const data = {
     {
       name: "Consultancy Banner",
       url: "/admin/consultancy_banner",
+      icon: Image,
+    },
+    {
+      name: "Filter Banner",
+      url: "/admin/filter_banner",
+      icon: Image,
+    },
+    {
+      name: "Offers Deals",
+      url: "/admin/offer_details",
       icon: Image,
     },
     {

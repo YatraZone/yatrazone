@@ -95,9 +95,9 @@ const ResponsiveCarousel = ({ packages, formatNumericStr }) => {
                             </div>
                         </CarouselItem>
                     ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                </CarouselContent >
+                <CarouselPrevious className="absolute -left-2 top-1/2 -translate-y-1/2 p-2 bg-blue-500 text-white rounded-full" />
+                <CarouselNext className="absolute -right-2 top-1/2 -translate-y-1/2 p-2 bg-blue-500 text-white rounded-full" />
             </Carousel>
         </div>
     );

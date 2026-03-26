@@ -14,9 +14,6 @@ const SearchSection = () => {
   const [location, setLocation] = useState('');
   const [propertyFor, setPropertyFor] = useState('');
   const [propertyType, setPropertyType] = useState('');
-  const [locations, setLocations] = useState([]);
-  const [propertyTypes, setPropertyTypes] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [trendingSearches, setTrendingSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [checkInDate, setCheckInDate] = useState('');
@@ -24,7 +21,8 @@ const SearchSection = () => {
   const [guestCount, setGuestCount] = useState(1);
   const [menuItems, setMenuItems] = useState([]);
   const [fixedMenuItems, setFixedMenuItems] = useState([]);
-  const [selectedPackages, setSelectedPackages] = useState([]);
+  const [filterBanners, setFilterBanners] = useState([]);
+  const [offerDetails, setOfferDetails] = useState(null);
 
   // Reusable Number Input Component
   const NumberInput = ({ value, onChange, min = 1, max = 10, className = '' }) => {
@@ -69,26 +67,34 @@ const SearchSection = () => {
     );
   };
 
-  // Memoize the property options to prevent unnecessary recalculations
-  const propertyForOptions = React.useMemo(() =>
-    fixedMenuItems.flatMap(category =>
-      category.subCat?.map(subCategory => ({
-        value: subCategory._id,
-        label: subCategory.title,
-        packages: subCategory.subCatPackage || []
-      })) || []
-    ), [fixedMenuItems]);
+  // Main category options (top-level menu items)
+  const mainCategoryOptions = React.useMemo(() => {
+    return menuItems
+      .filter(item => item.active)
+      .map(item => ({
+        value: String(item._id),
+        label: item.title,
+      }));
+  }, [menuItems]);
 
-  // Update selected packages when category changes
+  // Subcategory options based on selected main category
+  const subCategoryOptions = React.useMemo(() => {
+    if (!propertyFor) return [];
+    const selectedMain = menuItems.find(item => String(item._id) === propertyFor);
+    if (!selectedMain) return [];
+    return (selectedMain.subMenu || [])
+      .filter(sub => sub.active !== false)
+      .map(sub => ({
+        value: String(sub._id),
+        label: sub.title,
+        url: sub.url || '',
+      }));
+  }, [propertyFor, menuItems]);
+
+  // Reset subcategory when main category changes
   useEffect(() => {
-    if (!propertyFor) {
-      setSelectedPackages([]);
-      return;
-    }
-
-    const selectedCategory = propertyForOptions.find(option => option.value === propertyFor);
-    setSelectedPackages(selectedCategory?.packages || []);
-  }, [propertyFor, propertyForOptions]);
+    setPropertyType('');
+  }, [propertyFor]);
 
   const yatraType = [
     { value: 'Solo', label: 'Solo' },
@@ -126,33 +132,69 @@ const SearchSection = () => {
       .then(res => res.json())
       .then(data => {
         let arr = Array.isArray(data) ? data : (Array.isArray(data.packages) ? data.packages : []);
+        console.log("subMenuFixed raw data:", arr);
         setFixedMenuItems(arr.filter(item => item.active));
-      });
+      })
+      .catch(err => console.error("Failed to fetch subMenuFixed:", err));
     fetchTrendingSearches();
+    fetch("/api/filterBanner")
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data)) setFilterBanners(data); })
+      .catch(() => {});
+    fetch("/api/offerDetails")
+      .then(res => res.json())
+      .then(data => { if (data) setOfferDetails(data); })
+      .catch(() => {});
   }, []);
 
   const handleSearch = async (e) => {
     e.preventDefault();
 
-    if (!propertyFor || !propertyType) {
-      toast.error('Please select Yatra Type and Package Type');
+    if (!propertyFor) {
+      toast.error('Please select a Category');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const selectedCategory = propertyForOptions.find(opt => opt.value === propertyFor);
-      const selectedPackage = selectedCategory?.packages.find(pkg => pkg.title === propertyType);
+      // Get main category name
+      const mainCat = mainCategoryOptions.find(opt => opt.value === propertyFor);
 
-      if (selectedPackage?.url) {
-        window.location.href = selectedPackage.url;
+      // Build query params
+      const params = new URLSearchParams();
+      if (guestCount > 1) params.set('guests', guestCount);
+      if (checkInDate) params.set('checkIn', checkInDate);
+      if (checkOutDate) params.set('checkOut', checkOutDate);
+      if (location) params.set('yatraType', location);
+      if (mainCat?.label) params.set('category', mainCat.label);
+
+      // Helper to build final URL with /category/ prefix
+      const buildUrl = (rawUrl, subLabel) => {
+        if (subLabel) params.set('subcategory', subLabel);
+        const qs = params.toString() ? `?${params.toString()}` : '';
+        // Ensure /category/ prefix
+        const path = rawUrl.startsWith('/category/') ? rawUrl : `/category/${rawUrl.replace(/^\//, '')}`;
+        return path + qs;
+      };
+
+      // If subcategory selected, navigate to its URL
+      if (propertyType) {
+        const selectedSub = subCategoryOptions.find(opt => opt.value === propertyType);
+        if (selectedSub?.url) {
+          window.location.href = buildUrl(selectedSub.url, selectedSub.label);
+          return;
+        }
+      }
+      // Fallback: navigate to first subcategory URL of the main category
+      if (subCategoryOptions.length > 0 && subCategoryOptions[0].url) {
+        window.location.href = buildUrl(subCategoryOptions[0].url, subCategoryOptions[0].label);
       } else {
-        toast.error('No Package Found with this Yatra Type');
+        toast.error('No packages found for this category');
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Failed to navigate to package');
+      toast.error('Failed to navigate');
     } finally {
       setIsLoading(false);
     }
@@ -174,7 +216,7 @@ const SearchSection = () => {
         {/* ===== LEFT: Search Section (75%) ===== */}
         <div className="w-full lg:w-[75%]">
           {/* Heading */}
-          <div className="mb-4">
+          <div className="mb-4 px-10 md:px-5">
             <h2 className="text-xl md:text-[1.65rem] font-bold text-gray-900 leading-tight">
               Biggest discounts on Hotels <span className="text-gray-500 font-normal">+ DHAM YATRA</span>
             </h2>
@@ -192,18 +234,9 @@ const SearchSection = () => {
             >
               <TabsContent value="property">
                 <form onSubmit={handleSearch}>
-                  {/* Search Bar Header */}
-                  <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-4 py-3 mb-5 bg-gray-50/60 hover:border-orange-300 transition-colors">
-                    <MapPin className="h-4 w-4 text-gray-400 shrink-0" />
-                    <span className="text-xs uppercase tracking-wider text-gray-400 font-medium">Search Package:</span>
-                    <span className="text-sm text-gray-700 font-medium">Sacred India - One Journey, Infinite Blessings.</span>
-                    <ChevronDown className="h-4 w-4 text-gray-400 ml-auto shrink-0" />
-                  </div>
-
-                  {/* Filter Row 1: Yatra Type, Category, Guests */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div className="flex-col md:flex-row flex items-center gap-2 w-full mb-3">
                     {/* Yatra Type */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-1.5 w-full">
                       <label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 uppercase tracking-wide">
                         <LayoutGrid className="h-3.5 w-3.5" />
                         Yatra Type
@@ -226,8 +259,8 @@ const SearchSection = () => {
                       </Select>
                     </div>
 
-                    {/* Category */}
-                    <div className="space-y-1.5">
+                    {/* Category (Main) */}
+                    <div className="space-y-1.5 w-full">
                       <label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 uppercase tracking-wide">
                         <LayoutGrid className="h-3.5 w-3.5" />
                         Category
@@ -240,10 +273,10 @@ const SearchSection = () => {
                           <SelectValue placeholder="Select Category" />
                         </SelectTrigger>
                         <SelectContent>
-                          {propertyForOptions.length > 0 ? (
-                            propertyForOptions.map((option, index) => (
-                              <SelectItem key={`cat-${index}`} value={option.value || 'all'}>
-                                {option.label || 'Loading...'}
+                          {mainCategoryOptions.length > 0 ? (
+                            mainCategoryOptions.map((option, index) => (
+                              <SelectItem key={`cat-${index}`} value={option.value}>
+                                {option.label}
                               </SelectItem>
                             ))
                           ) : (
@@ -255,6 +288,39 @@ const SearchSection = () => {
                       </Select>
                     </div>
 
+                    {/* Subcategory */}
+                    <div className="space-y-1.5 w-full">
+                      <label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                        <LayoutGrid className="h-3.5 w-3.5" />
+                        Subcategory
+                      </label>
+                      <Select
+                        value={propertyType}
+                        onValueChange={(value) => setPropertyType(value)}
+                        disabled={!propertyFor}
+                      >
+                        <SelectTrigger className="w-full h-10 border-gray-200 rounded-lg text-sm">
+                          <SelectValue placeholder={propertyFor ? "Select Subcategory" : "Select a category first"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {subCategoryOptions.length > 0 ? (
+                            subCategoryOptions.map((option, index) => (
+                              <SelectItem key={`sub-${index}`} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <SelectItem value="none" disabled>
+                              No subcategories available
+                            </SelectItem>
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Filter Row 2: Package, Check-in, Check-out, Search CTA */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     {/* Guests */}
                     <div className="space-y-1.5">
                       <label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 uppercase tracking-wide">
@@ -269,10 +335,6 @@ const SearchSection = () => {
                         className="h-10 rounded-lg"
                       />
                     </div>
-                  </div>
-
-                  {/* Filter Row 2: Package, Check-in, Check-out, Search CTA */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     {/* Check-in Date */}
                     <div className="space-y-1.5">
                       <label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 uppercase tracking-wide">
@@ -352,47 +414,42 @@ const SearchSection = () => {
           </div>
         </div>
 
-        {/* ===== RIGHT: Offer Cards (25%) ===== */}
-        <div className="w-full lg:w-[25%] flex flex-row lg:flex-col gap-4">
-          {/* Card 1: Luxury Hotel Offer */}
-          <div className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 group cursor-pointer hover:shadow-xl transition-shadow duration-300">
-            <div className="relative w-full h-full min-h-[270px]">
-              <Image
-                src="/luxury-hotel-card.png"
-                alt="Luxury Hotels at Low Price - 5 Star Hotels Starting ₹2,999"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              <div className="absolute bottom-3 left-3 right-3">
-                <span className="inline-block bg-orange-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded mb-1.5">
-                  Luxury at Low Price
-                </span>
-                <p className="text-white text-sm font-semibold drop-shadow-lg">
-                  5 Star Hotels Starting <span className="text-yellow-300">₹2,999</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Last Minute Deals */}
+        {/* ===== RIGHT: Filter Banner Cards (25%) ===== */}
+        <div className="w-full lg:w-[25%] px-2 flex-col md:flex-row flex lg:flex-col gap-4">
+          {filterBanners.length > 0 && (
+            filterBanners.map((banner, idx) => (
+              <Link
+                key={banner._id || idx}
+                href={banner.buttonLink || '#'}
+                className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 group cursor-pointer hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="relative w-full h-full min-h-[270px]">
+                  <Image
+                    src={banner.image?.url || '/placeholder.png'}
+                    alt="Filter Banner"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              </Link>
+            ))
+          )}
           <div className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 bg-white p-4 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-bold text-gray-800">More offers</h4>
-                <Link href="/packages" className="text-xs text-blue-600 hover:text-blue-700 font-medium hover:underline">
+                <h4 className="text-sm font-bold text-gray-800">{offerDetails?.moreOffers?.title || 'More offers'}</h4>
+                {/* <Link href={offerDetails?.moreOffers?.knowMoreLink || '/packages'} className="text-xs text-blue-600 hover:text-blue-700 font-medium hover:underline">
                   View all
-                </Link>
+                </Link> */}
               </div>
               <div className="border-t border-gray-100 pt-3">
-                <h5 className="text-base font-bold text-gray-900 mb-1.5">Last Minute Deals!</h5>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Upto 40% off on Hotels for check-ins today & tomorrow
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  {offerDetails?.moreOffers?.description || 'Upto 40% off on Hotels for check-ins today & tomorrow'}
                 </p>
               </div>
             </div>
             <Link
-              href="/packages"
+              href={offerDetails?.moreOffers?.knowMoreLink || '/packages'}
               className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 mt-3 group/link"
             >
               Know more

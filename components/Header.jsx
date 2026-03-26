@@ -203,12 +203,27 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Login/Cart section on the right */}
-            <div className="flex items-center gap-3">
-              <SearchBar />
-              <div className="">
-                <LanguageSelector />
-              </div>
+
+            <div className="flex items-center gap-5">
+            {/* Nav Links */}
+            <div className="flex items-center gap-6">
+              <Link href="/offers" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-500"><circle cx="9" cy="9" r="2"/><circle cx="15" cy="15" r="2"/><line x1="7.5" y1="16.5" x2="16.5" y2="7.5"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                Offers
+              </Link>
+              <Link href="/business" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                Business <ChevronDown className="w-3.5 h-3.5" />
+              </Link>
+              <Link href="/my-trips" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+                My Trips
+              </Link>
+              <Link href="/support" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 border-r border-gray-400 pr-4 hover:text-gray-900 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                Support
+              </Link>
+            </div>
               <div className="relative" ref={profileMenuRef}>
                 {status === "loading" ? (
                   <Loader2 className="animate-spin text-blue-600" size={36} />
@@ -315,7 +330,6 @@ const Header = () => {
           pathName.includes("sign-in") ||
           pathName.includes("customEnquiry")
           || pathName.includes("search")
-          || pathName.includes("package")
           ? "hidden"
           : "block"
           }`}>
@@ -346,9 +360,6 @@ const Header = () => {
         </Link>
 
         <div className="flex items-center gap-2">
-          <div className="text-right">
-            <LanguageSelector />
-          </div>
           <div className="relative">
             {status === "loading" ? (
               <Loader2 className="animate-spin text-blue-600" size={36} />
@@ -367,8 +378,6 @@ const Header = () => {
                     className="rounded-full cursor-pointer"
                   />
                 </button>
-                <SearchBar />
-
                 {/* Dropdown Menu */}
                 {isProfileOpen && (
                   <div className="absolute top-14 right-0 mt-2 w-fit text-black bg-white shadow-lg rounded-lg border z-100">

@@ -895,7 +895,7 @@ export default function PackageDetailClient({
       </div>
       {/* ========== YOU MIGHT ALSO LIKE ========== */}
       {packages.length > 0 && (
-        <div className="mt-10 w-full md:w-[85%] mx-auto ">
+        <div className="mt-10 w-full md:w-[85%] mx-auto px-5 md:px-0">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">You Might Also Like</h3>
           <p className="text-sm text-gray-500 mb-6">
             We don't just suggest—we predict. Based on your current interests, we've gathered a collection of insights and products

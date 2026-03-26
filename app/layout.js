@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
 import { SearchProvider } from "@/context/SearchContext";
 import OverlayButton from "@/components/OverlayButton";
-import GoogleTranslate from "@/components/GoogleTranslate";
+// import GoogleTranslate from "@/components/GoogleTranslate";
 import Link from "next/link";
 
 
@@ -80,7 +80,7 @@ export default function RootLayout({ children }) {
             <SessionWrapper>
               <SearchProvider>
                 <Header />
-                <GoogleTranslate />
+                {/* <GoogleTranslate /> */}
                 <main>
                   <OverlayButton />
                   {children}

@@ -11,6 +11,7 @@ const AboutUsSection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [bannerSection1st, setBannerSection1st] = useState([]);
     const [loading1, setLoading1] = useState(true);
+  const [offerDetails, setOfferDetails] = useState(null);
 
   const dummyPackages = [
     {
@@ -75,6 +76,10 @@ const AboutUsSection = () => {
   useEffect(() => {
     fetchPackages();
     fetchBannerSection1st();
+    fetch("/api/offerDetails")
+      .then(res => res.json())
+      .then(data => { if (data) setOfferDetails(data); })
+      .catch(() => {});
   }, []);
 
   if (isLoading) {
@@ -174,32 +179,32 @@ const AboutUsSection = () => {
       </section>
       <section className="w-full md:w-[90%] mx-auto py-4 space-y-3 px-4 md:px-0">
         {/* Banner 1: Last Minute Deal */}
-        <div className="flex items-center justify-between bg-gradient-to-r from-[#fde8e2] via-[#fdf0ec] to-[#fef6f4] rounded-xl px-5 py-4 shadow-sm border border-orange-100/60 hover:shadow-md transition-shadow duration-300">
+        <div className="flex-col md:flex-row flex items-center justify-between bg-gradient-to-r from-[#fde8e2] via-[#fdf0ec] to-[#fef6f4] rounded-xl px-5 py-4 shadow-sm border border-orange-100/60 hover:shadow-md transition-shadow duration-300">
           <div className="flex items-center gap-4">
             <span className="text-4xl" role="img" aria-label="stopwatch">⏱️</span>
             <div>
-              <h4 className="text-base md:text-lg font-bold text-gray-900">Last Minute Deal</h4>
-              <p className="text-sm text-gray-500">Up to 75% off on selected hotels</p>
+              <h4 className="text-base md:text-lg font-bold text-gray-900">{offerDetails?.lastMinuteDeal?.heading || 'Last Minute Deal'}</h4>
+              <p className="text-sm text-gray-500">{offerDetails?.lastMinuteDeal?.description || 'Up to 75% off on selected hotels'}</p>
             </div>
           </div>
           <Link
-            href="/packages"
+            href={offerDetails?.lastMinuteDeal?.link || '/packages'}
             className="shrink-0 text-sm font-medium text-gray-700 border border-gray-300 rounded-full px-5 py-2 hover:bg-gray-800 hover:text-white hover:border-gray-800 transition-all duration-200"
           >
             Know More
           </Link>
         </div>
 
-        {/* Banner 2: Credit Card Offer */}
-        <div className="flex items-center justify-between bg-gradient-to-r from-[#ede4f5] via-[#f3eef9] to-[#f8f5fc] rounded-xl px-5 py-4 shadow-sm border border-purple-100/60 hover:shadow-md transition-shadow duration-300">
+        {/* Banner 2: Promo Banner */}
+        <div className="flex-col md:flex-row flex items-center justify-between bg-gradient-to-r from-[#ede4f5] via-[#f3eef9] to-[#f8f5fc] rounded-xl px-5 py-4 shadow-sm border border-purple-100/60 hover:shadow-md transition-shadow duration-300">
           <div className="flex items-center gap-4">
             <span className="text-4xl" role="img" aria-label="credit card">💳</span>
             <p className="text-sm md:text-base text-gray-700">
-              Save <span className="font-bold text-gray-900">₹2,000</span> on Hotels by using Adani One ICICI Bank credit card.
+              {offerDetails?.promoBanner?.description || 'Save ₹2,000 on Hotels by using Adani One ICICI Bank credit card.'}
             </p>
           </div>
           <Link
-            href="/packages"
+            href={offerDetails?.promoBanner?.link || '/packages'}
             className="shrink-0 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full px-6 py-2 hover:bg-gray-800 hover:text-white hover:border-gray-800 shadow-sm transition-all duration-200"
           >
             Apply
