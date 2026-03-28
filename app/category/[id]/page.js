@@ -71,6 +71,7 @@ const CategoryPage = async ({ params }) => {
     const serializedPackages = visiblePackages.map(pkg => ({
         _id: pkg._id?.toString() || pkg._id,
         packageName: pkg.packageName,
+        slug: pkg.slug,
         price: pkg.price || 0,
         basicDetails: {
             thumbnail: pkg.basicDetails?.thumbnail || null,
