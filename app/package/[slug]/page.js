@@ -99,7 +99,7 @@ const PackageDetailsPage = async ({ params }) => {
     }
     const reviews = await getReviewsById(slug);
 
-    const packages = await Package.find({}).limit(10).lean().exec();
+    const packages = await Package.find({active: true}).limit(10).lean().exec();
 
     const featuredPackages = await getFeaturedPackages();
     // console.log('SSR featuredPackages:', featuredPackages);
