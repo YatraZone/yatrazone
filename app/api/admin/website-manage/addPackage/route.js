@@ -4,11 +4,50 @@ import Package from "@/models/Package";
 import MenuBar from "@/models/MenuBar";
 import { deleteFileFromUploadthing } from "@/utils/Utapi";
 
+const slugify = (str) => {
+    if (!str) return "";
+    return String(str)
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "");
+};
+
+const generateUniqueSlug = async (sourceName, excludeId = null) => {
+    const baseSlug = slugify(sourceName);
+    if (!baseSlug) return "";
+
+    let slug = baseSlug;
+    let suffix = 1;
+
+    while (true) {
+        const existingPackage = await Package.findOne({
+            slug,
+            ...(excludeId ? { _id: { $ne: excludeId } } : {}),
+        });
+
+        if (!existingPackage) return slug;
+
+        slug = `${baseSlug}-${suffix}`;
+        suffix += 1;
+    }
+};
+
 export async function POST(req) {
     await connectDB();
     const body = await req.json();
 
     try {
+        const sourceName = body?.packages?.packageName || body?.packages?.slug;
+        const slug = await generateUniqueSlug(sourceName);
+
+        if (!slug) {
+            return NextResponse.json({ message: "Valid package name is required" }, { status: 400 });
+        }
+
         // Step 1: Create a new Package document
         const newPackage = await Package.create({
             link: body.packages.link,
@@ -16,6 +55,7 @@ export async function POST(req) {
             active: body.packages.active,
             packageCode: body.packages.packageCode,
             packageName: body.packages.packageName,
+            slug,
             price: body.packages.price,
             priceUnit: body.packages.priceUnit
         });
@@ -52,8 +92,11 @@ export async function PUT(req) {
         }
 
         // Merge new data with existing data (to prevent missing fields)
+        const nextPackageName = body.packageName ?? existingPackage.packageName;
+        const nextSlug = await generateUniqueSlug(body.slug || nextPackageName, body.pkgId);
+
         const updatedData = {
-            packageName: body.packageName ?? existingPackage.packageName,
+            packageName: nextPackageName,
             price: body.price ?? existingPackage.price,
             priceUnit: body.priceUnit ?? existingPackage.priceUnit,
             link: body.link ?? existingPackage.link,
@@ -61,6 +104,7 @@ export async function PUT(req) {
             isTrending: body.isTrending ?? existingPackage.isTrending,
             order: body.order ?? existingPackage.order,
             packageCode: body.packageCode ?? existingPackage.packageCode,
+            slug: nextSlug || existingPackage.slug,
 
             basicDetails: {
                 ...existingPackage.basicDetails,

@@ -62,8 +62,7 @@ const RandomTourPackageSection = () => {
       <section className="md:mt-19 w-full px-2 md:px-8 lg:px-16 bg-[url('/bg-custom-3.jpg')] overflow-hidden max-w-screen overflow-x-hidden">
         <div className=" w-full h-full overflow-hidden max-w-screen overflow-x-hidden">
           <div className="w-full py-10">
-            <h2 className="flex items-center text-sm md:text-md lg:text-lg uppercase font-barlow font-semibold"></h2>
-            <h1 className="font-bold text-xl md:text-3xl lg:text-4xl uppercase text-center">
+            <h1 className="font-recoleta text-xl md:text-3xl lg:text-4xl uppercase text-center">
               Trending Packages: The Best, Today
             </h1>
             <Carousel className="w-[75%] md:w-[95%] drop-shadow-xl mx-auto xl:w-full my-6 md:my-12">
@@ -116,10 +115,10 @@ const RandomTourPackageSection = () => {
       <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
         <div className=" w-full h-full overflow-hidden max-w-screen ">
           <div className="w-full py-9 px-1 md:px-12">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mt-10">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-recoleta text-center mt-10">
               Trending Packages: The Best, Today
             </h1>
-            <p className=" text-gray-600 py-8 text-center font-barlow w-[80%] mx-auto">
+            <p className=" text-gray-600 py-8 text-center font-sans w-[80%] mx-auto">
               Discover the hottest deals with our Trending Packages! Curated
               daily, these top-rated picks offer the best value and quality —
               handpicked for professionals who demand the best, today. Don’t
@@ -190,7 +189,7 @@ const RandomTourPackageSection = () => {
                                 </p>
                                 <p className="text-xs font-semibold">Onwards</p>
                               </div>
-                              <Link href={`/package/${item._id}`}>
+                              <Link href={`/package/${item?.slug}`}>
                                 <Button className="bg-blue-500 hover:bg-blue-600 uppercase rounded-sm">
                                   Learn more
                                 </Button>

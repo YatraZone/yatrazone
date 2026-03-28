@@ -9,7 +9,7 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
-import { Copy, Loader2, Pencil, Trash2 } from "lucide-react"
+import { Copy, Edit, Loader2, Pencil, Trash2 } from "lucide-react"
 import { Switch } from "../ui/switch"
 import { Label } from "../ui/label"
 
@@ -22,28 +22,71 @@ const generateCode = () => {
     return code;
 };
 
+const slugify = (str) => {
+    if (!str) return "";
+    return String(str)
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "");
+};
+
 const AddDirectPackage = () => {
     const { handleSubmit, register, setValue, reset } = useForm()
     const [packageCode, setPackageCode] = useState("")
+    const [selectedPriceUnit, setSelectedPriceUnit] = useState("")
+    const [priceValue, setPriceValue] = useState(0)
+    const [editingPackageId, setEditingPackageId] = useState(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [subMenuItems, setSubMenuItems] = useState([])
 
-    useEffect(() => {
-        setPackageCode(generateCode());
-        setValue('packages.packageCode', packageCode)
-
-        const fetchSubMenuItems = async () => {
-            try {
-                const response = await fetch(`/api/admin/website-manage/addDirectPackage`);
-                const data = await response.json();
-                setSubMenuItems(data || []);
-            } catch (error) {
-                console.error("Error fetching direct packages:", error);
-            }
+    const fetchSubMenuItems = async () => {
+        try {
+            const response = await fetch(`/api/admin/website-manage/addDirectPackage`);
+            const data = await response.json();
+            setSubMenuItems(data || []);
+        } catch (error) {
+            console.error("Error fetching direct packages:", error);
         }
+    };
 
+    const resetToCreateMode = () => {
+        const newCode = generateCode();
+        setEditingPackageId(null);
+        setPackageCode(newCode);
+        setSelectedPriceUnit("");
+        setPriceValue(0);
+        reset({
+            packages: {
+                packageName: "",
+                price: 0,
+                priceUnit: "",
+                packageCode: newCode,
+            },
+        });
+    };
+
+    useEffect(() => {
+        const newCode = generateCode();
+        setPackageCode(newCode);
+        setValue("packages.packageCode", newCode);
         fetchSubMenuItems();
-    }, [])
+    }, [setValue])
+
+    const startEdit = (pkg) => {
+        setEditingPackageId(pkg._id);
+        setPackageCode(pkg.packageCode || "");
+        setSelectedPriceUnit(pkg.priceUnit || "");
+        setPriceValue(pkg.price || 0);
+        setValue("packages.packageName", pkg.packageName || "");
+        setValue("packages.price", pkg.price || 0);
+        setValue("packages.priceUnit", pkg.priceUnit || "");
+        setValue("packages.packageCode", pkg.packageCode || "");
+    };
 
     const deletePackage = async (id) => {
         setIsLoading(true);
@@ -101,39 +144,58 @@ const AddDirectPackage = () => {
             toast.error("All fields are required", { style: { borderRadius: "10px", border: "2px solid red" } })
             return;
         }
-
-        // Always send price as 0, regardless of what admin enters
-        if (!data.packages.price) {
-            data.packages.price = 0;
-        }
-        data.packages.link = packageCode;
-        data.packages.packageCode = packageCode;
+        setIsSubmitting(true)
 
         try {
+            const isEditMode = Boolean(editingPackageId);
             const response = await fetch("/api/admin/website-manage/addDirectPackage", {
-                method: "POST",
+                method: isEditMode ? "PUT" : "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(
+                    isEditMode
+                        ? {
+                            pkgId: editingPackageId,
+                            packageName: data.packages.packageName,
+                            price: Number(data.packages.price) || 0,
+                            priceUnit: data.packages.priceUnit,
+                            packageCode,
+                            slug: slugify(data.packages.packageName),
+                        }
+                        : {
+                            packages: {
+                                packageName: data.packages.packageName,
+                                price: Number(data.packages.price) || 0,
+                                priceUnit: data.packages.priceUnit,
+                                link: packageCode,
+                                packageCode,
+                                slug: slugify(data.packages.packageName),
+                            },
+                        }
+                ),
             });
 
             const res = await response.json();
             // console.log(res)
 
             if (response.ok) {
-                toast.success("Package added successfully!", { style: { borderRadius: "10px", border: "2px solid green" } })
-                setSubMenuItems(prev => ({
-                    ...prev,
-                    packages: [...(prev?.packages || []), res.package]
-                }));
-                reset();
-                setPackageCode(generateCode());
+                toast.success(
+                    isEditMode ? "Package updated successfully!" : "Package added successfully!",
+                    { style: { borderRadius: "10px", border: "2px solid green" } }
+                )
+                await fetchSubMenuItems();
+                resetToCreateMode();
             } else {
-                toast.error("Failed to add package", { style: { borderRadius: "10px", border: "2px solid red" } })
+                toast.error(
+                    res?.message || (isEditMode ? "Failed to update package" : "Failed to add package"),
+                    { style: { borderRadius: "10px", border: "2px solid red" } }
+                )
             }
         } catch (error) {
             toast.error("Something went wrong", { style: { borderRadius: "10px", border: "2px solid red" } })
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
@@ -157,11 +219,18 @@ const AddDirectPackage = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         <label htmlFor="price" className="font-semibold">Package Price</label>
-                        <NumericFormat thousandSeparator={true} prefix="₹" name="price" className="px-2 font-bold py-1 w-full border-2 rounded-md border-blue-600 focus:border-dashed focus:border-blue-500 bg-transparent focus:outline-none focus-visible:ring-0" onValueChange={(values) => setValue('packages.price', values.floatValue)} />
+                        <NumericFormat thousandSeparator={true} prefix="₹" name="price" value={priceValue} className="px-2 font-bold py-1 w-full border-2 rounded-md border-blue-600 focus:border-dashed focus:border-blue-500 bg-transparent focus:outline-none focus-visible:ring-0" onValueChange={(values) => {
+                            const value = values.floatValue || 0;
+                            setPriceValue(value);
+                            setValue("packages.price", value);
+                        }} />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label htmlFor="priceUnit" className="font-semibold">Price Unit</label>
-                        <Select name="priceUnit" className="p-2 border border-gray-300 rounded-md" onValueChange={(value) => setValue('packages.priceUnit', value)}>
+                        <Select value={selectedPriceUnit} name="priceUnit" className="p-2 border border-gray-300 rounded-md" onValueChange={(value) => {
+                            setSelectedPriceUnit(value);
+                            setValue("packages.priceUnit", value);
+                        }}>
                             <SelectTrigger className="w-52 border-2 bg-transparent border-blue-600 focus:border-blue-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0">
                                 <SelectValue placeholder="Select Price Unit" />
                             </SelectTrigger>
@@ -175,7 +244,15 @@ const AddDirectPackage = () => {
                         </Select>
                     </div>
                 </div>
-                <Button type="submit" className="bg-blue-600 hover:bg-blue-500">Add Package</Button>
+                <div className="flex items-center gap-3">
+                    <Button type="submit" disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-500">
+                        {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                        {editingPackageId ? "Update Package" : "Add Package"}
+                    </Button>
+                    {editingPackageId ? (
+                        <Button type="button" variant="outline" onClick={resetToCreateMode}>Cancel Edit</Button>
+                    ) : null}
+                </div>
             </form>
 
             <div className="bg-blue-100 p-4 rounded-lg shadow max-w-5xl mx-auto w-full overflow-x-auto lg:overflow-visible text-center">
@@ -197,7 +274,7 @@ const AddDirectPackage = () => {
                                             <Button
                                                 size="icon"
                                                 variant="ghost"
-                                                onClick={() => pkg.active && copyToClipboard(`${window.location.origin}/package/${pkg._id}`)}
+                                                onClick={() => pkg.active && copyToClipboard(`${window.location.origin}/package/${pkg.slug || pkg._id}`)}
                                                 disabled={!pkg.active}
                                             >
                                                 <Copy className="w-4 h-4" />
@@ -206,6 +283,9 @@ const AddDirectPackage = () => {
                                     </TableCell>
                                     <TableCell className="border font-semibold border-blue-600">
                                         <div className="flex items-center justify-center gap-6">
+                                            <Button size="icon" variant="outline" onClick={() => startEdit(pkg)} title="Edit data here">
+                                                <Edit className="w-4 h-4" />
+                                            </Button>
                                             <Button size="icon" variant="outline" asChild>
                                                 <Link href={`/admin/editPackage/${pkg._id}`}>
                                                     <Pencil className="w-4 h-4" />

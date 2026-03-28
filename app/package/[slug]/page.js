@@ -38,9 +38,9 @@ import ComingSoon from "@/models/ComingSoon";
 import ComingSoonEnquiryForm from "@/components/ComingSoonEnquiryForm";
 import ImportantNotice from "@/components/ImportantNotice"
 
-const getPackageById = async (id) => {
+const getPackageBySlug = async (slug) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPackageById/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getPackageBySlug/${slug}`);
 
         if (!res.ok) {
             return null; // Return null when package is not found
@@ -86,18 +86,18 @@ const getComingSoonById = async (id) => {
 };
 
 const PackageDetailsPage = async ({ params }) => {
-    const { id } = await params;
+    const { slug } = await params;
     await connectDB();
     const session = await getServerSession(authOptions);
     // Try Package first
-    let packageDetails = await getPackageById(id);
+    let packageDetails = await getPackageBySlug(slug);
     let isComingSoon = false;
     if (!packageDetails) {
         // Try ComingSoon
-        packageDetails = await getComingSoonById(id);
+        packageDetails = await getComingSoonById(slug);
         isComingSoon = !!packageDetails;
     }
-    const reviews = await getReviewsById(id);
+    const reviews = await getReviewsById(slug);
 
     const packages = await Package.find({}).limit(10).lean().exec();
 

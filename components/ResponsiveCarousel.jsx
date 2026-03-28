@@ -86,7 +86,7 @@ const ResponsiveCarousel = ({ packages, formatNumericStr }) => {
                                                 </p>
                                                 <p className="text-xs font-semibold">Onwards</p>
                                             </div>
-                                            <Link href={`/package/${item._id}`}>
+                                            <Link href={`/package/${item?.slug}`}>
                                                 <Button className="bg-blue-500 hover:bg-blue-600 uppercase rounded-sm">Learn more</Button>
                                             </Link>
                                         </div>

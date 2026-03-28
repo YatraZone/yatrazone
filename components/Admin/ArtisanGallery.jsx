@@ -230,7 +230,7 @@ const ArtisanGallery = ({ artisanDetails, artisanId }) => {
       // Refresh galleries table
       refreshGalleries();
     } catch (err) {
-        console.log(err)
+        // console.log(err)
       toast.error('Failed to save gallery');
     }
   };

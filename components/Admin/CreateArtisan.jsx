@@ -160,7 +160,7 @@ const CreateArtisan = () => {
       const res = await fetch("/api/createArtisan");
       if (!res.ok) throw new Error("Failed to fetch artisans");
       const data = await res.json();
-      console.log(data)
+      // console.log(data)
       setUsers(data);
     } catch (err) {
       console.error("Error in fetchUsers:", err.message);

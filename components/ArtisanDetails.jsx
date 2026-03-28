@@ -20,7 +20,7 @@ import { Star } from "lucide-react";
 import ReviewModal from "./ReviewModal";
 
 const ArtisanDetails = ({ artisan }) => {
-  console.log(artisan)
+  // console.log(artisan)
 
   // ...existing state
   const [otherArtisans, setOtherArtisans] = useState([]);

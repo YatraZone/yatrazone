@@ -7,6 +7,7 @@ const PackageSchema = new Schema({
     order: { type: Number },
     packageCode: { type: String },
     packageName: { type: String },
+    slug: { type: String, unique: true },
     isDirect: { type: Boolean, default: false },
     price: { type: Number },
     priceUnit: { type: String },

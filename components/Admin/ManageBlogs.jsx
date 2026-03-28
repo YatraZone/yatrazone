@@ -32,7 +32,7 @@ const ManageBlogs = () => {
             try {
                 const response = await fetch("/api/blogs");
                 const data = await response.json();
-                console.log(data)
+                // console.log(data)
                 setBlogs(data);
 
                 // Auto-set next order number
@@ -67,7 +67,7 @@ const ManageBlogs = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ ...formData, id: editBlog }),
             });
-            console.log(response)
+            // console.log(response)
 
             const data = await response.json();
 

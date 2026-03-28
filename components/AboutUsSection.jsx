@@ -10,7 +10,7 @@ const AboutUsSection = () => {
   const [featuredPackages, setFeaturedPackages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [bannerSection1st, setBannerSection1st] = useState([]);
-    const [loading1, setLoading1] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const [offerDetails, setOfferDetails] = useState(null);
 
   const dummyPackages = [
@@ -79,7 +79,7 @@ const AboutUsSection = () => {
     fetch("/api/offerDetails")
       .then(res => res.json())
       .then(data => { if (data) setOfferDetails(data); })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   if (isLoading) {
@@ -130,10 +130,10 @@ const AboutUsSection = () => {
     <>
       <section className="relative py-1 w-full md:px-10 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
         <div className="w-full">
-          <h2 className="font-bold text-2xl md:text-4xl text-center mt-7">
+          <h2 className="font-recoleta text-2xl md:text-4xl text-center mt-7">
             Be a part of a spiritual journey.
           </h2>
-          <p className="text-gray-600 py-8 text-center font-barlow  w-[80%] mx-auto">
+          <p className="text-gray-600 py-8 text-center font-sans  w-[80%] mx-auto">
             YatraZone is more than just a travel company; we are facilitators of
             spiritual exploration and cultural immersion tailored for Indian
             pilgrims and global adventurers. With years of expertise in
@@ -177,39 +177,51 @@ const AboutUsSection = () => {
           </div>
         </div>
       </section>
-      <section className="w-full md:w-[90%] mx-auto py-4 space-y-3 px-4 md:px-0">
-        {/* Banner 1: Last Minute Deal */}
-        <div className="flex-col md:flex-row flex items-center justify-between bg-gradient-to-r from-[#fde8e2] via-[#fdf0ec] to-[#fef6f4] rounded-xl px-5 py-4 shadow-sm border border-orange-100/60 hover:shadow-md transition-shadow duration-300">
-          <div className="flex items-center gap-4">
-            <span className="text-4xl" role="img" aria-label="stopwatch">⏱️</span>
+      <section className="w-full md:w-[90%] mx-auto py-4 space-y-3 px-3 sm:px-4 md:px-0">
+
+        {/* Banner 1 */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-[#fde8e2] via-[#fdf0ec] to-[#fef6f4] rounded-xl px-4 sm:px-5 py-4 shadow-sm border border-orange-100/60">
+
+          <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+            <Image src="/clockImage.png" alt="clock" width={40} height={40} className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+
             <div>
-              <h4 className="text-base md:text-lg font-bold text-gray-900">{offerDetails?.lastMinuteDeal?.heading || 'Last Minute Deal'}</h4>
-              <p className="text-sm text-gray-500">{offerDetails?.lastMinuteDeal?.description || 'Up to 75% off on selected hotels'}</p>
+              <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900">
+                {offerDetails?.lastMinuteDeal?.heading || 'Last Minute Deal'}
+              </h4>
+              <p className="text-xs sm:text-sm text-gray-500">
+                {offerDetails?.lastMinuteDeal?.description || 'Up to 75% off on selected hotels'}
+              </p>
             </div>
           </div>
+
           <Link
-            href={offerDetails?.lastMinuteDeal?.link || '/packages'}
-            className="shrink-0 text-sm font-medium text-gray-700 border border-gray-300 rounded-full px-5 py-2 hover:bg-gray-800 hover:text-white hover:border-gray-800 transition-all duration-200"
+            href={offerDetails?.lastMinuteDeal?.link || ''}
+            className="w-full sm:w-auto text-center text-sm font-medium text-gray-700 border border-gray-300 rounded-full px-4 sm:px-5 py-2 hover:bg-gray-800 hover:text-white transition-all duration-200"
           >
             Know More
           </Link>
         </div>
 
-        {/* Banner 2: Promo Banner */}
-        <div className="flex-col md:flex-row flex items-center justify-between bg-gradient-to-r from-[#ede4f5] via-[#f3eef9] to-[#f8f5fc] rounded-xl px-5 py-4 shadow-sm border border-purple-100/60 hover:shadow-md transition-shadow duration-300">
-          <div className="flex items-center gap-4">
-            <span className="text-4xl" role="img" aria-label="credit card">💳</span>
-            <p className="text-sm md:text-base text-gray-700">
+        {/* Banner 2 */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-[#ede4f5] via-[#f3eef9] to-[#f8f5fc] rounded-xl px-4 sm:px-5 py-4 shadow-sm border border-purple-100/60">
+
+          <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+            <Image src="/cardImage.png" alt="card" width={40} height={40} className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+
+            <p className="text-xs sm:text-sm md:text-base text-gray-700">
               {offerDetails?.promoBanner?.description || 'Save ₹2,000 on Hotels by using Adani One ICICI Bank credit card.'}
             </p>
           </div>
+
           <Link
-            href={offerDetails?.promoBanner?.link || '/packages'}
-            className="shrink-0 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full px-6 py-2 hover:bg-gray-800 hover:text-white hover:border-gray-800 shadow-sm transition-all duration-200"
+            href={offerDetails?.promoBanner?.link || ''}
+            className="w-full sm:w-auto text-center text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full px-5 py-2 hover:bg-gray-800 hover:text-white transition-all duration-200"
           >
             Apply
           </Link>
         </div>
+
       </section>
       <section className="bg-[#ededed] relative w-full">
         {loading1 ? (

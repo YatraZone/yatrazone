@@ -38,7 +38,7 @@ const ComingSoonEnquiries = () => {
             try {
                 const response = await fetch("/api/comingSoonEnquiry");
                 const data = await response.json();
-                console.log(data)
+                // console.log(data)
                 if (Array.isArray(data)) {
                     setAllEnquiry(data);
                     setFilteredEnquiry(data);

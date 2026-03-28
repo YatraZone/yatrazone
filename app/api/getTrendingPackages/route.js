@@ -6,7 +6,7 @@ export async function GET() {
     try {
         await connectDB();
         const properties = await Package.find({isTrending:true})
-        .select('packageName')
+        .select('packageName slug')
         .sort({ createdAt: -1 });
         return NextResponse.json({ success: true, data: properties });
     } catch (error) {

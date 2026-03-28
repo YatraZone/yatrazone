@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { PencilIcon, Plus, Trash2Icon, UploadIcon, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
-const CreateHotels = () => {
+const CreateDestinationBlogs = () => {
     const [hotels, setHotels] = useState([]);
     const [categories, setCategories] = useState([]);
     const [editHotel, setEditHotel] = useState(null);
@@ -30,7 +30,7 @@ const CreateHotels = () => {
         imageClickLink: "",
     });
 
-    // Fetch hotels and categories on mount
+    // Fetch Destination Blogs and categories on mount
     useEffect(() => {
         fetchHotels();
         fetchCategories();
@@ -42,7 +42,7 @@ const CreateHotels = () => {
             const data = await res.json();
             setHotels(data);
         } catch (error) {
-            toast.error("Failed to fetch hotels");
+            toast.error("Failed to fetch Destination Blogs");
         }
     };
 
@@ -134,11 +134,11 @@ const CreateHotels = () => {
             const data = await res.json();
 
             if (res.ok) {
-                toast.success(`Hotel ${editHotel ? "updated" : "added"} successfully!`);
+                toast.success(`Destination Blogs ${editHotel ? "updated" : "added"} successfully!`);
                 resetForm();
                 fetchHotels();
             } else {
-                toast.error(data.error || "Failed to save hotel");
+                toast.error(data.error || "Failed to save Destination Blogs");
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -164,10 +164,10 @@ const CreateHotels = () => {
                 body: JSON.stringify({ id }),
             });
             if (res.ok) {
-                toast.success("Hotel deleted!");
+                toast.success("Destination Blogs deleted!");
                 fetchHotels();
             } else {
-                toast.error("Failed to delete hotel");
+                toast.error("Failed to delete Destination Blogs");
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -195,7 +195,7 @@ const CreateHotels = () => {
 
     return (
         <div className="max-w-5xl mx-auto py-10 w-full">
-            <h2 className="text-2xl font-bold mb-6">{editHotel ? "Edit Hotel" : "Add New Hotel"}</h2>
+            <h2 className="text-2xl font-bold mb-6">{editHotel ? "Edit Destination Blogs" : "Add New Destination Blogs"}</h2>
             <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-6 space-y-4">
                 {/* Category Select + Add Button */}
                 <div>
@@ -225,9 +225,9 @@ const CreateHotels = () => {
                     </div>
                 </div>
 
-                {/* Hotel Image Upload */}
+                {/* Destination Blogs Image Upload */}
                 <div>
-                    <Label className="block mb-2 font-bold">Hotel Image</Label>
+                    <Label className="block mb-2 font-bold">Destination Blogs Image</Label>
                     <input
                         type="file"
                         accept="image/*"
@@ -241,7 +241,7 @@ const CreateHotels = () => {
                         className="mb-2 flex items-center gap-2 bg-blue-500 text-white"
                         onClick={() => fileInputRef.current?.click()}
                     >
-                        <span>Upload Hotel Image</span>
+                        <span>Upload Destination Blogs Image</span>
                         <UploadIcon className="w-4 h-4" />
                     </Button>
                     {uploading && <div className="text-blue-600 font-semibold">Uploading...</div>}
@@ -249,7 +249,7 @@ const CreateHotels = () => {
                         <div className="relative w-48 h-28 border rounded overflow-hidden mb-2">
                             <Image
                                 src={formData.image.url}
-                                alt="Hotel Image Preview"
+                                alt="Destination Blogs Image Preview"
                                 fill
                                 className="object-cover"
                             />
@@ -265,12 +265,12 @@ const CreateHotels = () => {
                     )}
                 </div>
 
-                {/* Hotel Name */}
+                {/* Destination Blogs Name */}
                 <div>
-                    <Label className="block mb-2 font-bold">Hotel Name</Label>
+                    <Label className="block mb-2 font-bold">Destination Blogs Name</Label>
                     <Input
                         name="name"
-                        placeholder="Enter hotel name"
+                        placeholder="Enter Destination Blogs name"
                         value={formData.name}
                         onChange={handleInputChange}
                     />
@@ -312,8 +312,8 @@ const CreateHotels = () => {
                 </div>
             </form>
 
-            {/* Hotels Table */}
-            <h2 className="text-2xl font-bold mt-10 mb-4">Existing Hotels</h2>
+            {/* Destination Blogs Table */}
+            <h2 className="text-2xl font-bold mt-10 mb-4">Existing Destination Blogs</h2>
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -360,7 +360,7 @@ const CreateHotels = () => {
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan="6" className="text-center py-4">No hotels found</TableCell>
+                            <TableCell colSpan="6" className="text-center py-4">No Destination Blogs found</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -370,9 +370,9 @@ const CreateHotels = () => {
             <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete Hotel</DialogTitle>
+                        <DialogTitle>Delete Destination Blogs</DialogTitle>
                     </DialogHeader>
-                    <p>Are you sure you want to delete this hotel?</p>
+                    <p>Are you sure you want to delete this Destination Blogs?</p>
                     <DialogFooter>
                         <Button variant="secondary" onClick={() => { setShowDeleteModal(false); setHotelToDelete(null); }}>Cancel</Button>
                         <Button variant="destructive" onClick={confirmDelete}>Delete</Button>
@@ -405,4 +405,4 @@ const CreateHotels = () => {
     );
 };
 
-export default CreateHotels;
+export default CreateDestinationBlogs;

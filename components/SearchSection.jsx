@@ -35,7 +35,7 @@ const SearchSection = () => {
     };
 
     return (
-      <div className={`flex items-center border rounded-md overflow-hidden ${className}`}>
+      <div className={`flex items-center border w-fit rounded-md overflow-hidden ${className}`}>
         <button
           type="button"
           onClick={decrement}
@@ -132,7 +132,7 @@ const SearchSection = () => {
       .then(res => res.json())
       .then(data => {
         let arr = Array.isArray(data) ? data : (Array.isArray(data.packages) ? data.packages : []);
-        console.log("subMenuFixed raw data:", arr);
+        // console.log("subMenuFixed raw data:", arr);
         setFixedMenuItems(arr.filter(item => item.active));
       })
       .catch(err => console.error("Failed to fetch subMenuFixed:", err));
@@ -208,7 +208,6 @@ const SearchSection = () => {
     if (params.get('checkInDate')) setCheckInDate(params.get('checkInDate'));
     if (params.get('guests')) setGuestCount(parseInt(params.get('guests')));
   }, []);
-
   return (
     <section className="w-full md:w-[90%] mx-auto md:my-8">
       <div className="flex flex-col lg:flex-row gap-5">
@@ -218,7 +217,7 @@ const SearchSection = () => {
           {/* Heading */}
           <div className="mb-4 px-10 md:px-5">
             <h2 className="text-xl md:text-[1.65rem] font-bold text-gray-900 leading-tight">
-              Biggest discounts on Hotels <span className="text-gray-500 font-normal">+ DHAM YATRA</span>
+              Biggest discounts on Dham<span className="text-gray-500 font-normal">+Yatra Packages</span>
             </h2>
             <p className="text-sm md:text-base text-gray-500 mt-1">
               30-80% off | 5-star stays from <span className="font-semibold text-gray-700">₹2999</span>
@@ -379,7 +378,7 @@ const SearchSection = () => {
                         </span>
                       ) : (
                         <span className="flex items-center justify-center gap-2">
-                          <Search className="h-4 w-4" /> Search hotels
+                          <Search className="h-4 w-4" /> Search Packages
                         </span>
                       )}
                     </Button>
@@ -401,7 +400,7 @@ const SearchSection = () => {
                           className="rounded-full px-3.5 py-1 text-xs h-auto hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 border-gray-200 text-gray-600 transition-colors"
                           asChild
                         >
-                          <Link href={`/package/${property._id}`}>
+                          <Link href={`/package/${property?.slug}`}>
                             {property.packageName}
                           </Link>
                         </Button>
@@ -438,7 +437,7 @@ const SearchSection = () => {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-bold text-gray-800">{offerDetails?.moreOffers?.title || 'More offers'}</h4>
-                {/* <Link href={offerDetails?.moreOffers?.knowMoreLink || '/packages'} className="text-xs text-blue-600 hover:text-blue-700 font-medium hover:underline">
+                {/* <Link href={offerDetails?.moreOffers?.knowMoreLink || ''} className="text-xs text-blue-600 hover:text-blue-700 font-medium hover:underline">
                   View all
                 </Link> */}
               </div>
@@ -449,7 +448,7 @@ const SearchSection = () => {
               </div>
             </div>
             <Link
-              href={offerDetails?.moreOffers?.knowMoreLink || '/packages'}
+              href={offerDetails?.moreOffers?.knowMoreLink || ''}
               className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 mt-3 group/link"
             >
               Know more

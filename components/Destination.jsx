@@ -33,7 +33,7 @@ const RandomTourPackageSection = () => {
   const [selectedReviews, setSelectedReviews] = useState([]);
   const ReviewModal = ({ open, onClose, reviews }) => {
     if (!open) return null;
-    console.log(reviews);
+    // console.log(reviews);
     return (
       <div
         className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
@@ -139,7 +139,7 @@ const RandomTourPackageSection = () => {
     try {
       const res = await fetch("/api/createArtisan");
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       // Ensure artisan is always an array
       if (Array.isArray(data)) {
         setArtisan(data);
@@ -232,14 +232,14 @@ const RandomTourPackageSection = () => {
                 <div className="flex flex-col md:flex-row items-start gap-5">
                   {/* Left: Heading and description */}
                   <div className="flex-1 flex flex-col justify-center md:pr-8">
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-start mb-5 uppercase">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-recoleta text-start mb-5 uppercase">
                       “Sacred India — One Journey, Infinite Blessings.”
                     </h2>
                     <h2 className="text-xl font-bold mb-2">
                       “Across India, Into Yourself — A Spiritual Journey
                       Beyond Boundaries.”
                     </h2>
-                    <div className="text-md text-gray-700 text-justify mb-6">
+                    <div className="text-md text-gray-700 font-sens text-justify mb-6">
                       Step into a soulful exploration that spans India’s sacred
                       landscapes — the Himalayas, Ganga, ancient temples, and
                       coastal ashrams. This journey is more than travel; it’s a

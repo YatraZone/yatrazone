@@ -4,20 +4,20 @@ const OfferDetailsSchema = new Schema(
     {
         // Section 1: More Offers card (SearchSection right sidebar)
         moreOffers: {
-            title: { type: String, default: "More offers" },
-            description: { type: String, default: "" },
-            knowMoreLink: { type: String, default: "/packages" },
+            title: { type: String, },
+            description: { type: String, },
+            knowMoreLink: { type: String, },
         },
         // Section 2: Last Minute Deal banner (AboutUsSection)
         lastMinuteDeal: {
-            heading: { type: String, default: "Last Minute Deal" },
-            description: { type: String, default: "" },
-            link: { type: String, default: "/packages" },
+            heading: { type: String,},
+            description: { type: String, },
+            link: { type: String, },
         },
         // Section 3: Promo banner (AboutUsSection)
         promoBanner: {
-            description: { type: String, default: "" },
-            link: { type: String, default: "/packages" },
+            description: { type: String, },
+            link: { type: String,},
         },
     },
     { timestamps: true }

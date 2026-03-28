@@ -27,7 +27,7 @@ export default function PackageDetailClient({
   sanitizedUser,
   formatNumericStr,
 }) {
-  console.log(packageDetails)
+  // console.log(packageDetails)
   const [activeTab, setActiveTab] = useState("overview");
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [copied, setCopied] = useState(false);

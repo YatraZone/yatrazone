@@ -320,7 +320,7 @@ const CategoryClient = ({ packages, reviews = {}, menuItems = [], currentCategor
             const avgRating = r?.avg || 0;
             const totalReviews = r?.count || 0;
             return (
-              <Link key={pkg._id} href={`/package/${pkg._id}`} className="group">
+              <Link key={pkg._id} href={`/package/${pkg?.slug}`} className="group">
                 <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
                   {/* Image */}
                   <div className="relative w-full h-52 overflow-hidden">

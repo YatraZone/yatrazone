@@ -58,7 +58,7 @@ const PackageCard = async ({ pkg }) => {
             <span className="ml-1 text-base font-medium">{averageRating || 0}</span>
             <span className="ml-1 text-sm font-medium text-blue-600">({totalReviews || 0} reviews)</span>
           </div>
-          <Link href={`/package/${pkg?._id}`}>
+          <Link href={`/package/${pkg?.slug}`}>
             <Button size="lg" className="bg-blue-600 text-lg uppercase hover:bg-blue-500 rounded-sm">Learn More</Button>
           </Link>
         </div>

@@ -52,8 +52,8 @@ const data = {
     },
     { divider: true },
     {
-      name: "Create Hotels",
-      url: "/admin/create_hotels",
+      name: "Create Destination Blogs",
+      url: "/admin/create_destination_blogs",
       icon: User,
     },
     { divider: true },

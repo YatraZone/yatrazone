@@ -123,7 +123,7 @@ const Header = () => {
           pathName.includes("search")
           ? "hidden"
           : "block"
-          } bg-[#fcf7f1] text-black border-b font-barlow tracking-wider w-full`}
+          } bg-white text-black font-barlow tracking-wider w-full`}
       >
         <div className="hidden md:flex items-center">
           <TopAdvertisementMarquee />
@@ -190,7 +190,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-        <div className="md:flex hidden items-center justify-between gap-8 border-b border-gray-400 md:px-8 ">
+        <div className="md:flex hidden items-center justify-between gap-8 md:px-8 ">
           <div className="flex flex-row justify-between w-full items-center px-8">
             {/* Logo on the left */}
             <div className="flex-shrink-0">
@@ -282,9 +282,9 @@ const Header = () => {
                         e.stopPropagation();
                         setIsAuthDropdownOpen(!isAuthDropdownOpen);
                       }}
-                      className="flex flex-col items-center py-2"
+                      className="flex gap-2 items-center py-2"
                     >
-                      <User className="ml-2" size={20} />
+                      <User className="" size={20} />
                       <h2 className="text-xs font-semibold">Sign In / Login</h2>
                     </button>
                     <AnimatePresence>

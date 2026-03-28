@@ -73,10 +73,10 @@ const Banner = () => {
       <div className="w-full overflow-hidden max-w-screen overflow-x-hidden">
         {consultancyBanner.length > 0 && (
           <div className="w-full px-2 md:py-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-2 uppercase">
+            <h2 className="font-recoleta text-2xl md:text-3xl font-bold text-center mb-2 uppercase">
               India Awaits - Walk the Land of Saints, Seekers, and Silence
             </h2>
-            <p className="text-gray-600 text-center py-4 mx-auto md:w-[50%]">
+            <p className="text-gray-600 text-center py-4 mx-auto md:w-[50%] font-sans">
               Traverse the spiritual heart of India where divinity flows, through every river and prayer echoes in every breeze, This all-India spiritual tour is designed for seekers fo peace , prupose and presence, From Himalayan shrine to souhtern ashrams, discover timeless traditions, guieded practices and sacred wisdom that nurture both body and soul.
             </p>
             <Carousel className="w-full md:px-20 mx-auto">
@@ -157,10 +157,12 @@ const Banner = () => {
 
         {/* ===== HOTELS SECTION ===== */}
         <div className="w-full px-4 md:px-20 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+          <h2 className="font-recoleta text-2xl md:text-3xl font-bold text-gray-900 mb-1">
             Your style. These stays. A perfect match.
           </h2>
-          <p className="text-sm text-gray-500 mb-5">Handpicked hotels curated just for you</p>
+          <p className="text-sm text-gray-500 mb-5 font-sans">
+            Handpicked hotels curated just for you
+          </p>
 
           {/* Category Carousel */}
           <div className="mb-6 border-b border-gray-200 flex gap-5">
@@ -232,7 +234,7 @@ const Banner = () => {
               <CarouselNext className="!-right-3 !top-1/3 !-translate-y-1/2 z-10 bg-white/90 hover:bg-white w-10 h-10 rounded-full shadow-md" />
             </Carousel>
           ) : (
-            <p className="text-gray-400 text-center py-8">No hotels found in this category.</p>
+            <p className="text-gray-400 text-center py-8">No destination blogs found in this category.</p>
           )}
         </div>
 

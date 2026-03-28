@@ -102,7 +102,7 @@ const ResponsiveFeaturedCarousel = ({ featuredPackages: initialFeaturedPackages 
                                             {/* Text slides up on hover */}
                                             <div className="absolute bottom-0 left-0 text-center w-full z-20 translate-y-full group-hover:translate-y-[-25%] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                                                 <h1 className="text-white text-xl xl:text-2xl mt-2 font-bold">{item?.title || item?.packageName}</h1>
-                                                <Link href={item?.link || `/package/${item._id}`}>
+                                                <Link href={item?.link || `/package/${item?.slug}`}>
                                                     <button className="hover:bg-white hover:text-black text-white font-bold px-4 py-2 rounded-full mt-4 transition duration-300 ease-in-out">
                                                         View More
                                                     </button>

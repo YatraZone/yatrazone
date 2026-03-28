@@ -1,8 +1,8 @@
-import CreateHotels from "@/components/Admin/CreateHotels"
+import CreateDestinationBlogs from "@/components/Admin/CreateDestinationBlogs"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 
 
-const  CreateHotelsPage = () => {
+const CreateDestinationBlogsPage = () => {
     return (
         <SidebarInset>
             <header className="flex h-16 shrink-0 items-center gap-2">
@@ -11,11 +11,11 @@ const  CreateHotelsPage = () => {
                 </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                <h1 className="text-4xl px-12 font-semibold">Create Hotels</h1>
-                <CreateHotels />
+                <h1 className="text-4xl px-12 font-semibold">Create Destination Blogs</h1>
+                <CreateDestinationBlogs />
             </div>
         </SidebarInset>
     )
 }
 
-export default CreateHotelsPage
+export default CreateDestinationBlogsPage
