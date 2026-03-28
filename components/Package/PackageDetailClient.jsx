@@ -151,13 +151,19 @@ export default function PackageDetailClient({
 
   // Night stops for itinerary bar
   const nightStops = packageDetails.basicDetails?.nightStops || [];
+  const basicHighlights = Array.isArray(packageDetails.basicDetails?.highlights)
+    ? packageDetails.basicDetails.highlights
+    : [];
+  const basicTableData = Array.isArray(packageDetails.basicDetails?.tableData)
+    ? packageDetails.basicDetails.tableData
+    : [];
 
   return (
     <div className="min-h-screen bg-white font-barlow w-full">
       {/* ========== HEADER: Package Name + Tags + Itinerary ========== */}
       <div className="w-full bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-5">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+          <h1 className="text-2xl font-recoleta md:text-3xl font-bold text-gray-900 mb-3">
             {packageDetails.packageName}
           </h1>
 
@@ -168,23 +174,18 @@ export default function PackageDetailClient({
                 ✈️ {packageDetails.basicDetails.tourType}
               </span>
             )}
-            {packageDetails.basicDetails?.groupSize && (
-              <span className="border border-gray-300 text-gray-700 text-xs font-medium px-3 py-1 rounded">
-                👥 {packageDetails.basicDetails.groupSize} People Group
-              </span>
-            )}
             <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded">
               {packageDetails.basicDetails?.duration || "7N/8D"}
             </span>
 
             {/* Night stops */}
             {nightStops.length > 0 && (
-              <div className="flex items-center gap-1 text-sm text-gray-600 ml-2 flex-wrap">
+              <div className="flex items-center gap-1 text-md text-gray-600 ml-2 flex-wrap">
                 {nightStops.map((stop, i) => (
-                  <React.Fragment key={i}>
+                  <div key={i} className="flex items-center gap-2 border  border-gray-200 rounded-lg px-2 py-1">
+                    <span className="text-md mx-1">•</span>
                     <span className="font-medium">{stop}</span>
-                    {i < nightStops.length - 1 && <span className="text-orange-400 mx-1">•</span>}
-                  </React.Fragment>
+                  </div>
                 ))}
               </div>
             )}
@@ -265,11 +266,7 @@ export default function PackageDetailClient({
                   <h3 className="text-base font-bold text-blue-800 mb-3">
                     🎯 Here's a list of Activities & Inclusions in this package for you
                   </h3>
-                  {packageDetails.basicDetails?.highlights && (
-                    <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed custom-desc-list">
-                      <div dangerouslySetInnerHTML={{ __html: packageDetails.basicDetails.highlights }} />
-                    </div>
-                  )}
+
                   {inclusions.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       <button
@@ -299,6 +296,60 @@ export default function PackageDetailClient({
                     <div dangerouslySetInnerHTML={{ __html: packageDetails.basicDetails.fullDesc }} />
                   </div>
                 )}
+                {/* Highlights */}
+                {basicHighlights.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <h5 className="text-md font-bold text-gray-900 mb-3">
+                      Itinerary Highlights
+                    </h5>
+
+                    <ul className="list-disc pl-5 space-y-2">
+                      {basicHighlights.map((hl, hIdx) => (
+                        <li key={hIdx}>
+                          <p className="text-md font-semibold text-gray-800">
+                            {hl.highlightName}
+                          </p>
+
+                          {hl.highlightDesc?.length > 0 && (
+                            <ul className="list-disc pl-5 mt-1 space-y-1">
+                              {hl.highlightDesc.map((desc, dIdx) => (
+                                <li key={dIdx} className="text-sm text-gray-600">
+                                  {desc}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Table */}
+                {basicTableData.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    {basicTableData.map((tbl, tIdx) => (
+                      <div key={tIdx} className="mb-4">
+                        <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
+                        <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                          <tbody>
+                            {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                              const col1 = tbl.tableDesc[rowIdx * 2];
+                              const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                              return (
+                                <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                                  <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
+                                  <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
 
                 {/* Map */}
                 {packageDetails.info?.filter(i => i.typeOfSelection === "Location Map")[0]?.selectionDesc && (
@@ -424,22 +475,29 @@ export default function PackageDetailClient({
                         {/* Highlights */}
                         {day.selectionHighlight?.length > 0 && (
                           <div className="mt-4 pt-4 border-t border-gray-100">
-                            <h5 className="text-md font-semibold text-gray-900 mb-3">Itenary Highlights</h5>
-                            <div className="space-y-3">
+                            <h5 className="text-md font-semibold text-gray-900 mb-3">
+                              Itinerary Highlights
+                            </h5>
+
+                            <ul className="list-disc pl-5 space-y-2">
                               {day.selectionHighlight.map((hl, hIdx) => (
-                                <div key={hIdx} className="flex items-center gap-2">
-                                  <span className="text-green-600 mt-0.5 text-xs">*</span>
-                                  <div className="ml-1 flex items-center gap-2">
-                                    <p className="text-sm font-bold text-gray-800">{hl.highlightName}</p>
-                                    {hl.highlightDesc?.map((desc, dIdx) => (
-                                      <div key={dIdx} className="flex items-start gap-2">
-                                        <p className="text-sm text-gray-600">{desc}</p>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
+                                <li key={hIdx}>
+                                  <p className="text-sm font-semibold text-gray-800">
+                                    {hl.highlightName}
+                                  </p>
+
+                                  {hl.highlightDesc?.length > 0 && (
+                                    <ul className="list-disc pl-5 mt-1 space-y-1">
+                                      {hl.highlightDesc.map((desc, dIdx) => (
+                                        <li key={dIdx} className="text-sm text-gray-600">
+                                          {desc}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </li>
                               ))}
-                            </div>
+                            </ul>
                           </div>
                         )}
 
@@ -653,14 +711,37 @@ export default function PackageDetailClient({
 
                       {/* Right: Description grid (2 per row) */}
                       <div className="flex-1 py-5 px-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                          {item.description?.map((desc, di) => (
-                            <div key={di} className="flex items-start border-r border-l border-gray-200 gap-5">
-                              <span className="text-base mt-0.5">📋</span>
-                              <span className="text-sm text-gray-700">{desc}</span>
+                        {(() => {
+                          const descs = item.description || [];
+                          // Group descriptions into rows of 2
+                          const rows = [];
+                          for (let r = 0; r < descs.length; r += 2) {
+                            rows.push(descs.slice(r, r + 2));
+                          }
+                          return rows.map((row, ri) => (
+                            <div key={ri}>
+                              {ri > 0 && rows.length > 1 && (
+                                <hr className="border-gray-500 my-3" />
+                              )}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0 md:divide-x md:divide-gray-200">
+                                {row.map((desc, di) => (
+                                  <div key={di} className="flex items-start gap-3 md:px-4">
+                                    <span className="text-base mt-0.5">
+                                      <Image
+                                        className="w-6 h-6"
+                                        src="/square.png"
+                                        alt="Check"
+                                        width={20}
+                                        height={20}
+                                      />
+                                    </span>
+                                    <span className="text-md text-gray-700">{desc}</span>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          ))}
-                        </div>
+                          ));
+                        })()}
                       </div>
                     </div>
                   )) : (
@@ -896,8 +977,8 @@ export default function PackageDetailClient({
       {/* ========== YOU MIGHT ALSO LIKE ========== */}
       {packages.length > 0 && (
         <div className="mt-10 w-full md:w-[85%] mx-auto px-5 md:px-0">
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">You Might Also Like</h3>
-          <p className="text-sm text-gray-500 mb-6">
+          <h3 className="text-2xl font-recoleta text-gray-900 mb-2">You Might Also Like</h3>
+          <p className="text-sm text-gray-500 mb-6 font-sans">
             We don't just suggest—we predict. Based on your current interests, we've gathered a collection of insights and products
             designed to complement your style. Whether you're looking to dive deeper into this topic or find the perfect finishing touch,
             these recommendations are tailored to meet you right where you are.

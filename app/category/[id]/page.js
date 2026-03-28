@@ -95,7 +95,7 @@ const CategoryPage = async ({ params }) => {
     }));
 
     return (
-        <div className="min-h-screen bg-gray-50 w-full mx-auto">
+        <div className="min-h-screen bg-white w-full mx-auto">
             {/* Banner */}
             <CategoryBanner title={categoryInfo.title} bannerImage={categoryInfo.bannerImage} />
 

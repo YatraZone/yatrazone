@@ -45,13 +45,10 @@ export async function POST(req) {
         await addSpecializationIfNotExists(spec);
       }
     }
-    return new Response(JSON.stringify({ message: 'Artisan profile created successfully', artisan }), { status: 201 });
+    return new Response(JSON.stringify({ message: 'Destination profile created successfully', artisan }), { status: 201 });
   } catch (err) {
-    if (err.code === 11000 && err.keyPattern && err.keyPattern.artisanNumber) {
-      return new Response(JSON.stringify({ message: 'Artisan number already exists', code: 11000 }), { status: 400 });
-    }
     console.error('Error creating artisan profile:', err);
-    return new Response(JSON.stringify({ message: 'Error creating artisan profile', error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ message: 'Error creating Destination profile', error: err.message }), { status: 500 });
   }
 }
 
@@ -67,7 +64,7 @@ export async function GET(req) {
       query._id = { $ne: excludeId };
     }
 
-    // First, try to get just the basic artisan data without populating
+    // First, try to get just the basic Destination data without populating
     let artisans = await Artisan.find(query).sort({ order: 1 });
     
     // If no artisans found, return empty array
@@ -104,7 +101,7 @@ export async function GET(req) {
   } catch (error) {
     console.error('Error in GET /api/createArtisan:', error);
     return new Response(JSON.stringify({ 
-      message: 'Error fetching artisans', 
+      message: 'Error fetching Destination', 
       error: error.message 
     }), { 
       status: 500,
@@ -113,7 +110,7 @@ export async function GET(req) {
   }
 }
 
-// PUT handler for editing an artisan
+// PUT handler for editing an Destination
 export async function PATCH(req) {
   try {
     await connectDB();
@@ -162,14 +159,14 @@ export async function PATCH(req) {
     // Directly replace all fields with the new data (admin full update)
     const updatedArtisan = await Artisan.findByIdAndUpdate(id, updateFields, { new: true, overwrite: false });
     if (!updatedArtisan) {
-      return new Response(JSON.stringify({ message: 'Artisan not found' }), { status: 404 });
+      return new Response(JSON.stringify({ message: 'Destination not found' }), { status: 404 });
     }
-    return new Response(JSON.stringify({ message: 'Artisan profile updated successfully', artisan: updatedArtisan }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Destination profile updated successfully', artisan: updatedArtisan }), { status: 200 });
   } catch (error) {
     if (error.code === 11000 && error.keyPattern && error.keyPattern.artisanNumber) {
-      return new Response(JSON.stringify({ message: 'Artisan number already exists', code: 11000 }), { status: 400 });
+      return new Response(JSON.stringify({ message: 'Destination number already exists', code: 11000 }), { status: 400 });
     }
-    return new Response(JSON.stringify({ message: 'Error updating artisan', error: error.message }), { status: 500 });
+    return new Response(JSON.stringify({ message: 'Error updating destination', error: error.message }), { status: 500 });
   }
 }
 
@@ -179,7 +176,7 @@ export async function DELETE(req) {
     const { id } = await req.json();
     const artisan = await Artisan.findById(id);
     if (!artisan) {
-      return new Response(JSON.stringify({ message: 'Artisan not found' }), { status: 404 });
+      return new Response(JSON.stringify({ message: 'Destination not found' }), { status: 404 });
     }
     // Delete the artisan's profile image from Cloudinary
     const imageKey = artisan.profileImage?.key;
@@ -232,7 +229,7 @@ export async function DELETE(req) {
 
     // Finally, delete the artisan
     await Artisan.findByIdAndDelete(id);
-    return new Response(JSON.stringify({ message: 'Artisan and all related data deleted successfully' }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Destination and all related data deleted successfully' }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message || "Internal Server Error" }), { status: 500 });
   }

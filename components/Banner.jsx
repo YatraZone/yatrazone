@@ -216,7 +216,7 @@ const Banner = () => {
                             src={hotel.image.url}
                             alt={hotel.name}
                             fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            className="object-contain transition-transform duration-500 group-hover:scale-110"
                           />
                         ) : (
                           <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-const Sidebar = ({ id }) => {
+const Sidebar = ({ id, slug }) => {
     const pathname = usePathname()
     return (
         <>
@@ -28,7 +28,7 @@ const Sidebar = ({ id }) => {
             <Link href={`/admin/editPackage/add-vehicle/${id}`} className='w-52'>
                 <button className={`${pathname.includes('/add-vehicle') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Add Vehicle Plan</button>
             </Link>
-            <Link href={`/package/${id}`} className='w-52'>
+            <Link href={`/package/${slug}`} className='w-52'>
                 <button className={` bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>View Final Detail</button>
             </Link>
         </>

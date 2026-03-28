@@ -24,7 +24,7 @@ export async function GET(req, { params }) {
     .populate('artisanHighlights')
   if (!artisan || artisan.active !== true) {
     // console.log('Artisan not found for id:', id, 'Result:', artisan);
-    return new Response(JSON.stringify({ message: 'Artisan not found', debug: { id, artisan } }), { status: 404 });
+    return new Response(JSON.stringify({ message: 'Destination not found', debug: { id, artisan } }), { status: 404 });
   }
   return new Response(JSON.stringify(artisan), { status: 200 });
 }

@@ -23,6 +23,19 @@ const PackageSchema = new Schema({
         notice: { type: String },
         smallDesc: { type: String },
         fullDesc: { type: String },
+        highlights: [
+            {
+                highlightName: { type: String },
+                highlightDesc: [{ type: String }],
+            }
+        ],
+        tableData: [
+            {
+                tableName: { type: String },
+                tableDesc: [{ type: String }],
+            }
+        ],
+        nightStops: [{ type: String }],
     },
     info: [{
         typeOfSelection: { type: String },

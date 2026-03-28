@@ -91,6 +91,36 @@ export async function PUT(req) {
             return NextResponse.json({ message: "Package not found" }, { status: 404 });
         }
 
+        // Normalize array payloads so nested sections are reliably persisted.
+        const bodyBasicDetails = body.basicDetails || {};
+        const normalizedHighlights = Array.isArray(bodyBasicDetails.highlights)
+            ? bodyBasicDetails.highlights
+                .map((h) => ({
+                    highlightName: (h?.highlightName || "").trim(),
+                    highlightDesc: Array.isArray(h?.highlightDesc)
+                        ? h.highlightDesc.map((d) => (d || "").trim()).filter(Boolean)
+                        : [],
+                }))
+                .filter((h) => h.highlightName)
+            : existingPackage.basicDetails?.highlights || [];
+
+        const normalizedTableData = Array.isArray(bodyBasicDetails.tableData)
+            ? bodyBasicDetails.tableData
+                .map((t) => ({
+                    tableName: (t?.tableName || "").trim(),
+                    tableDesc: Array.isArray(t?.tableDesc)
+                        ? t.tableDesc.map((d) => (d || "").trim()).filter(Boolean)
+                        : [],
+                }))
+                .filter((t) => t.tableName)
+            : existingPackage.basicDetails?.tableData || [];
+
+        const normalizedNightStops = Array.isArray(bodyBasicDetails.nightStops)
+            ? bodyBasicDetails.nightStops
+                .map((stop) => (stop || "").trim())
+                .filter(Boolean)
+            : existingPackage.basicDetails?.nightStops || [];
+
         // Merge new data with existing data (to prevent missing fields)
         const nextPackageName = body.packageName ?? existingPackage.packageName;
         const nextSlug = await generateUniqueSlug(body.slug || nextPackageName, body.pkgId);
@@ -108,7 +138,10 @@ export async function PUT(req) {
 
             basicDetails: {
                 ...existingPackage.basicDetails,
-                ...body.basicDetails
+                ...bodyBasicDetails,
+                highlights: normalizedHighlights,
+                tableData: normalizedTableData,
+                nightStops: normalizedNightStops,
             }
         };
 

@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import Link from 'next/link';
 import Image from 'next/image';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const SearchSection = () => {
   const [activeTab, setActiveTab] = useState('property');
@@ -414,24 +415,33 @@ const SearchSection = () => {
         </div>
 
         {/* ===== RIGHT: Filter Banner Cards (25%) ===== */}
-        <div className="w-full lg:w-[25%] px-2 flex-col md:flex-row flex lg:flex-col gap-4">
+        <div className="w-full lg:w-[25%] flex-col md:flex-row flex lg:flex-col gap-2">
           {filterBanners.length > 0 && (
-            filterBanners.map((banner, idx) => (
-              <Link
-                key={banner._id || idx}
-                href={banner.buttonLink || '#'}
-                className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 group cursor-pointer hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="relative w-full h-full min-h-[270px]">
-                  <Image
-                    src={banner.image?.url || '/placeholder.png'}
-                    alt="Filter Banner"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              </Link>
-            ))
+            <div className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 bg-white p-1 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300  ">
+              <Carousel className="w-full" opts={{ align: "start", loop: true }}>
+                <CarouselContent className="-ml-0">
+                  {filterBanners.map((banner, idx) => (
+                    <CarouselItem key={banner._id || idx} className="pl-0 basis-full">
+                      <Link
+                        href={banner.buttonLink || '#'}
+                        className="block group cursor-pointer"
+                      >
+                        <div className="relative w-full min-h-[170px] rounded-lg overflow-hidden">
+                          <Image
+                            src={banner.image?.url || '/placeholder.png'}
+                            alt="Filter Banner"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                      </Link>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-1 h-6 w-6 bg-white/90 hover:bg-white border border-gray-200" />
+                <CarouselNext className="right-1 h-6 w-6 bg-white/90 hover:bg-white border border-gray-200" />
+              </Carousel>
+            </div>
           )}
           <div className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 bg-white p-4 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
             <div>

@@ -167,7 +167,7 @@ const CategoryClient = ({ packages, reviews = {}, menuItems = [], currentCategor
 
   const formatNumber = (number) => new Intl.NumberFormat("en-IN").format(number);
   return (
-    <div className="container mx-auto px-2 md:px-4 py-5 md:py-8">
+    <div className="container mx-auto px-2 md:px-4 py-3">
       {/* ===== Filter Bar ===== */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
         {/* Search Row */}

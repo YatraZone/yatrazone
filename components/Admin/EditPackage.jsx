@@ -23,13 +23,13 @@ import Underline from '@tiptap/extension-underline'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import { Extension } from '@tiptap/core'
-import { 
-  Bold, 
-  Italic, 
-  Underline as UnderlineIcon, 
-  AlignLeft, 
-  AlignCenter, 
-  AlignRight, 
+import {
+  Bold,
+  Italic,
+  Underline as UnderlineIcon,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
   Link as LinkIcon,
   List,
   ListOrdered,
@@ -595,9 +595,57 @@ const EditPackage = () => {
       setThumbnailKey(packages?.basicDetails?.thumbnail?.key)
       setImage(packages?.basicDetails?.imageBanner?.url)
       setImageKey(packages?.basicDetails?.imageBanner?.key)
+      // Initialize highlights from existing data
+      if (packages?.basicDetails?.highlights?.length > 0) {
+        setEditHighlights(packages.basicDetails.highlights.map(h => ({
+          highlightName: h.highlightName || '',
+          highlightDesc: h.highlightDesc?.length > 0 ? [...h.highlightDesc] : ['']
+        })));
+      }
+      // Initialize table data from existing data
+      if (packages?.basicDetails?.tableData?.length > 0) {
+        setEditTableData(packages.basicDetails.tableData.map(t => ({
+          tableName: t.tableName || '',
+          tableDesc: t.tableDesc?.length > 0 ? [...t.tableDesc] : ['', '']
+        })));
+      }
+      // Initialize night stops from existing data
+      if (packages?.basicDetails?.nightStops?.length > 0) {
+        setEditNightStops([...packages.basicDetails.nightStops]);
+      }
     }
   }, [packages, setValue]);
+ // Highlights state: array of { highlightName: '', highlightDesc: [''] }
+  const [highlights, setHighlights] = useState([]);
+  const [editHighlights, setEditHighlights] = useState([]);
 
+  // Table state: array of { tableName: '', tableDesc: ['', ''] } (pairs of 2 columns)
+  const [tableData, setTableData] = useState([]);
+  const [editTableData, setEditTableData] = useState([]);
+
+  // Night Stops state: array of strings
+  const [editNightStops, setEditNightStops] = useState([]);
+
+  // --- Highlight Helpers ---
+  const addHighlight = (setter) => setter(prev => [...prev, { highlightName: '', highlightDesc: [''] }]);
+  const removeHighlight = (setter, idx) => setter(prev => prev.filter((_, i) => i !== idx));
+  const updateHighlightName = (setter, idx, val) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], highlightName: val }; return u; });
+  const addHighlightDesc = (setter, idx) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], highlightDesc: [...u[idx].highlightDesc, ''] }; return u; });
+  const removeHighlightDesc = (setter, hIdx, dIdx) => setter(prev => { const u = [...prev]; u[hIdx] = { ...u[hIdx], highlightDesc: u[hIdx].highlightDesc.filter((_, i) => i !== dIdx) }; return u; });
+  const updateHighlightDesc = (setter, hIdx, dIdx, val) => setter(prev => { const u = [...prev]; const d = [...u[hIdx].highlightDesc]; d[dIdx] = val; u[hIdx] = { ...u[hIdx], highlightDesc: d }; return u; });
+
+  // --- Table Helpers ---
+  const addTableEntry = (setter) => setter(prev => [...prev, { tableName: '', tableDesc: ['', ''] }]);
+  const removeTableEntry = (setter, idx) => setter(prev => prev.filter((_, i) => i !== idx));
+  const updateTableName = (setter, idx, val) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], tableName: val }; return u; });
+  const addTableRow = (setter, idx) => setter(prev => { const u = [...prev]; u[idx] = { ...u[idx], tableDesc: [...u[idx].tableDesc, '', ''] }; return u; });
+  const removeTableRow = (setter, tIdx, rowStart) => setter(prev => { const u = [...prev]; const d = [...u[tIdx].tableDesc]; d.splice(rowStart, 2); u[tIdx] = { ...u[tIdx], tableDesc: d }; return u; });
+  const updateTableDesc = (setter, tIdx, dIdx, val) => setter(prev => { const u = [...prev]; const d = [...u[tIdx].tableDesc]; d[dIdx] = val; u[tIdx] = { ...u[tIdx], tableDesc: d }; return u; });
+
+  // --- Night Stops Helpers ---
+  const addNightStop = (setter) => setter(prev => [...prev, '']);
+  const removeNightStop = (setter, idx) => setter(prev => prev.filter((_, i) => i !== idx));
+  const updateNightStop = (setter, idx, val) => setter(prev => { const u = [...prev]; u[idx] = val; return u; });
   const [showNotice, setShowNotice] = useState(!!watch('basicDetails.notice'));
 
   const handleBannerUpload = async (file) => {
@@ -643,6 +691,28 @@ const EditPackage = () => {
   const onSubmit = async (data) => {
     data.pkgId = packages._id
     data.packageCode = packages.packageCode
+
+    // Ensure nested object exists before attaching dynamic sections.
+    data.basicDetails = data.basicDetails || {};
+
+    const normalizedHighlights = editHighlights
+      .map((h) => ({
+        highlightName: (h.highlightName || '').trim(),
+        highlightDesc: (h.highlightDesc || []).map((d) => (d || '').trim()).filter(Boolean),
+      }))
+      .filter((h) => h.highlightName !== '');
+
+    const normalizedTableData = editTableData
+      .map((t) => ({
+        tableName: (t.tableName || '').trim(),
+        tableDesc: (t.tableDesc || []).map((d) => (d || '').trim()).filter(Boolean),
+      }))
+      .filter((t) => t.tableName !== '');
+
+    // Attach highlights, table data, and night stops to basicDetails.
+    data.basicDetails.highlights = normalizedHighlights;
+    data.basicDetails.tableData = normalizedTableData;
+    data.basicDetails.nightStops = editNightStops.map(ns => (ns || '').trim()).filter(Boolean);
 
     if (!data.basicDetails.duration) {
       toast.error("Duration Field is required", {
@@ -798,6 +868,42 @@ const EditPackage = () => {
             )}
           </div>
           <div className="flex flex-col gap-2 col-span-2 xl:col-span-4">
+            <label htmlFor="nightStops" className="font-semibold">Night Stops</label>
+            <div className="flex flex-wrap gap-2">
+              {editNightStops.length === 0 ? (
+                <p className="text-gray-500 text-sm italic">No night stops added. Click "Add Night Stop" to add.</p>
+              ) : (
+                editNightStops.map((stop, idx) => (
+                  <div key={idx} className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+                    <Input
+                      value={stop}
+                      onChange={(e) => updateNightStop(setEditNightStops, idx, e.target.value)}
+                      placeholder={`Stop ${idx + 1}`}
+                      className="border-0 focus:outline-none focus-visible:ring-0 text-sm flex-1 bg-transparent"
+                    />
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => removeNightStop(setEditNightStops, idx)}
+                      className="shrink-0 h-6 w-6 text-red-500 hover:text-red-700"
+                    >
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                ))
+              )}
+            </div>
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => addNightStop(setEditNightStops)}
+              className="bg-blue-600 hover:bg-blue-500 h-8 px-3 w-fit"
+            >
+              <Plus className="w-4 h-4 mr-1" /> Add Night Stop
+            </Button>
+          </div>
+          <div className="flex flex-col gap-2 col-span-2 xl:col-span-4">
             <label htmlFor="smallDesc" className="font-semibold">Small Description</label>
             <Textarea name="smallDesc" rows={4} className="border-2 font-bold border-blue-600 focus:border-dashed focus:border-blue-500 focus:outline-none focus-visible:ring-0" onChange={(e) => setValue('basicDetails.smallDesc', e.target.value)} {...register('basicDetails.smallDesc')} />
           </div>
@@ -805,12 +911,117 @@ const EditPackage = () => {
             <label htmlFor="fullDesc" className="font-semibold">Full Description</label>
             <div className="rounded-lg border-2 border-blue-600 focus-within:border-dashed focus-within:border-blue-500">
               <MenuBar editor={editor} />
-              <EditorContent 
-                editor={editor} 
-                className="min-h-[200px] p-2 prose max-w-none bg-transparent" 
+              <EditorContent
+                editor={editor}
+                className="min-h-[200px] p-2 prose max-w-none bg-transparent"
               />
             </div>
           </div>
+        </div>
+
+        {/* ===== EDIT HIGHLIGHTS SECTION (Full Width) ===== */}
+        <div className="w-full border-t border-blue-300 pt-6 mt-2">
+          <div className="flex items-center justify-between mb-4">
+            <label className="font-semibold text-lg">Highlights</label>
+            <Button type="button" size="sm" onClick={() => addHighlight(setEditHighlights)} className="bg-blue-600 hover:bg-blue-500 h-8 px-3">
+              <Plus className="w-4 h-4 mr-1" /> Add Highlight
+            </Button>
+          </div>
+          {editHighlights.length === 0 && (
+            <p className="text-gray-500 text-sm italic mb-2">No highlights added yet. Click "Add Highlight" to get started.</p>
+          )}
+          {editHighlights.map((hl, hIdx) => (
+            <div key={hIdx} className="mb-4 border border-blue-200 rounded-lg p-4 bg-blue-50 w-full">
+              <div className="flex items-center gap-3 mb-3">
+                <Input
+                  value={hl.highlightName}
+                  onChange={(e) => updateHighlightName(setEditHighlights, hIdx, e.target.value)}
+                  placeholder="Highlight Title"
+                  className="border-2 border-blue-600 focus:outline-none focus-visible:ring-0 font-bold flex-1"
+                />
+                <Button type="button" size="icon" variant="destructive" onClick={() => removeHighlight(setEditHighlights, hIdx)} className="shrink-0 h-9 w-9">
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 ml-4">
+                {hl.highlightDesc.map((desc, dIdx) => (
+                  <div key={dIdx} className="flex items-center gap-2">
+                    <Input
+                      value={desc}
+                      onChange={(e) => updateHighlightDesc(setEditHighlights, hIdx, dIdx, e.target.value)}
+                      placeholder={`Point ${dIdx + 1}`}
+                      className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm flex-1"
+                    />
+                    {hl.highlightDesc.length > 1 && (
+                      <Button type="button" size="icon" variant="ghost" onClick={() => removeHighlightDesc(setEditHighlights, hIdx, dIdx)} className="shrink-0 h-8 w-8 text-red-500 hover:text-red-700">
+                        <X className="w-3 h-3" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <Button type="button" size="sm" variant="ghost" onClick={() => addHighlightDesc(setEditHighlights, hIdx)} className="ml-4 mt-2 text-blue-600 hover:text-blue-800 h-7 text-xs border border-blue-400">
+                <Plus className="w-3 h-3 mr-1" /> Add Point
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        {/* ===== EDIT TABLE SECTION (Full Width) ===== */}
+        <div className="w-full border-t border-blue-300 pt-6 mt-2">
+          <div className="flex items-center justify-between mb-4">
+            <label className="font-semibold text-lg">Table Data</label>
+            <Button type="button" size="sm" onClick={() => addTableEntry(setEditTableData)} className="bg-blue-600 hover:bg-blue-500 h-8 px-3">
+              <Plus className="w-4 h-4 mr-1" /> Add Table
+            </Button>
+          </div>
+          {editTableData.length === 0 && (
+            <p className="text-gray-500 text-sm italic mb-2">No table data added yet. Click "Add Table" to get started.</p>
+          )}
+          {editTableData.map((tbl, tIdx) => (
+            <div key={tIdx} className="mb-4 border border-blue-200 rounded-lg p-4 bg-blue-50 w-full">
+              <div className="flex items-center gap-3 mb-3">
+                <Input
+                  value={tbl.tableName}
+                  onChange={(e) => updateTableName(setEditTableData, tIdx, e.target.value)}
+                  placeholder="Table Title"
+                  className="border-2 border-blue-600 focus:outline-none focus-visible:ring-0 font-bold flex-1"
+                />
+                <Button type="button" size="icon" variant="destructive" onClick={() => removeTableEntry(setEditTableData, tIdx)} className="shrink-0 h-9 w-9">
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+              <div className="space-y-2 ml-4">
+                {Array.from({ length: Math.ceil(tbl.tableDesc.length / 2) }, (_, rowIdx) => {
+                  const colStart = rowIdx * 2;
+                  return (
+                    <div key={rowIdx} className="flex items-center gap-2">
+                      <Input
+                        value={tbl.tableDesc[colStart] || ''}
+                        onChange={(e) => updateTableDesc(setEditTableData, tIdx, colStart, e.target.value)}
+                        placeholder="Column 1"
+                        className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm flex-1"
+                      />
+                      <Input
+                        value={tbl.tableDesc[colStart + 1] || ''}
+                        onChange={(e) => updateTableDesc(setEditTableData, tIdx, colStart + 1, e.target.value)}
+                        placeholder="Column 2"
+                        className="border border-blue-400 focus:outline-none focus-visible:ring-0 text-sm flex-1"
+                      />
+                      {tbl.tableDesc.length > 2 && (
+                        <Button type="button" size="icon" variant="ghost" onClick={() => removeTableRow(setEditTableData, tIdx, colStart)} className="shrink-0 h-8 w-8 text-red-500 hover:text-red-700">
+                          <X className="w-3 h-3" />
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <Button type="button" size="sm" variant="ghost" onClick={() => addTableRow(setEditTableData, tIdx)} className="ml-4 mt-2 text-blue-600 hover:text-blue-800 h-7 text-xs border border-blue-400">
+                <Plus className="w-3 h-3 mr-1" /> Add Row
+              </Button>
+            </div>
+          ))}
         </div>
 
         <div className="space-y-2 w-full">
