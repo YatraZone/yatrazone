@@ -192,6 +192,11 @@ const data = {
 
     // Fourth group: Blog & pages
     {
+      name: "Create Webpages Pages",
+      url: "/admin/create_webpage",
+      icon: StickyNote,
+    },
+    {
       name: "Manage Webpages",
       url: "/admin/manage_webpage",
       icon: StickyNote,
