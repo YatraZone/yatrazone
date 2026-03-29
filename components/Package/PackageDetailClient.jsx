@@ -721,12 +721,11 @@ export default function PackageDetailClient({
                           return rows.map((row, ri) => (
                             <div key={ri}>
                               {ri > 0 && rows.length > 1 && (
-                                <hr className="border-gray-500 my-3" />
+                                <hr className="border-gray-400 my-3" />
                               )}
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0 md:divide-x md:divide-gray-200">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-0 md:divide-x md:divide-gray-400">
                                 {row.map((desc, di) => (
-                                  <div key={di} className="flex items-start gap-3 md:px-4">
-                                    <span className="text-base mt-0.5">
+                                  <div key={di} className="flex items-start gap-3 px-2">
                                       <Image
                                         className="w-6 h-6"
                                         src="/square.png"
@@ -734,8 +733,7 @@ export default function PackageDetailClient({
                                         width={20}
                                         height={20}
                                       />
-                                    </span>
-                                    <span className="text-md text-gray-700">{desc}</span>
+                                    <span className="text-sm text-gray-700">{desc}</span>
                                   </div>
                                 ))}
                               </div>
