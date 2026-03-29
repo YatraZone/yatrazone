@@ -207,7 +207,7 @@ const AboutUsSection = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-[#ede4f5] via-[#f3eef9] to-[#f8f5fc] rounded-xl px-4 sm:px-5 py-4 shadow-sm border border-purple-100/60">
 
           <div className="flex items-start sm:items-center gap-3 sm:gap-4">
-            <Image src="/cardImage.png" alt="card" width={40} height={40} className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+            <Image src="/banner1.png" alt="card" width={40} height={40} className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
 
             <p className="text-xs sm:text-sm md:text-base text-gray-700">
               {offerDetails?.promoBanner?.description || 'Save ₹2,000 on Hotels by using Adani One ICICI Bank credit card.'}

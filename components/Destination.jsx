@@ -232,10 +232,10 @@ const RandomTourPackageSection = () => {
                 <div className="flex flex-col md:flex-row items-start gap-5">
                   {/* Left: Heading and description */}
                   <div className="flex-1 flex flex-col justify-center md:pr-8">
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-recoleta text-start mb-5 uppercase">
+                    <h2 className="text-2xl md:text-3xl font-recoleta text-start mb-5 ">
                       “Sacred India — One Journey, Infinite Blessings.”
                     </h2>
-                    <h2 className="text-xl font-bold mb-2">
+                    <h2 className="text-lg font-recoleta mb-2">
                       “Across India, Into Yourself — A Spiritual Journey
                       Beyond Boundaries.”
                     </h2>

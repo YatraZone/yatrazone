@@ -217,8 +217,8 @@ const SearchSection = () => {
         <div className="w-full lg:w-[75%]">
           {/* Heading */}
           <div className="mb-4 px-10 md:px-5">
-            <h2 className="text-xl md:text-[1.65rem] font-bold text-gray-900 leading-tight">
-              Biggest discounts on Dham<span className="text-gray-500 font-normal">+Yatra Packages</span>
+            <h2 className="text-xl md:text-[1.65rem] font-recoleta text-gray-900 leading-tight">
+              Biggest discounts on Dham<span className="text-gray-900 font-recoleta"> Yatra Packages</span>
             </h2>
             <p className="text-sm md:text-base text-gray-500 mt-1">
               30-80% off | 5-star stays from <span className="font-semibold text-gray-700">₹2999</span>

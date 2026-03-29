@@ -196,7 +196,7 @@ export default function PackageDetailClient({
       {/* ========== GALLERY SECTION ========== */}
       {galleryImages.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 rounded-xl overflow-hidden h-[300px] md:h-[380px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 rounded-xl overflow-hidden h-[300px] md:h-[320px]">
             {/* Main large image */}
             <div onClick={() => openGallery(0)} className="col-span-2 row-span-2 relative group cursor-pointer overflow-hidden rounded-xl">
               <Image

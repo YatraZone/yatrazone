@@ -155,13 +155,13 @@ const Banner = () => {
           </div>
         )}
 
-        {/* ===== HOTELS SECTION ===== */}
+        {/* ===== Popular Destination SECTION ===== */}
         <div className="w-full px-4 md:px-20 py-10">
           <h2 className="font-recoleta text-2xl md:text-3xl font-bold text-gray-900 mb-1">
             Your style. These stays. A perfect match.
           </h2>
           <p className="text-sm text-gray-500 mb-5 font-sans">
-            Handpicked hotels curated just for you
+            Handpicked Popular Destination curated just for you
           </p>
 
           {/* Category Carousel */}
@@ -234,7 +234,7 @@ const Banner = () => {
               <CarouselNext className="!-right-3 !top-1/3 !-translate-y-1/2 z-10 bg-white/90 hover:bg-white w-10 h-10 rounded-full shadow-md" />
             </Carousel>
           ) : (
-            <p className="text-gray-400 text-center py-8">No destination blogs found in this category.</p>
+            <p className="text-gray-400 text-center py-8">No popular destinations found in this category.</p>
           )}
         </div>
 

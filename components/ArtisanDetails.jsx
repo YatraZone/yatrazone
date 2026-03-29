@@ -1261,7 +1261,7 @@ const ArtisanDetails = ({ artisan }) => {
         <div className="flex flex-col md:flex-row items-start gap-5 ">
           {/* Left: Heading and description */}
           <div className="flex-1 flex flex-col justify-center my-4 md:pr-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-start mb-5 uppercase">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-recoleta text-start mb-5">
               “Sacred India — One Journey, Infinite Blessings.”
             </h2>
             <h2 className="text-xl font-bold mb-2">

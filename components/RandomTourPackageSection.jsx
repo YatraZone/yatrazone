@@ -62,7 +62,7 @@ const RandomTourPackageSection = () => {
       <section className="md:mt-19 w-full px-2 md:px-8 lg:px-16 bg-[url('/bg-custom-3.jpg')] overflow-hidden max-w-screen overflow-x-hidden">
         <div className=" w-full h-full overflow-hidden max-w-screen overflow-x-hidden">
           <div className="w-full py-10">
-            <h1 className="font-recoleta text-xl md:text-3xl lg:text-4xl uppercase text-center">
+            <h1 className="font-recoleta text-xl md:text-3xl uppercase text-center">
               Trending Packages: The Best, Today
             </h1>
             <Carousel className="w-[75%] md:w-[95%] drop-shadow-xl mx-auto xl:w-full my-6 md:my-12">
