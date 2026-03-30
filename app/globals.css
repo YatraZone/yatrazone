@@ -7,6 +7,20 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Geist';
+  src: url('/Geist-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('/Geist-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -217,6 +231,12 @@
 .font-recoleta {
   font-family: 'Recoleta', serif;
 }
+
+.font-geist {
+  font-family: 'Geist', sans-serif;
+}
+
+
 
 @keyframes spin {
   to { transform: rotate(360deg); }

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
+  ArrowLeft,
   ChevronDown,
   Facebook,
   Globe,
@@ -43,7 +44,7 @@ const HtmlBlock = ({ html, className = "" }) => {
   if (!isFilledText(html)) return null;
   return (
     <div
-      className={`prose prose-sm max-w-none text-gray-600 leading-7 ${className}`}
+      className={`prose prose-sm max-w-none  leading-7 font-geist font-bold ${className}`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
@@ -55,7 +56,7 @@ const StaticSidebarCard = ({ data }) => {
 
   if (adImage) {
     const card = (
-      <div className="overflow-hidden rounded-md border-2 h-[250px] bg-white">
+      <div className="overflow-hidden h-[250px] bg-white">
         <img src={adImage} alt={data.title || "Advertisement"} className="h-full w-full object-contain" />
       </div>
     );
@@ -214,7 +215,7 @@ const ShareCard = ({ slug }) => {
 //         ))
 //       ) : (
 //         <>
-          
+
 //         </>
 //       )}
 //     </div>
@@ -337,6 +338,7 @@ const PopularDestinations = () => {
 };
 
 const WebPage = ({ data }) => {
+  console.log(data)
   const [openAccordion, setOpenAccordion] = useState(0);
   const isDesignTwo = data.templateType === "design2";
   const isDesignThree = data.templateType === "design3";
@@ -355,7 +357,14 @@ const WebPage = ({ data }) => {
   const blockquoteTags = useMemo(() => cleanTextArray(data.blockquoteTags), [data.blockquoteTags]);
 
   const paragraphImages = [data.paragraphFirstImage?.url, data.paragraphSecondImage?.url].filter(Boolean);
-  const headerImage = data.bannerImage?.url || data.imageFirst?.url || paragraphImages[0] || data.sideThumbImage?.url;
+  const hasTopMetaContent =
+    isFilledText(data.firstTitle) ||
+    isFilledText(data.secondTitle) ||
+    tags.length > 0;
+  const hasMainTopImage = !!data.imageFirst?.url;
+  const hasTopHeaderContent = hasTopMetaContent || hasMainTopImage;
+  const isBannerOnlyTop = !isDesignThree && !!data.bannerImage?.url && !hasTopHeaderContent;
+  const headerImage = data.imageFirst?.url || paragraphImages[0] || data.sideThumbImage?.url;
   const leadParagraph = isDesignTwo ? paragraphs[0] : null;
   const contentParagraphs = isDesignTwo ? paragraphs.slice(1) : paragraphs;
   const designOneLeadParagraph = !isDesignTwo && !isDesignThree ? paragraphs[0] : null;
@@ -371,53 +380,63 @@ const WebPage = ({ data }) => {
 
   return (
     <div className="min-h-screen bg-white font-recoleta text-gray-900 ">
-      <div className="w-full border-b border-[#ece7df] bg-[#f7f3ed]">
+      <div className={`w-full border-b border-[#ece7df] ${!isDesignThree ? "bg-[#efefef]" : "bg-[#f7f3ed]"}`}>
         <div className="mx-auto max-w-7xl md:px-4 md:py-2 sm:px-6 lg:px-12">
-          <div className={`grid gap-6 ${isDesignThree ? "grid-cols-1" : isDesignTwo ? "lg:grid-cols-[350px_minmax(0,760px)] lg:justify-center" : "lg:grid-cols-[320px_1fr] lg:items-center"}`}>
+          {!isDesignThree && (
+            <div className="flex items-center justify-between py-6 text-gray-600">
+
+              {/* <span className="w-[120px] md:w-[180px]" /> */}
+            </div>
+          )}
+          <div className={`grid gap-2 ${isDesignThree ? "grid-cols-1" : isBannerOnlyTop ? "grid-cols-1" : "lg:grid-cols-[520px_minmax(0,1fr)] lg:items-center"}`}>
             {isDesignThree ? (
               <div className="flex items-center gap-2">
                 {designThreeHeroImages[0] && (
                   <img src={designThreeHeroImages[0]} alt={data.title} className="md:h-[300px] w-full object-contain" />
                 )}
               </div>
-            ) : (
+            ) : isBannerOnlyTop ? (
               <div className="overflow-hidden rounded-md">
+                <img src={data.bannerImage.url} alt={data.title} className="h-[240px] md:h-[360px] w-full object-cover" />
+              </div>
+            ) : (
+              <div className="overflow-hidden">
                 {headerImage && (
-                  <img src={headerImage} alt={data.title} className="h-[200px] md:h-[240px]: w-full object-contain lg:h-[220px] md:object-cover" />
-                ) }
+                  <img src={headerImage} alt={data.title} className="h-[220px] w-full object-contain md:h-[250px]" />
+                )}
               </div>
             )}
             {!isDesignThree && (
               <div>
                 {isFilledText(data.firstTitle) && (
-                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#8f7c62]">{data.firstTitle}</p>
+                  <span className="hidden text-md my-5 font-medium text-gray-600 md:block">{data.firstTitle}</span>
                 )}
-                <h1 className="mt-2 max-w-3xl text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+                <h1 className="max-w-4xl text-2xl font-geist font-semibold leading-[1.05] tracking-tight text-black sm:text-5xl">
                   {data.title}
                 </h1>
                 {isFilledText(data.secondTitle) && (
-                  <p className="mt-4 max-w-3xl text-base leading-7 text-gray-600">{data.secondTitle}</p>
+                  <p className="mt-4 max-w-3xl text-md leading-8 text-gray-700">{data.secondTitle}</p>
                 )}
                 {tags.length > 0 && (
-                  <div className="mt-5 flex flex-wrap gap-2">
+                  <div className="mt-2 flex flex-wrap gap-2">
                     {tags.map((tag, idx) => (
                       <span
                         key={tag + idx}
-                        className="rounded-md border border-[#d9d0c3] bg-white px-3 py-1 text-sm font-semibold text-gray-700"
+                        className="rounded-md border border-[#d4d4d4] bg-[#efefef] px-2 py-2 text-md font-medium text-black"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 )}
-                <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                  <div className="flex items-center gap-2">
+                <div className="mt-7 flex flex-wrap items-center gap-4 text-md text-black">
+                  <div className="flex items-center gap-4">
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e8e4ff] text-sm font-bold text-[#4f46e5]">
                       {(data.sideThumbName || "E").charAt(0)}
                     </span>
                     <span>{data.sideThumbName || "Editorial Team"}</span>
                   </div>
-                  <span className="h-1 w-1 rounded-full bg-gray-300" />
+                  <span className="h-10 w-px bg-gray-400" />
                   <span>{formatDate(data.updatedAt || data.createdAt) || ""}</span>
                 </div>
               </div>
@@ -474,10 +493,23 @@ const WebPage = ({ data }) => {
                   ))}
                 </div>
               )}
+              {/* Bullet Points Section */}
+              {designOneLeadParagraph.bulletPoints && designOneLeadParagraph.bulletPoints.length > 0 && designOneLeadParagraph.bulletPoints.some(point => isFilledText(point)) && (
+                <div className="space-y-3 mt-4">
+                  {designOneLeadParagraph.bulletPoints.map((point, bulletIdx) => (
+                    isFilledText(point) && (
+                      <div key={bulletIdx} className="flex gap-3">
+                        <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
+                        <p className="text-md leading-6 text-gray-600">{point}</p>
+                      </div>
+                    )
+                  ))}
+                </div>
+              )}
             </section>
           )}
 
-          <div className={`grid gap-10 md:p-5 sm:px-8 ${isDesignThree ? "grid-cols-1" : isDesignTwo ? "lg:grid-cols-[330px_minmax(0,1fr)] lg:items-start" : "lg:grid-cols-[290px_1fr]"}`}>
+          <div className={`grid gap-10 md:p-5 sm:px-8 ${isDesignThree ? "grid-cols-1" : isDesignTwo ? "lg:grid-cols-[330px_minmax(0,1fr)] lg:items-start" : "lg:grid-cols-[400px_1fr]"}`}>
             {isDesignThree ? (
               <>
                 <main className="space-y-10">
@@ -488,6 +520,9 @@ const WebPage = ({ data }) => {
                           <h2 className="text-2xl font-bold leading-tight text-gray-950">{section.title}</h2>
                         )}
                         <HtmlBlock html={section.description} />
+
+
+
                         {paragraphImages.length > 0 && index === 0 && (
                           <div className={`grid gap-4 ${paragraphImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
                             {paragraphImages.map((image, imgIndex) => (
@@ -585,6 +620,21 @@ const WebPage = ({ data }) => {
                       {isFilledText(leadParagraph.title) && (
                         <h2 className="text-4xl font-bold leading-tight text-gray-950">{leadParagraph.title}</h2>
                       )}
+
+                      {/* Bullet Points Section */}
+                      {/* {leadParagraph.bulletPoints && leadParagraph.bulletPoints.length > 0 && leadParagraph.bulletPoints.some(point => isFilledText(point)) && (
+                        <div className="space-y-3 mt-4">
+                          {leadParagraph.bulletPoints.map((point, bulletIdx) => (
+                            isFilledText(point) && (
+                              <div key={bulletIdx} className="flex gap-3">
+                                <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
+                                <p className="text-sm leading-6 text-gray-600">{point}</p>
+                              </div>
+                            )
+                          ))}
+                        </div>
+                      )} */}
+
                       <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
                         <span>{data.postedBy?.admin ? "By Admin" : data.sideThumbName || "Editorial Team"}</span>
                         <span className="h-1 w-1 rounded-full bg-gray-300" />
@@ -615,6 +665,20 @@ const WebPage = ({ data }) => {
                           </h2>
                         )}
                         <HtmlBlock html={section.description} />
+
+                        {/* Bullet Points Section */}
+                        {/* {section.bulletPoints && section.bulletPoints.length > 0 && section.bulletPoints.some(point => isFilledText(point)) && (
+                          <div className="space-y-3 mt-4">
+                            {section.bulletPoints.map((point, bulletIdx) => (
+                              isFilledText(point) && (
+                                <div key={bulletIdx} className="flex gap-3">
+                                  <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
+                                  <p className="text-sm leading-6 text-gray-600">{point}</p>
+                                </div>
+                              )
+                            ))}
+                          </div>
+                        )} */}
                       </section>
                     ))}
 
@@ -635,6 +699,7 @@ const WebPage = ({ data }) => {
                       </div>
                     </section>
                   )}
+
 
                   {(isFilledText(data.blockquoteDescription) || isFilledText(data.blockquoteMainTitle)) && (
                     <section className={`rounded bg-gray-100 px-2 gap-2 flex flex-col py-5 text-black ${isDesignTwo ? "max-w-3xl" : ""}`}>
@@ -673,24 +738,61 @@ const WebPage = ({ data }) => {
                     </section>
                   )}
 
+                  {/* Bullet Points Section */}
+                  {/* {section.bulletPoints && section.bulletPoints.length > 0 && section.bulletPoints.some(point => isFilledText(point)) && (
+                    <div className="space-y-3 mt-4">
+                      {section.bulletPoints.map((point, bulletIdx) => (
+                        isFilledText(point) && (
+                          <div key={bulletIdx} className="flex gap-3">
+                            <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
+                            <p className="text-sm leading-6 text-gray-600">{point}</p>
+                          </div>
+                        )
+                      ))}
+                    </div>
+                  )} */}
+
                   {accordionItems.length > 0 && (
-                    <section className="space-y-4">
-                      <h2 className="text-2xl font-bold text-gray-950">Frequently asked</h2>
-                      <div className="space-y-3">
+                    <section className="space-y-6">
+                      <h2 className="text-3xl font-bold text-gray-950">Frequently asked</h2>
+                      <div className="space-y-2.5">
                         {accordionItems.map((item, index) => {
                           const isOpen = openAccordion === index;
                           return (
-                            <div key={`${item.left}-${index}`} className="overflow-hidden border border-[#ece7df] bg-[#fcfaf6]">
+                            <div
+                              key={`${item.left}-${index}`}
+                              className={`overflow-hidden rounded-lg border transition-all duration-300 ${isOpen
+                                ? "border-[#6156b0] bg-gradient-to-br from-[#f9f8fd] to-[#fcfaf6]"
+                                : "border-[#e6dccf] bg-white"
+                                }`}
+                              style={{
+                                transformOrigin: "top",
+                                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                              }}
+                            >
                               <button
                                 type="button"
                                 onClick={() => setOpenAccordion(isOpen ? -1 : index)}
-                                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                                className={`flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-all duration-300 ${isOpen
+                                  ? "bg-gradient-to-r from-[#6156b0]/5 to-transparent"
+                                  : "hover:bg-[#faf8f5]"
+                                  }`}
                               >
-                                <span className="text-sm font-semibold text-gray-900">{item.left || `Question ${index + 1}`}</span>
-                                <ChevronDown className={`h-4 w-4 shrink-0 text-gray-500 transition ${isOpen ? "rotate-180" : ""}`} />
+                                <span className={`font-semibold transition-colors duration-300 ${isOpen ? "text-[#6156b0]" : "text-gray-900 group-hover:text-gray-950"}`}>
+                                  {item.left || `Question ${index + 1}`}
+                                </span>
+                                <ChevronDown
+                                  className={`h-5 w-5 shrink-0 transition-all duration-500 ${isOpen ? "rotate-180 text-[#6156b0]" : "text-gray-500"
+                                    }`}
+                                />
                               </button>
                               {isOpen && (
-                                <div className="border-t border-[#ece7df] px-5 py-4 text-sm leading-7 text-gray-600">
+                                <div
+                                  className="border-t border-[#e6dccf] px-6 py-5 text-sm leading-7 text-gray-700 animate-in fade-in duration-300"
+                                  style={{
+                                    animation: "fadeIn 0.4s ease"
+                                  }}
+                                >
                                   {item.right || "No details added yet."}
                                 </div>
                               )}

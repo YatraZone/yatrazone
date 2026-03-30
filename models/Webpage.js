@@ -19,6 +19,9 @@ const ParagraphSectionSchema = new Schema(
   {
     title: { type: String, default: "" },
     description: { type: String, default: "" },
+    firstImage: { type: ImageSchema, default: () => ({}) },
+    secondImage: { type: ImageSchema, default: () => ({}) },
+    bulletPoints: { type: [String], default: [""] },
   },
   { _id: false }
 );
@@ -59,7 +62,10 @@ const WebpageSchema = new Schema(
       user: { type: Boolean, default: false },
     },
     highlights: { type: [HighlightSchema], default: [{ title: "", point: "" }] },
-    paragraphSections: { type: [ParagraphSectionSchema], default: [{ title: "", description: "" }] },
+    paragraphSections: {
+      type: [ParagraphSectionSchema],
+      default: [{ title: "", description: "", firstImage: {}, secondImage: {}, bulletPoints: [""] }],
+    },
     paragraphFirstImage: { type: ImageSchema, default: () => ({}) },
     paragraphSecondImage: { type: ImageSchema, default: () => ({}) },
     tableTitle: { type: String, default: "" },

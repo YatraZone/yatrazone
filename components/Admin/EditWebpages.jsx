@@ -32,7 +32,14 @@ import {
 } from 'lucide-react'
 const initialCreateTags = [''];
 const initialHighlights = [{ title: '', point: '' }];
-const initialParagraphSections = [{ title: '', description: '' }];
+const createEmptyParagraphSection = () => ({
+  title: '',
+  description: '',
+  firstImage: { url: '', key: '' },
+  secondImage: { url: '', key: '' },
+  bulletPoints: ['']
+});
+const initialParagraphSections = [createEmptyParagraphSection()];
 const initialTableRows = [{ column1: '', column2: '' }];
 const initialAccordionTags = [{ left: '', right: '' }];
 const TEMPLATE_OPTIONS = [
@@ -40,6 +47,19 @@ const TEMPLATE_OPTIONS = [
   { value: 'design2', label: 'Design 2' },
   { value: 'design3', label: 'Design 3' },
 ];
+
+const normalizeParagraphSections = (sections) => {
+  if (!Array.isArray(sections) || sections.length === 0) {
+    return initialParagraphSections;
+  }
+  return sections.map((section) => ({
+    title: section?.title || '',
+    description: section?.description || '',
+    firstImage: section?.firstImage || { url: '', key: '' },
+    secondImage: section?.secondImage || { url: '', key: '' },
+    bulletPoints: Array.isArray(section?.bulletPoints) && section.bulletPoints.length > 0 ? section.bulletPoints : ['']
+  }));
+};
 
 const InlineRichTextEditor = ({ value, onChange }) => {
   const editor = useEditor({
@@ -114,7 +134,7 @@ const EditWebpages = ({ activityId }) => {
             createTags: Array.isArray(data.createTags) && data.createTags.length > 0 ? data.createTags : initialCreateTags,
             postedBy: data.postedBy || { admin: false, user: false },
             highlights: Array.isArray(data.highlights) && data.highlights.length > 0 ? data.highlights : initialHighlights,
-            paragraphSections: Array.isArray(data.paragraphSections) && data.paragraphSections.length > 0 ? data.paragraphSections : initialParagraphSections,
+            paragraphSections: normalizeParagraphSections(data.paragraphSections),
             tableTitle: data.tableTitle || '',
             tableRows: Array.isArray(data.tableRows) && data.tableRows.length > 0 ? data.tableRows : initialTableRows,
             blockquoteMainTitle: data.blockquoteMainTitle || '',
@@ -152,8 +172,6 @@ const EditWebpages = ({ activityId }) => {
   const [uploadingMainProfileImage, setUploadingMainProfileImage] = useState(false);
   const sideThumbImageInputRef = useRef(null);
   const [uploadingSideThumbImage, setUploadingSideThumbImage] = useState(false);
-  const paragraphFirstImageInputRef = useRef(null);
-  const paragraphSecondImageInputRef = useRef(null);
   const advertisementImageInputRef = useRef(null);
   const [uploadingParagraphFirstImage, setUploadingParagraphFirstImage] = useState(false);
   const [uploadingParagraphSecondImage, setUploadingParagraphSecondImage] = useState(false);
@@ -251,6 +269,94 @@ const EditWebpages = ({ activityId }) => {
       toast.error('Cloudinary delete error: ' + err.message);
     }
   };
+
+  const handleParagraphSectionImageChange = async (e, index, imageKey) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (imageKey === 'firstImage') setUploadingParagraphFirstImage(true);
+    if (imageKey === 'secondImage') setUploadingParagraphSecondImage(true);
+
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+
+    try {
+      const res = await fetch('/api/cloudinary', {
+        method: 'POST',
+        body: formDataUpload,
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        const uploadedImage = { url: data.url, key: data.key || '' };
+        setForm((prev) => {
+          const nextParagraphs = [...(prev.paragraphSections || [])];
+          nextParagraphs[index] = {
+            ...nextParagraphs[index],
+            [imageKey]: uploadedImage,
+          };
+          const next = { ...prev, paragraphSections: nextParagraphs };
+          if (index === 0 && imageKey === 'firstImage') next.paragraphFirstImage = uploadedImage;
+          if (index === 0 && imageKey === 'secondImage') next.paragraphSecondImage = uploadedImage;
+          return next;
+        });
+        toast.success('Image uploaded!');
+      } else {
+        toast.error('Cloudinary upload failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      toast.error('Cloudinary upload error: ' + err.message);
+    }
+
+    if (imageKey === 'firstImage') setUploadingParagraphFirstImage(false);
+    if (imageKey === 'secondImage') setUploadingParagraphSecondImage(false);
+    e.target.value = '';
+  };
+
+  const handleDeleteParagraphSectionImage = async (index, imageKey) => {
+    const image = form.paragraphSections?.[index]?.[imageKey];
+
+    if (!image || !image.key) {
+      setForm((prev) => {
+        const nextParagraphs = [...(prev.paragraphSections || [])];
+        nextParagraphs[index] = {
+          ...nextParagraphs[index],
+          [imageKey]: { url: '', key: '' },
+        };
+        const next = { ...prev, paragraphSections: nextParagraphs };
+        if (index === 0 && imageKey === 'firstImage') next.paragraphFirstImage = { url: '', key: '' };
+        if (index === 0 && imageKey === 'secondImage') next.paragraphSecondImage = { url: '', key: '' };
+        return next;
+      });
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/cloudinary', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId: image.key }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setForm((prev) => {
+          const nextParagraphs = [...(prev.paragraphSections || [])];
+          nextParagraphs[index] = {
+            ...nextParagraphs[index],
+            [imageKey]: { url: '', key: '' },
+          };
+          const next = { ...prev, paragraphSections: nextParagraphs };
+          if (index === 0 && imageKey === 'firstImage') next.paragraphFirstImage = { url: '', key: '' };
+          if (index === 0 && imageKey === 'secondImage') next.paragraphSecondImage = { url: '', key: '' };
+          return next;
+        });
+        toast.success('Image deleted from Cloudinary!');
+      } else {
+        toast.error('Cloudinary delete failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      toast.error('Cloudinary delete error: ' + err.message);
+    }
+  };
   const initialForm = {
     firstTitle: '',
     imageFirst: { url: '', key: '' },
@@ -289,6 +395,7 @@ const EditWebpages = ({ activityId }) => {
   const [galleryPreviews, setGalleryPreviews] = useState([]);
   const isDesignThree = form.templateType === 'design3';
   const isDesignOneOrTwo = form.templateType === 'design1' || form.templateType === 'design2';
+  const [topSectionView, setTopSectionView] = useState('all');
 
   // Handle input changes
   const handleChange = (e) => {
@@ -337,11 +444,85 @@ const EditWebpages = ({ activityId }) => {
     setForm((prev) => ({ ...prev, [name]: (prev[name] || []).filter((_, i) => i !== index) }));
   };
 
+  const addParagraphBulletPoint = (paragraphIndex) => {
+    setForm((prev) => {
+      const nextParagraphs = [...(prev.paragraphSections || [])];
+      const currentBullets = nextParagraphs[paragraphIndex]?.bulletPoints || [''];
+      nextParagraphs[paragraphIndex] = {
+        ...nextParagraphs[paragraphIndex],
+        bulletPoints: [...currentBullets, ''],
+      };
+      return { ...prev, paragraphSections: nextParagraphs };
+    });
+  };
+
+  const removeParagraphBulletPoint = (paragraphIndex, bulletIndex) => {
+    setForm((prev) => {
+      const nextParagraphs = [...(prev.paragraphSections || [])];
+      const currentBullets = nextParagraphs[paragraphIndex]?.bulletPoints || [''];
+      const updatedBullets = currentBullets.filter((_, idx) => idx !== bulletIndex);
+      nextParagraphs[paragraphIndex] = {
+        ...nextParagraphs[paragraphIndex],
+        bulletPoints: updatedBullets.length > 0 ? updatedBullets : [''],
+      };
+      return { ...prev, paragraphSections: nextParagraphs };
+    });
+  };
+
+  const handleParagraphBulletPointChange = (paragraphIndex, bulletIndex, value) => {
+    setForm((prev) => {
+      const nextParagraphs = [...(prev.paragraphSections || [])];
+      const currentBullets = [...(nextParagraphs[paragraphIndex]?.bulletPoints || [''])];
+      currentBullets[bulletIndex] = value;
+      nextParagraphs[paragraphIndex] = {
+        ...nextParagraphs[paragraphIndex],
+        bulletPoints: currentBullets,
+      };
+      return { ...prev, paragraphSections: nextParagraphs };
+    });
+  };
+
+  const hasNonEmptyText = (value) => typeof value === 'string' && value.trim().length > 0;
+  const hasAnyNonEmptyTag = (tags) => Array.isArray(tags) && tags.some((tag) => hasNonEmptyText(tag));
+  const hasPostedBySelection = (postedBy) => !!(postedBy?.admin || postedBy?.user);
+
+  const hasTopTextSectionContent = (data) => {
+    return (
+      hasNonEmptyText(data?.firstTitle) ||
+      hasNonEmptyText(data?.secondTitle) ||
+      hasAnyNonEmptyTag(data?.createTags) ||
+      hasPostedBySelection(data?.postedBy) ||
+      !!data?.imageFirst?.url
+    );
+  };
+
+  const hasTopBannerContent = (data) => !!data?.bannerImage?.url;
+
   // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { _id, __v, createdAt, updatedAt, ...payload } = form;
+      const { _id, __v, createdAt, updatedAt, ...restPayload } = form;
+      const payload = { ...restPayload };
+      const firstParagraphSection = Array.isArray(payload.paragraphSections) && payload.paragraphSections.length > 0
+        ? payload.paragraphSections[0]
+        : null;
+      if (firstParagraphSection) {
+        payload.paragraphFirstImage = firstParagraphSection.firstImage || { url: '', key: '' };
+        payload.paragraphSecondImage = firstParagraphSection.secondImage || { url: '', key: '' };
+      }
+
+      const hasTopText = hasTopTextSectionContent(payload);
+      const hasTopBanner = hasTopBannerContent(payload);
+      if (hasTopText && hasTopBanner) {
+        toast.error('Please fill either top text section or top banner image, not both.');
+        return;
+      }
+      if (!hasTopText && !hasTopBanner) {
+        toast.error('Please fill at least one option: top text section or top banner image.');
+        return;
+      }
+
       const res = await fetch(`/api/create_webpage/${activityId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -369,7 +550,7 @@ const EditWebpages = ({ activityId }) => {
                 createTags: Array.isArray(data.createTags) && data.createTags.length > 0 ? data.createTags : initialCreateTags,
                 postedBy: data.postedBy || { admin: false, user: false },
                 highlights: Array.isArray(data.highlights) && data.highlights.length > 0 ? data.highlights : initialHighlights,
-                paragraphSections: Array.isArray(data.paragraphSections) && data.paragraphSections.length > 0 ? data.paragraphSections : initialParagraphSections,
+                paragraphSections: normalizeParagraphSections(data.paragraphSections),
                 tableTitle: data.tableTitle || '',
                 tableRows: Array.isArray(data.tableRows) && data.tableRows.length > 0 ? data.tableRows : initialTableRows,
                 blockquoteMainTitle: data.blockquoteMainTitle || '',
@@ -411,55 +592,146 @@ const EditWebpages = ({ activityId }) => {
         <h2 className="text-2xl font-semibold mb-6">Webpage Name : {form.title}</h2>
         <div className="mb-4">
           <label className="block mb-1 font-semibold">Frontend Design</label>
-          <select
-            name="templateType"
-            value={form.templateType || 'design1'}
-            onChange={handleChange}
-            className="w-full rounded-md p-3 bg-gray-200 text-black font-semibold"
-          >
-            {TEMPLATE_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+
+          <input type="text" value={form.templateType} disabled readOnly className="w-full rounded-md p-3 bg-gray-200 font-semibold text-black" />
         </div>
         {(isDesignOneOrTwo || isDesignThree) && (
           <>
-            {/* Main Short Tag Line */}
             <div className="mb-4">
-              <label className="block mb-1 font-semibold">Main Short Tag Line</label>
-              <input type="text" name="firstTitle" value={form.firstTitle} onChange={handleChange} placeholder="Type Here" className="w-full rounded-md p-3 bg-gray-200 font-semibold text-black" />
+              <label className="block mb-2 font-semibold">Top Section View</label>
+              <div className="inline-flex rounded-md border border-gray-300 overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setTopSectionView('all')}
+                  className={`px-4 py-2 font-semibold ${topSectionView === 'all' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
+                >
+                  All Inputs
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTopSectionView('bannerOnly')}
+                  className={`px-4 py-2 font-semibold ${topSectionView === 'bannerOnly' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
+                >
+                  Banner Image Only
+                </button>
+              </div>
             </div>
-            {/* Main Top Image (Cloudinary Upload) */}
-            {!isDesignThree && (
+
+            {topSectionView === 'all' && (
+              <>
+                {/* Main Short Tag Line */}
+                <div className="mb-4">
+                  <label className="block mb-1 font-semibold">Main Short Tag Line</label>
+                  <input type="text" name="firstTitle" value={form.firstTitle} onChange={handleChange} placeholder="Type Here" className="w-full rounded-md p-3 bg-gray-200 font-semibold text-black" />
+                </div>
+                {/* Main Top Image (Cloudinary Upload) */}
+                {!isDesignThree && (
+                  <div className="mb-4">
+                    <label className="block mb-1 font-semibold">Main Top Image</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => handleCloudinaryImageChange(e, 'imageFirst')}
+                      ref={imageFirstInputRef}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      className="mb-2 flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded"
+                      onClick={() => imageFirstInputRef.current && imageFirstInputRef.current.click()}
+                    >
+                      <span>Upload Here</span>
+                    </button>
+                    {uploadingImageFirst && <div className="text-blue-600 font-semibold">Uploading...</div>}
+                    {form.imageFirst && form.imageFirst.url && (
+                      <div className="relative w-full h-48 border rounded overflow-hidden mb-2">
+                        <img
+                          src={form.imageFirst.url}
+                          alt="Image First Preview"
+                          className="object-contain w-full h-full"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteCloudinaryImage('imageFirst')}
+                          className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full p-1 hover:bg-red-200"
+                          title="Remove image"
+                        >
+                          <Trash2 className="w-5 h-5 text-red-600" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {/* Main Top Title Tag Line */}
+                <div className="mb-4">
+                  <label className="block mb-1 font-semibold">Main Top Title Tag Line</label>
+                  <input type="text" name="secondTitle" value={form.secondTitle} onChange={handleChange} placeholder="Type Here" className="w-full rounded-md p-3 bg-gray-200 font-semibold" />
+                </div>
+
+                {/* Create Tag */}
+                <div className="mb-4">
+                  <label className="block mb-1 font-semibold">Create Tag</label>
+                  {form.createTags.map((tag, index) => (
+                    <div key={index} className="flex items-center gap-2 mb-2">
+                      <input
+                        type="text"
+                        value={tag}
+                        onChange={(e) => handleArrayTextChange('createTags', index, e.target.value)}
+                        placeholder="Type Here"
+                        className="flex-1 rounded-md p-3 bg-gray-200 font-semibold"
+                      />
+                      <button type="button" onClick={() => addArrayTextRow('createTags')} className="bg-blue-700 text-white px-3 py-2 rounded">+</button>
+                      {form.createTags.length > 1 && (
+                        <button type="button" onClick={() => removeArrayTextRow('createTags', index)} className="bg-red-500 text-white px-3 py-2 rounded"><Trash2 className="w-4 h-4" /></button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Posted By */}
+                <div className="mb-4">
+                  <label className="block mb-2 font-semibold">Posted By</label>
+                  <div className="flex items-center gap-6">
+                    <label className="flex items-center gap-2 font-semibold">
+                      <input type="checkbox" checked={!!form.postedBy?.admin} onChange={() => handlePostedByChange('admin')} /> Admin
+                    </label>
+                    <label className="flex items-center gap-2 font-semibold">
+                      <input type="checkbox" checked={!!form.postedBy?.user} onChange={() => handlePostedByChange('user')} /> User
+                    </label>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Main Top Banner Image (Cloudinary Upload) */}
+            {(topSectionView === 'bannerOnly') && (
               <div className="mb-4">
-                <label className="block mb-1 font-semibold">Main Top Image</label>
+                <label className="block mb-1 font-semibold">Main Top Banner Image</label>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={e => handleCloudinaryImageChange(e, 'imageFirst')}
-                  ref={imageFirstInputRef}
+                  onChange={e => handleCloudinaryImageChange(e, 'bannerImage')}
+                  ref={bannerImageInputRef}
                   className="hidden"
                 />
                 <button
                   type="button"
                   className="mb-2 flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded"
-                  onClick={() => imageFirstInputRef.current && imageFirstInputRef.current.click()}
+                  onClick={() => bannerImageInputRef.current && bannerImageInputRef.current.click()}
                 >
                   <span>Upload Here</span>
                 </button>
-                {uploadingImageFirst && <div className="text-blue-600 font-semibold">Uploading...</div>}
-                {form.imageFirst && form.imageFirst.url && (
+                {uploadingBannerImage && <div className="text-blue-600 font-semibold">Uploading...</div>}
+                {form.bannerImage && form.bannerImage.url && (
                   <div className="relative w-full h-48 border rounded overflow-hidden mb-2">
                     <img
-                      src={form.imageFirst.url}
-                      alt="Image First Preview"
+                      src={form.bannerImage.url}
+                      alt="Banner Image Preview"
                       className="object-contain w-full h-full"
                     />
                     <button
                       type="button"
-                      onClick={() => handleDeleteCloudinaryImage('imageFirst')}
+                      onClick={() => handleDeleteCloudinaryImage('bannerImage')}
                       className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full p-1 hover:bg-red-200"
                       title="Remove image"
                     >
@@ -469,80 +741,7 @@ const EditWebpages = ({ activityId }) => {
                 )}
               </div>
             )}
-            {/* Main Top Banner Image (Cloudinary Upload) */}
-            <div className="mb-4">
-              <label className="block mb-1 font-semibold">Main Top Banner Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={e => handleCloudinaryImageChange(e, 'bannerImage')}
-                ref={bannerImageInputRef}
-                className="hidden"
-              />
-              <button
-                type="button"
-                className="mb-2 flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={() => bannerImageInputRef.current && bannerImageInputRef.current.click()}
-              >
-                <span>Upload Here</span>
-              </button>
-              {uploadingBannerImage && <div className="text-blue-600 font-semibold">Uploading...</div>}
-              {form.bannerImage && form.bannerImage.url && (
-                <div className="relative w-full h-48 border rounded overflow-hidden mb-2">
-                  <img
-                    src={form.bannerImage.url}
-                    alt="Banner Image Preview"
-                    className="object-contain w-full h-full"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteCloudinaryImage('bannerImage')}
-                    className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full p-1 hover:bg-red-200"
-                    title="Remove image"
-                  >
-                    <Trash2 className="w-5 h-5 text-red-600" />
-                  </button>
-                </div>
-              )}
-            </div>
-            {/* Main Top Title Tag Line */}
-            <div className="mb-4">
-              <label className="block mb-1 font-semibold">Main Top Title Tag Line</label>
-              <input type="text" name="secondTitle" value={form.secondTitle} onChange={handleChange} placeholder="Type Here" className="w-full rounded-md p-3 bg-gray-200 font-semibold" />
-            </div>
 
-            {/* Create Tag */}
-            <div className="mb-4">
-              <label className="block mb-1 font-semibold">Create Tag</label>
-              {form.createTags.map((tag, index) => (
-                <div key={index} className="flex items-center gap-2 mb-2">
-                  <input
-                    type="text"
-                    value={tag}
-                    onChange={(e) => handleArrayTextChange('createTags', index, e.target.value)}
-                    placeholder="Type Here"
-                    className="flex-1 rounded-md p-3 bg-gray-200 font-semibold"
-                  />
-                  <button type="button" onClick={() => addArrayTextRow('createTags')} className="bg-blue-700 text-white px-3 py-2 rounded">+</button>
-                  {form.createTags.length > 1 && (
-                    <button type="button" onClick={() => removeArrayTextRow('createTags', index)} className="bg-red-500 text-white px-3 py-2 rounded"><Trash2 className="w-4 h-4" /></button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Posted By */}
-            <div className="mb-4">
-              <label className="block mb-2 font-semibold">Posted By</label>
-              <div className="flex items-center gap-6">
-                <label className="flex items-center gap-2 font-semibold">
-                  <input type="checkbox" checked={!!form.postedBy?.admin} onChange={() => handlePostedByChange('admin')} /> Admin
-                </label>
-                <label className="flex items-center gap-2 font-semibold">
-                  <input type="checkbox" checked={!!form.postedBy?.user} onChange={() => handlePostedByChange('user')} /> User
-                </label>
-              </div>
-            </div>
 
             {/* Highlights */}
             <div className="mb-4 border rounded p-3 bg-blue-50">
@@ -578,6 +777,7 @@ const EditWebpages = ({ activityId }) => {
               <label className="block mb-2 font-semibold">Paragraph Section</label>
               {form.paragraphSections.map((row, index) => (
                 <div key={index} className="mb-3 border border-gray-200 rounded p-3">
+                  <label className="block mb-2 font-semibold">Paragraph Heading</label>
                   <div className="flex gap-2 mb-2">
                     <input
                       type="text"
@@ -586,30 +786,31 @@ const EditWebpages = ({ activityId }) => {
                       placeholder="Title Text Line"
                       className="flex-1 rounded-md p-3 bg-gray-200 font-semibold"
                     />
-                    <button type="button" onClick={() => addObjectArrayRow('paragraphSections', { title: '', description: '' })} className="bg-blue-700 text-white px-3 py-2 rounded">+</button>
+                    <button type="button" onClick={() => addObjectArrayRow('paragraphSections', createEmptyParagraphSection())} className="bg-blue-700 text-white px-3 py-2 rounded">+</button>
                     {form.paragraphSections.length > 1 && (
                       <button type="button" onClick={() => removeObjectArrayRow('paragraphSections', index)} className="bg-red-500 text-white px-3 py-2 rounded"><Trash2 className="w-4 h-4" /></button>
                     )}
                   </div>
+                  <label className="block mb-2 font-semibold my-5">Paragraph Description</label>
                   <InlineRichTextEditor
                     value={row.description}
                     onChange={(html) => handleObjectArrayChange('paragraphSections', index, 'description', html)}
                   />
                   <div className="flex flex-col gap-3 mt-2">
                     <div>
-                      <input type="file" accept="image/*" onChange={e => handleCloudinaryImageChange(e, 'paragraphFirstImage')} ref={paragraphFirstImageInputRef} className="hidden" />
-                      <button type="button" className="bg-yellow-400 my-2 px-4 py-2 rounded" onClick={() => paragraphFirstImageInputRef.current && paragraphFirstImageInputRef.current.click()}>Upload First Image</button>
+                      <input id={`paragraph-first-image-${index}`} type="file" accept="image/*" onChange={e => handleParagraphSectionImageChange(e, index, 'firstImage')} className="hidden" />
+                      <label htmlFor={`paragraph-first-image-${index}`} className="inline-block bg-yellow-400 my-2 px-4 py-2 rounded cursor-pointer">Upload First Image</label>
                       {uploadingParagraphFirstImage && <div className="text-blue-600 text-sm my-2">Uploading...</div>}
-                      {form.paragraphFirstImage?.url && (
+                      {row.firstImage?.url && (
                         <div className="relative w-full h-48 border rounded overflow-hidden mb-2">
                           <img
-                            src={form.paragraphFirstImage.url}
+                            src={row.firstImage.url}
                             alt="Paragraph First Image Preview"
                             className="object-contain w-full h-full"
                           />
                           <button
                             type="button"
-                            onClick={() => handleDeleteCloudinaryImage('paragraphFirstImage')}
+                            onClick={() => handleDeleteParagraphSectionImage(index, 'firstImage')}
                             className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full p-1 hover:bg-red-200"
                             title="Remove image"
                           >
@@ -619,19 +820,19 @@ const EditWebpages = ({ activityId }) => {
                       )}
                     </div>
                     <div>
-                      <input type="file" accept="image/*" onChange={e => handleCloudinaryImageChange(e, 'paragraphSecondImage')} ref={paragraphSecondImageInputRef} className="hidden" />
-                      <button type="button" className="bg-gray-200 px-4 py-2 rounded" onClick={() => paragraphSecondImageInputRef.current && paragraphSecondImageInputRef.current.click()}>Upload Second Image</button>
+                      <input id={`paragraph-second-image-${index}`} type="file" accept="image/*" onChange={e => handleParagraphSectionImageChange(e, index, 'secondImage')} className="hidden" />
+                      <label htmlFor={`paragraph-second-image-${index}`} className="inline-block bg-gray-200 px-4 py-2 rounded cursor-pointer">Upload Second Image</label>
                       {uploadingParagraphSecondImage && <div className="text-blue-600 text-sm my-2">Uploading...</div>}
-                      {form.paragraphSecondImage?.url && (
+                      {row.secondImage?.url && (
                         <div className="relative w-full h-48 border rounded overflow-hidden mb-2">
                           <img
-                            src={form.paragraphSecondImage.url}
+                            src={row.secondImage.url}
                             alt="Paragraph Second Image Preview"
                             className="object-contain w-full h-full"
                           />
                           <button
                             type="button"
-                            onClick={() => handleDeleteCloudinaryImage('paragraphSecondImage')}
+                            onClick={() => handleDeleteParagraphSectionImage(index, 'secondImage')}
                             className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full p-1 hover:bg-red-200"
                             title="Remove image"
                           >
@@ -639,6 +840,25 @@ const EditWebpages = ({ activityId }) => {
                           </button>
                         </div>
                       )}
+                    </div>
+
+                    <div className="border border-gray-200 rounded p-3 bg-white">
+                      <label className="block mb-2 font-semibold">Bullet Points</label>
+                      {(row.bulletPoints || ['']).map((bullet, bulletIndex) => (
+                        <div key={bulletIndex} className="flex items-center gap-2 mb-2">
+                          <input
+                            type="text"
+                            value={bullet}
+                            onChange={(e) => handleParagraphBulletPointChange(index, bulletIndex, e.target.value)}
+                            placeholder="Add bullet point"
+                            className="flex-1 rounded-md p-3 bg-gray-200 font-semibold"
+                          />
+                          <button type="button" onClick={() => addParagraphBulletPoint(index)} className="bg-blue-700 text-white px-3 py-2 rounded">+</button>
+                          {(row.bulletPoints || []).length > 1 && (
+                            <button type="button" onClick={() => removeParagraphBulletPoint(index, bulletIndex)} className="bg-red-500 text-white px-3 py-2 rounded"><Trash2 className="w-4 h-4" /></button>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -646,8 +866,9 @@ const EditWebpages = ({ activityId }) => {
             </div>
 
             {/* Table Data */}
+            <label className="block mb-2 font-semibold">Table Data</label>
             <div className="mb-4 border rounded p-3 bg-blue-50">
-              <label className="block mb-2 font-semibold">Table Data</label>
+              <label className="block mb-2 font-semibold">Table Heading</label>
               <input
                 type="text"
                 name="tableTitle"
@@ -656,8 +877,11 @@ const EditWebpages = ({ activityId }) => {
                 placeholder="Table Title"
                 className="w-full rounded-md p-3 bg-gray-200 font-semibold mb-2"
               />
+              <label className="block mb-2 font-semibold">Table Description</label>
+
               {form.tableRows.map((row, index) => (
                 <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-2 mb-2">
+
                   <input type="text" value={row.column1} onChange={(e) => handleObjectArrayChange('tableRows', index, 'column1', e.target.value)} placeholder="Column 1" className="rounded-md p-3 bg-gray-200 font-semibold" />
                   <input type="text" value={row.column2} onChange={(e) => handleObjectArrayChange('tableRows', index, 'column2', e.target.value)} placeholder="Column 2" className="rounded-md p-3 bg-gray-200 font-semibold" />
                   <div className="flex gap-2">
@@ -677,6 +901,7 @@ const EditWebpages = ({ activityId }) => {
                 <input type="text" name="blockquoteMainTitle" value={form.blockquoteMainTitle} onChange={handleChange} placeholder="Title Name For Blockquote" className="rounded-md p-3 bg-gray-200 font-semibold" />
                 <input type="text" name="blockquoteLeftTitle" value={form.blockquoteLeftTitle} onChange={handleChange} placeholder="Blockquote Left Para" className="rounded-md p-3 bg-gray-200 font-semibold" />
               </div>
+              <label className="block mb-2 font-semibold">BlockQoute Description</label>
               <InlineRichTextEditor
                 value={form.blockquoteDescription}
                 onChange={(html) => setForm((prev) => ({ ...prev, blockquoteDescription: html }))}
@@ -829,7 +1054,7 @@ const EditWebpages = ({ activityId }) => {
               </div>
             )}
 
-            
+
           </>
         )}
         {/* Data Save Button */}
