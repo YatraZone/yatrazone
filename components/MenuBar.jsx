@@ -80,7 +80,7 @@ const MenuBar = (props) => {
             </div>
 
             <div className={clsx(
-                "absolute top-8  md:top-12 mt-4 rounded-xl left-0 w-[90vw] text-black bg-white shadow-md lg:hidden transition-all duration-300 overflow-hidden",
+                "absolute top-8 z-50 md:top-12 mt-4 rounded-xl left-0 w-[90vw] text-black bg-white shadow-md lg:hidden transition-all duration-300 overflow-hidden",
                 isOpen ? "max-h-[500px]" : "max-h-0"
             )}>
                 {menuItems.map((item, index) => (

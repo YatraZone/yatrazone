@@ -128,12 +128,12 @@ const AboutUsSection = () => {
 
   return (
     <>
-      <section className="relative py-1 w-full md:px-10 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
+      <section className="relative py-1 w-full px-3 md:px-10 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden bg-repeat-y bg-[url('/bg-custom-1.jpg')] brightness-145">
         <div className="w-full">
-          <h2 className="font-recoleta text-2xl md:text-4xl text-center mt-7">
+          <h2 className="font-recoleta text-2xl md:text-4xl mt-7">
             Be a part of a spiritual journey.
           </h2>
-          <p className="text-gray-600 py-8 text-center font-sans  w-[80%] mx-auto">
+          <p className="text-gray-600 py-4  font-sans">
             YatraZone is more than just a travel company; we are facilitators of
             spiritual exploration and cultural immersion tailored for Indian
             pilgrims and global adventurers. With years of expertise in
@@ -178,7 +178,6 @@ const AboutUsSection = () => {
         </div>
       </section>
       <section className="w-full md:w-[90%] mx-auto py-4 space-y-3 px-3 sm:px-4 md:px-0">
-
         {/* Banner 1 */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-[#fde8e2] via-[#fdf0ec] to-[#fef6f4] rounded-xl px-4 sm:px-5 py-4 shadow-sm border border-orange-100/60">
 

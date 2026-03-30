@@ -210,13 +210,13 @@ const SearchSection = () => {
     if (params.get('guests')) setGuestCount(parseInt(params.get('guests')));
   }, []);
   return (
-    <section className="w-full md:w-[90%] mx-auto md:my-8">
+    <section className="w-full md:w-[80%] mx-auto md:my-8">
       <div className="flex flex-col lg:flex-row gap-5">
 
         {/* ===== LEFT: Search Section (75%) ===== */}
         <div className="w-full lg:w-[75%]">
           {/* Heading */}
-          <div className="mb-4 px-10 md:px-5">
+          <div className="my-4 px-5">
             <h2 className="text-xl md:text-[1.65rem] font-recoleta text-gray-900 leading-tight">
               Biggest discounts on Dham<span className="text-gray-900 font-recoleta"> Yatra Packages</span>
             </h2>
@@ -226,7 +226,7 @@ const SearchSection = () => {
           </div>
 
           {/* Search Card */}
-          <div className="bg-white rounded-xl shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 p-5 md:p-6">
+          <div className="bg-white rounded-xl border border-gray-500 p-5 md:p-6">
             <Tabs
               defaultValue="property"
               className="w-full"
@@ -417,7 +417,7 @@ const SearchSection = () => {
         {/* ===== RIGHT: Filter Banner Cards (25%) ===== */}
         <div className="w-full lg:w-[25%] flex-col md:flex-row flex lg:flex-col gap-2">
           {filterBanners.length > 0 && (
-            <div className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 bg-white p-1 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300  ">
+            <div className="flex-1 rounded-xl overflow-hidden border border-gray-100 bg-white p-1 flex flex-col justify-between duration-300  ">
               <Carousel className="w-full" opts={{ align: "start", loop: true }}>
                 <CarouselContent className="-ml-0">
                   {filterBanners.map((banner, idx) => (
@@ -426,24 +426,24 @@ const SearchSection = () => {
                         href={banner.buttonLink || '#'}
                         className="block group cursor-pointer"
                       >
-                        <div className="relative w-full min-h-[170px] rounded-lg overflow-hidden">
+                        <div className="relative w-full min-h-[180px] rounded-lg overflow-hidden">
                           <Image
                             src={banner.image?.url || '/placeholder.png'}
                             alt="Filter Banner"
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="object-contain group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>
                       </Link>
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="left-1 h-6 w-6 bg-white/90 hover:bg-white border border-gray-200" />
-                <CarouselNext className="right-1 h-6 w-6 bg-white/90 hover:bg-white border border-gray-200" />
+                <CarouselPrevious className="left-24 top-22 h-6 w-6 bg-white/90 hover:bg-white border border-gray-200" />
+                <CarouselNext className="right-24 top-22 h-6 w-6 bg-white/90 hover:bg-white border border-gray-200" />
               </Carousel>
             </div>
           )}
-          <div className="flex-1 rounded-xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)] border border-gray-100 bg-white p-4 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
+          <div className="flex-1 rounded-xl overflow-hidden border border-gray-300 bg-white p-4 flex flex-col justify-between duration-300">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-bold text-gray-800">{offerDetails?.moreOffers?.title || 'More offers'}</h4>

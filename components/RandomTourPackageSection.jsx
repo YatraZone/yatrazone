@@ -62,7 +62,7 @@ const RandomTourPackageSection = () => {
       <section className="md:mt-19 w-full px-2 md:px-8 lg:px-16 bg-[url('/bg-custom-3.jpg')] overflow-hidden max-w-screen overflow-x-hidden">
         <div className=" w-full h-full overflow-hidden max-w-screen overflow-x-hidden">
           <div className="w-full py-10">
-            <h1 className="font-recoleta text-xl md:text-3xl uppercase text-center">
+            <h1 className="font-recoleta text-xl md:text-3xl uppercase">
               Trending Packages: The Best, Today
             </h1>
             <Carousel className="w-[75%] md:w-[95%] drop-shadow-xl mx-auto xl:w-full my-6 md:my-12">
@@ -112,13 +112,13 @@ const RandomTourPackageSection = () => {
 
   return (
     <>
-      <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center md:mt-19 w-full md:px-8 lg:px-16 overflow-hidden max-w-screen overflow-x-hidden">
+      <section className="bg-[url('/bg-custom-5.jpg')] bg-cover bg-center px-3 md:mt-19 w-full md:px-8 overflow-hidden max-w-screen overflow-x-hidden">
         <div className=" w-full h-full overflow-hidden max-w-screen ">
           <div className="w-full py-9 px-1 md:px-12">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-recoleta text-center mt-10">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-recoleta md:mt-10">
               Trending Packages: The Best, Today
             </h1>
-            <p className=" text-gray-600 py-8 text-center font-sans w-[80%] mx-auto">
+            <p className=" text-gray-600 py-8 font-sans">
               Discover the hottest deals with our Trending Packages! Curated
               daily, these top-rated picks offer the best value and quality —
               handpicked for professionals who demand the best, today. Don’t

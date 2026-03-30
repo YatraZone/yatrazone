@@ -158,7 +158,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <div className="block xl:hidden w-full relative max-h-[100vh]">
+      <div className="block xl:hidden w-full relative max-h-[100vh] pb-2">
         {/* Mobile Carousel: Only show first image, center content over image, add to cart above image */}
         <Carousel className="w-full max-w-md mx-auto " plugins={[plugin.current]} onMouseLeave={plugin.current.reset} setApi={setMobileApi} >
           <CarouselContent>

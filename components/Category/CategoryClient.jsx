@@ -167,11 +167,11 @@ const CategoryClient = ({ packages, reviews = {}, menuItems = [], currentCategor
 
   const formatNumber = (number) => new Intl.NumberFormat("en-IN").format(number);
   return (
-    <div className="container mx-auto px-2 md:px-4 py-3">
+    <div className="container mx-auto px-2 md:px-4 md:py-3">
       {/* ===== Filter Bar ===== */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-2 md:p-4 mb-6">
         {/* Search Row */}
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex flex-col md:flex-row w-full md:items-center gap-3 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input

@@ -254,7 +254,7 @@ const PopularDestinations = () => {
     activeCategory === "All" ? hotels : hotels.filter((hotel) => hotel.category === activeCategory);
 
   return (
-    <section className="w-full border-t border-[#ece7df] bg-white px-4 py-10 md:px-20">
+    <section className="w-full border-t border-[#ece7df] bg-white px-2 py-10 md:px-20">
       <h2 className="font-recoleta text-2xl font-bold text-gray-900 md:text-3xl">
         Your style. These stays. A perfect match.
       </h2>
@@ -300,19 +300,19 @@ const PopularDestinations = () => {
         <Carousel className="w-full" opts={{ align: "start" }}>
           <CarouselContent className="-ml-3">
             {filteredHotels.map((hotel) => (
-              <CarouselItem key={hotel._id} className="basis-1/2 pl-3 md:basis-1/4">
+              <CarouselItem key={hotel._id} className="pl-3 md:basis-1/4">
                 <Link
                   href={hotel.imageClickLink || "#"}
                   target={hotel.imageClickLink ? "_blank" : "_self"}
                   rel="noopener noreferrer"
                   className="group block cursor-pointer"
                 >
-                  <div className="relative mb-3 h-60 w-full overflow-hidden rounded-xl bg-[#f8f5ef]">
+                  <div className="relative mb-3 md:h-60 h-80 w-full overflow-hidden rounded-xl">
                     {hotel.image?.url ? (
                       <img
                         src={hotel.image.url}
                         alt={hotel.name}
-                        className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-110"
+                        className="h-full w-full object-contain md:object-contain transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
@@ -372,23 +372,19 @@ const WebPage = ({ data }) => {
   return (
     <div className="min-h-screen bg-white font-recoleta text-gray-900 ">
       <div className="w-full border-b border-[#ece7df] bg-[#f7f3ed]">
-        <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-12">
+        <div className="mx-auto max-w-7xl md:px-4 md:py-2 sm:px-6 lg:px-12">
           <div className={`grid gap-6 ${isDesignThree ? "grid-cols-1" : isDesignTwo ? "lg:grid-cols-[350px_minmax(0,760px)] lg:justify-center" : "lg:grid-cols-[320px_1fr] lg:items-center"}`}>
             {isDesignThree ? (
               <div className="flex items-center gap-2">
                 {designThreeHeroImages[0] && (
-                  <img src={designThreeHeroImages[0]} alt={data.title} className="h-[300px] w-full rounded-[14px] object-contain" />
+                  <img src={designThreeHeroImages[0]} alt={data.title} className="md:h-[300px] w-full object-contain" />
                 )}
               </div>
             ) : (
-              <div className="overflow-hidden rounded-md bg-[#efe8df]">
-                {headerImage ? (
-                  <img src={headerImage} alt={data.title} className="h-[240px] w-full object-cover lg:h-[220px]" />
-                ) : (
-                  <div className="flex h-[220px] items-center justify-center bg-[linear-gradient(135deg,#ddd6fe,#f5d0fe,#fde68a)] text-2xl font-bold text-gray-800">
-                    {data.title}
-                  </div>
-                )}
+              <div className="overflow-hidden rounded-md">
+                {headerImage && (
+                  <img src={headerImage} alt={data.title} className="h-[200px] md:h-[240px]: w-full object-contain lg:h-[220px] md:object-cover" />
+                ) }
               </div>
             )}
             {!isDesignThree && (
@@ -432,7 +428,7 @@ const WebPage = ({ data }) => {
       <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
         <div className=" bg-white">
           {isDesignThree && (
-            <section className="grid gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
+            <section className="grid gap-6 py-4 md:px-5 md:py-8 sm:px-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">{data.title}</h1>
                 <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500">
@@ -460,7 +456,7 @@ const WebPage = ({ data }) => {
           )}
 
           {designOneLeadParagraph && (
-            <section className="space-y-5 px-5 py-8 sm:px-8">
+            <section className="space-y-5 md:px-5 py-4 md:py-8 sm:px-8">
               {isFilledText(designOneLeadParagraph.title) && (
                 <h2 className="text-3xl font-bold leading-tight text-gray-950">{designOneLeadParagraph.title}</h2>
               )}
@@ -468,11 +464,11 @@ const WebPage = ({ data }) => {
               {paragraphImages.length > 0 && (
                 <div className="space-y-4">
                   {paragraphImages.map((image, imageIndex) => (
-                    <div key={`${image}-${imageIndex}`} className="overflow-hidden rounded-[22px] bg-[#f8f5ef]">
+                    <div key={`${image}-${imageIndex}`} className="overflow-hidden rounded-md bg-[#f8f5ef]">
                       <img
                         src={image}
                         alt={designOneLeadParagraph.title || `Section image ${imageIndex + 1}`}
-                        className="h-[260px] w-full object-cover sm:h-[360px]"
+                        className="md:h-[260px] w-full object-contain md:object-cover sm:h-[360px]"
                       />
                     </div>
                   ))}
@@ -481,7 +477,7 @@ const WebPage = ({ data }) => {
             </section>
           )}
 
-          <div className={`grid gap-10 px-5 py-5 sm:px-8 ${isDesignThree ? "grid-cols-1" : isDesignTwo ? "lg:grid-cols-[330px_minmax(0,1fr)] lg:items-start" : "lg:grid-cols-[290px_1fr]"}`}>
+          <div className={`grid gap-10 md:p-5 sm:px-8 ${isDesignThree ? "grid-cols-1" : isDesignTwo ? "lg:grid-cols-[330px_minmax(0,1fr)] lg:items-start" : "lg:grid-cols-[290px_1fr]"}`}>
             {isDesignThree ? (
               <>
                 <main className="space-y-10">
@@ -655,7 +651,7 @@ const WebPage = ({ data }) => {
                           <HtmlBlock html={data.blockquoteDescription} className="!text-black" />
                         </div>
                         {blockquoteTags.map((tag) => (
-                          <span key={tag} className="rounded-md mx-1 w-fit border border-gray-500 px-3 py-1 text-[12px] text-black">
+                          <span key={tag} className="rounded-md mx-1 w-fit border border-gray-500 px-3 py-2 text-[12px] text-black">
                             {tag}
                           </span>
                         ))}

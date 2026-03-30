@@ -73,10 +73,10 @@ const Banner = () => {
       <div className="w-full overflow-hidden max-w-screen overflow-x-hidden">
         {consultancyBanner.length > 0 && (
           <div className="w-full px-2 md:py-10">
-            <h2 className="font-recoleta text-2xl md:text-3xl font-bold text-center mb-2 uppercase">
+            <h2 className="font-recoleta text-2xl md:text-3xl font-bold mb-2 uppercase">
               India Awaits - Walk the Land of Saints, Seekers, and Silence
             </h2>
-            <p className="text-gray-600 text-center py-4 mx-auto md:w-[50%] font-sans">
+            <p className="text-gray-600 py-4font-sans">
               Traverse the spiritual heart of India where divinity flows, through every river and prayer echoes in every breeze, This all-India spiritual tour is designed for seekers fo peace , prupose and presence, From Himalayan shrine to souhtern ashrams, discover timeless traditions, guieded practices and sacred wisdom that nurture both body and soul.
             </p>
             <Carousel className="w-full md:px-20 mx-auto">
