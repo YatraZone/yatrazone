@@ -91,7 +91,7 @@ const EditWebpages = ({ activityId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch activity data on mount
+  // Fetch webpage data on mount
   React.useEffect(() => {
     if (!activityId) return;
     setLoading(true);
@@ -109,6 +109,7 @@ const EditWebpages = ({ activityId }) => {
             mainProfileImage: data.mainProfileImage || { url: '', key: '' },
             paragraphFirstImage: data.paragraphFirstImage || { url: '', key: '' },
             paragraphSecondImage: data.paragraphSecondImage || { url: '', key: '' },
+            advertisementImage: data.advertisementImage || { url: '', key: '' },
             imageGallery: Array.isArray(data.imageGallery) ? data.imageGallery : [],
             createTags: Array.isArray(data.createTags) && data.createTags.length > 0 ? data.createTags : initialCreateTags,
             postedBy: data.postedBy || { admin: false, user: false },
@@ -121,22 +122,24 @@ const EditWebpages = ({ activityId }) => {
             blockquoteDescription: data.blockquoteDescription || '',
             blockquoteTags: Array.isArray(data.blockquoteTags) && data.blockquoteTags.length > 0 ? data.blockquoteTags : initialCreateTags,
             accordionTags: Array.isArray(data.accordionTags) && data.accordionTags.length > 0 ? data.accordionTags : initialAccordionTags,
+            advertisementUrl: data.advertisementUrl || '',
             sideThumbImage: typeof data.sideThumbImage === 'string' ? data.sideThumbImage : data.sideThumbImage?.url || '',
             sideThumbImageKey: data.sideThumbImageKey || (typeof data.sideThumbImage === 'object' ? data.sideThumbImage?.key || '' : ''),
             sideThumbName: data.sideThumbName || '',
             sideThumbDesignation: data.sideThumbDesignation || '',
+            sideThumbDescription: data.sideThumbDescription || '',
             facebookUrl: data.facebookUrl || '',
             youtubeUrl: data.youtubeUrl || '',
             instaUrl: data.instaUrl || '',
             googleUrl: data.googleUrl || ''
           }));
         } else {
-          setError(data.error || 'Could not load activity');
+          setError(data.error || 'Could not load webpage');
         }
         setLoading(false);
       })
       .catch(err => {
-        setError('Failed to fetch activity: ' + err.message);
+        setError('Failed to fetch webpage: ' + err.message);
         setLoading(false);
       });
   }, [activityId]);
@@ -151,8 +154,10 @@ const EditWebpages = ({ activityId }) => {
   const [uploadingSideThumbImage, setUploadingSideThumbImage] = useState(false);
   const paragraphFirstImageInputRef = useRef(null);
   const paragraphSecondImageInputRef = useRef(null);
+  const advertisementImageInputRef = useRef(null);
   const [uploadingParagraphFirstImage, setUploadingParagraphFirstImage] = useState(false);
   const [uploadingParagraphSecondImage, setUploadingParagraphSecondImage] = useState(false);
+  const [uploadingAdvertisementImage, setUploadingAdvertisementImage] = useState(false);
   const handleCloudinaryImageChange = async (e, key) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -162,6 +167,7 @@ const EditWebpages = ({ activityId }) => {
     if (key === 'sideThumbImage') setUploadingSideThumbImage(true);
     if (key === 'paragraphFirstImage') setUploadingParagraphFirstImage(true);
     if (key === 'paragraphSecondImage') setUploadingParagraphSecondImage(true);
+    if (key === 'advertisementImage') setUploadingAdvertisementImage(true);
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
     try {
@@ -195,6 +201,7 @@ const EditWebpages = ({ activityId }) => {
     if (key === 'sideThumbImage') setUploadingSideThumbImage(false);
     if (key === 'paragraphFirstImage') setUploadingParagraphFirstImage(false);
     if (key === 'paragraphSecondImage') setUploadingParagraphSecondImage(false);
+    if (key === 'advertisementImage') setUploadingAdvertisementImage(false);
   };
   const handleDeleteCloudinaryImage = async (key) => {
     if (key === 'sideThumbImage') {
@@ -255,6 +262,8 @@ const EditWebpages = ({ activityId }) => {
     paragraphSections: initialParagraphSections,
     paragraphFirstImage: { url: '', key: '' },
     paragraphSecondImage: { url: '', key: '' },
+    advertisementImage: { url: '', key: '' },
+    advertisementUrl: '',
     tableTitle: '',
     tableRows: initialTableRows,
     blockquoteMainTitle: '',
@@ -266,6 +275,7 @@ const EditWebpages = ({ activityId }) => {
     sideThumbImageKey: '',
     sideThumbName: '',
     sideThumbDesignation: '',
+    sideThumbDescription: '',
     facebookUrl: '',
     youtubeUrl: '',
     instaUrl: '',
@@ -339,8 +349,8 @@ const EditWebpages = ({ activityId }) => {
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success('Activity updated successfully!');
-        // Refetch activity data so form stays in sync
+        toast.success('webpage updated successfully!');
+        // Refetch webpage data so form stays in sync
         fetch(`/api/create_webpage/${activityId}`)
           .then(res => res.json())
           .then(data => {
@@ -354,6 +364,7 @@ const EditWebpages = ({ activityId }) => {
                 mainProfileImage: data.mainProfileImage || { url: '', key: '' },
                 paragraphFirstImage: data.paragraphFirstImage || { url: '', key: '' },
                 paragraphSecondImage: data.paragraphSecondImage || { url: '', key: '' },
+                advertisementImage: data.advertisementImage || { url: '', key: '' },
                 imageGallery: Array.isArray(data.imageGallery) ? data.imageGallery : [],
                 createTags: Array.isArray(data.createTags) && data.createTags.length > 0 ? data.createTags : initialCreateTags,
                 postedBy: data.postedBy || { admin: false, user: false },
@@ -366,10 +377,12 @@ const EditWebpages = ({ activityId }) => {
                 blockquoteDescription: data.blockquoteDescription || '',
                 blockquoteTags: Array.isArray(data.blockquoteTags) && data.blockquoteTags.length > 0 ? data.blockquoteTags : initialCreateTags,
                 accordionTags: Array.isArray(data.accordionTags) && data.accordionTags.length > 0 ? data.accordionTags : initialAccordionTags,
+                advertisementUrl: data.advertisementUrl || '',
                 sideThumbImage: typeof data.sideThumbImage === 'string' ? data.sideThumbImage : data.sideThumbImage?.url || '',
                 sideThumbImageKey: data.sideThumbImageKey || (typeof data.sideThumbImage === 'object' ? data.sideThumbImage?.key || '' : ''),
                 sideThumbName: data.sideThumbName || '',
                 sideThumbDesignation: data.sideThumbDesignation || '',
+                sideThumbDescription: data.sideThumbDescription || '',
                 facebookUrl: data.facebookUrl || '',
                 youtubeUrl: data.youtubeUrl || '',
                 instaUrl: data.instaUrl || '',
@@ -378,10 +391,10 @@ const EditWebpages = ({ activityId }) => {
             }
           });
       } else {
-        toast.error(data.error || 'Failed to update activity');
+        toast.error(data.error || 'Failed to update webpage');
       }
     } catch (err) {
-      toast.error('Failed to update activity: ' + err.message);
+      toast.error('Failed to update webpage: ' + err.message);
     }
   };
   return (
@@ -391,11 +404,11 @@ const EditWebpages = ({ activityId }) => {
           toast.dismiss();
           router.back()
         }}>
-          <ArrowLeftIcon className="w-4 h-4 mr-2" /> Back to View Activity Page
+          <ArrowLeftIcon className="w-4 h-4 mr-2" /> Back to View Webpage Page
         </button>
       </div>
       <form className="max-w-4xl w-full mx-auto border border-black bg-white p-10 shadow-lg" onSubmit={handleSubmit}>
-        <h2 className="text-2xl font-semibold mb-6">Activities Page Name : {form.title}</h2>
+        <h2 className="text-2xl font-semibold mb-6">Webpage Name : {form.title}</h2>
         <div className="mb-4">
           <label className="block mb-1 font-semibold">Frontend Design</label>
           <select
@@ -669,6 +682,7 @@ const EditWebpages = ({ activityId }) => {
                 onChange={(html) => setForm((prev) => ({ ...prev, blockquoteDescription: html }))}
               />
               <div className="mt-2">
+                <label className="block mb-2 font-semibold">Blockquote Tags</label>
                 {form.blockquoteTags.map((tag, index) => (
                   <div key={index} className="flex items-center gap-2 mb-2">
                     <input type="text" value={tag} onChange={(e) => handleArrayTextChange('blockquoteTags', index, e.target.value)} placeholder="Blockquote Tag" className="flex-1 rounded-md p-3 bg-gray-200 font-semibold" />
@@ -684,12 +698,68 @@ const EditWebpages = ({ activityId }) => {
             {/* Accordion Tag */}
             {!isDesignThree && (
               <div className="mb-4">
-                <label className="block mb-2 font-semibold">Accordion Tag</label>
+                <label className="block mb-2 font-semibold">Advertisement Section</label>
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => handleCloudinaryImageChange(e, 'advertisementImage')}
+                      ref={advertisementImageInputRef}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => advertisementImageInputRef.current && advertisementImageInputRef.current.click()}
+                      className="rounded-md p-3 bg-blue-400 font-semibold text-left"
+                    >
+                      {form.advertisementImage?.url ? 'Change Advertisement Image' : 'Upload Advertisement Image'}
+                    </button>
+                    {uploadingAdvertisementImage && <div className="text-blue-600 text-sm mt-1">Uploading...</div>}
+                    {form.advertisementImage?.url && (
+                      <div className="relative w-full h-48 border rounded overflow-hidden mt-2">
+                        <img src={form.advertisementImage.url} alt="Advertisement Preview" className="object-contain w-full h-full" />
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteCloudinaryImage('advertisementImage')}
+                          className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full p-1 hover:bg-red-200"
+                          title="Remove image"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-600" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <h2 className='font-semibold mb-1'>Advertisement URL</h2>
+                    <input
+                      type="text"
+                      name="advertisementUrl"
+                      value={form.advertisementUrl}
+                      onChange={handleChange}
+                      placeholder="https://example.com"
+                      className="rounded-md p-3 bg-gray-200 font-semibold"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {!isDesignThree && (
+              <div className="mb-4">
+                <label className="block mb-2 font-bold">Accordion Tag</label>
                 {form.accordionTags.map((row, index) => (
                   <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-2 mb-2">
-                    <input type="text" value={row.left} onChange={(e) => handleObjectArrayChange('accordionTags', index, 'left', e.target.value)} placeholder="Title Text Line" className="rounded-md p-3 bg-gray-200 font-semibold" />
-                    <input type="text" value={row.right} onChange={(e) => handleObjectArrayChange('accordionTags', index, 'right', e.target.value)} placeholder="Accordion Tag Line" className="rounded-md p-3 bg-gray-200 font-semibold" />
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-1">
+                      <label className="block mb-2 font-semibold text-sm">Accordion Main Title</label>
+                      <input type="text" value={row.left} onChange={(e) => handleObjectArrayChange('accordionTags', index, 'left', e.target.value)} placeholder="Title Text Line" className="rounded-md p-3 bg-gray-200 font-semibold" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="block mb-2 font-semibold text-sm">Accordion Description</label>
+                      <input type="text" value={row.right} onChange={(e) => handleObjectArrayChange('accordionTags', index, 'right', e.target.value)} placeholder="Accordion Tag Line" className="rounded-md p-3 bg-gray-200 font-semibold" />
+                    </div>
+                    <div className="flex items-end gap-2">
                       <button type="button" onClick={() => addObjectArrayRow('accordionTags', { left: '', right: '' })} className="bg-blue-700 text-white px-3 py-2 rounded">+</button>
                       {form.accordionTags.length > 1 && (
                         <button type="button" onClick={() => removeObjectArrayRow('accordionTags', index)} className="bg-red-500 text-white px-3 py-2 rounded"><Trash2 className="w-4 h-4" /></button>
@@ -740,9 +810,11 @@ const EditWebpages = ({ activityId }) => {
                     <input type="text" name="sideThumbName" value={form.sideThumbName} onChange={handleChange} placeholder="Name Here" className="rounded-md p-3 bg-gray-200 text-black font-semibold" />
                     <h2 className='font-semibold mb-2'>Side Thumb Designation</h2>
                     <input type="text" name="sideThumbDesignation" value={form.sideThumbDesignation} onChange={handleChange} placeholder="Designation" className="rounded-md p-3 bg-gray-200 text-black font-semibold" />
+                    <h2 className='font-semibold mb-2'>Side Thumb Description</h2>
+                    <input type="text" name="sideThumbDescription" value={form.sideThumbDescription} onChange={handleChange} placeholder="Description" className="rounded-md p-3 bg-gray-200 text-black font-semibold" />
                   </div>
                 </div>
-                <hr className='my-4 border-black'/>
+                <hr className='my-4 border-black' />
                 <h2 className="text-lg font-bold my-2">Social Media Links</h2>
                 <div className="grid grid-col-1 gap-2">
                   <h2 className='font-semibold mb-1'>Facebook URL</h2>
@@ -756,6 +828,8 @@ const EditWebpages = ({ activityId }) => {
                 </div>
               </div>
             )}
+
+            
           </>
         )}
         {/* Data Save Button */}
