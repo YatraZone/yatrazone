@@ -457,7 +457,7 @@ const WebPage = ({ data }) => {
                         <img
                           src={image}
                           alt={designOneLeadParagraph.title || `Lead image ${index + 1}`}
-                          className="md:h-[300px] w-full object-cover sm:h-[200px]"
+                          className="md:h-[350px] w-full object-cover sm:h-[200px]"
                         />
                       </div>
                     ))}
@@ -626,7 +626,7 @@ const WebPage = ({ data }) => {
                               <img
                                 src={image}
                                 alt={leadParagraph.title || `Lead image ${index + 1}`}
-                                className="md:h-[300px] w-full object-cover sm:h-[200px]"
+                                className="md:h-[250px] w-full object-cover sm:h-[200px]"
                               />
                             </div>
                           ))}
@@ -653,7 +653,7 @@ const WebPage = ({ data }) => {
                                   <img
                                     src={image}
                                     alt={section.title || `Section image ${imageIndex + 1}`}
-                                    className="md:h-[300px] w-full object-cover sm:h-[200px]"
+                                    className="md:h-[250px] w-full object-cover sm:h-[200px]"
                                   />
                                 </div>
                               ))}
