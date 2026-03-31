@@ -56,7 +56,7 @@ const StaticSidebarCard = ({ data }) => {
 
   if (adImage) {
     const card = (
-      <div className="overflow-hidden h-[250px] bg-white">
+      <div className="overflow-hidden h-fit bg-white">
         <img src={adImage} alt={data.title || "Advertisement"} className="h-full w-full object-contain" />
       </div>
     );
@@ -187,41 +187,6 @@ const ShareCard = ({ slug }) => {
   );
 };
 
-// const SocialRail = ({ data }) => {
-//   const items = [
-//     data.facebookUrl ? { href: data.facebookUrl, label: "Facebook", icon: Facebook } : null,
-//     data.instaUrl ? { href: data.instaUrl, label: "Instagram", icon: Instagram } : null,
-//     data.googleUrl ? { href: data.googleUrl, label: "LinkedIn", icon: Linkedin } : null,
-//   ].filter(Boolean);
-
-//   return (
-//     <div className="flex flex-col items-center gap-4 text-gray-500">
-//       <div className="rounded-full border border-gray-500 bg-white px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em]">
-//         {formatDate(data.updatedAt || data.createdAt) || "2 Min Read"}
-//       </div>
-//       {/* <div className="h-12 w-px bg-gray-200" /> */}
-//       {items.length > 0 ? (
-//         items.map(({ href, label, icon: Icon }) => (
-//           <a
-//             key={label}
-//             href={href}
-//             target="_blank"
-//             rel="noreferrer"
-//             className="transition hover:text-gray-900"
-//             aria-label={label}
-//           >
-//             <Icon className="h-4 w-4" />
-//           </a>
-//         ))
-//       ) : (
-//         <>
-
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
 const PopularDestinations = () => {
   const [hotels, setHotels] = useState([]);
   const [hotelCategories, setHotelCategories] = useState([]);
@@ -340,7 +305,7 @@ const PopularDestinations = () => {
 const WebPage = ({ data }) => {
   console.log(data)
   const [openAccordion, setOpenAccordion] = useState(0);
-  const isDesignTwo = data.templateType === "design2";
+  const isDesignTwo = data.templateType === "design1";
   const isDesignThree = data.templateType === "design3";
 
   const tags = useMemo(() => cleanTextArray(data.createTags), [data.createTags]);
@@ -357,6 +322,10 @@ const WebPage = ({ data }) => {
   const blockquoteTags = useMemo(() => cleanTextArray(data.blockquoteTags), [data.blockquoteTags]);
 
   const paragraphImages = [data.paragraphFirstImage?.url, data.paragraphSecondImage?.url].filter(Boolean);
+  const getSectionImages = (section) => {
+    const sectionImages = [section?.firstImage?.url, section?.secondImage?.url].filter(Boolean);
+    return sectionImages.length > 0 ? sectionImages : paragraphImages;
+  };
   const hasTopMetaContent =
     isFilledText(data.firstTitle) ||
     isFilledText(data.secondTitle) ||
@@ -368,6 +337,8 @@ const WebPage = ({ data }) => {
   const leadParagraph = isDesignTwo ? paragraphs[0] : null;
   const contentParagraphs = isDesignTwo ? paragraphs.slice(1) : paragraphs;
   const designOneLeadParagraph = !isDesignTwo && !isDesignThree ? paragraphs[0] : null;
+  const leadParagraphImages = leadParagraph ? getSectionImages(leadParagraph) : paragraphImages;
+  const designOneLeadParagraphImages = designOneLeadParagraph ? getSectionImages(designOneLeadParagraph) : paragraphImages;
   const designOneRemainingParagraphs = !isDesignTwo && !isDesignThree ? paragraphs.slice(1) : contentParagraphs;
   const designThreeHeroImages = [
     data.imageFirst?.url,
@@ -379,7 +350,7 @@ const WebPage = ({ data }) => {
   const remainingHighlights = isDesignThree ? highlights.slice(1) : highlights;
 
   return (
-    <div className="min-h-screen bg-white font-geist font-semibold text-gray-900 ">
+    <div className="min-h-screen bg-white font-geist font-semibold text-gray-900">
       <div className={`w-full border-b border-[#ece7df] ${!isDesignThree ? "bg-[#efefef]" : "bg-[#f7f3ed]"}`}>
         <div className="mx-auto max-w-7xl md:px-4 pb-2 md:py-5 sm:px-6 lg:px-8">
           {!isDesignThree && (
@@ -442,7 +413,7 @@ const WebPage = ({ data }) => {
           </div>
         </div>
       </div>
-      <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full md:max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
         <div className=" bg-white">
           {isDesignThree && (
             <section className="grid gap-6 py-4 md:px-5 md:py-8 sm:px-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
@@ -478,30 +449,32 @@ const WebPage = ({ data }) => {
                 <h2 className="text-3xl font-bold leading-tight text-gray-950">{designOneLeadParagraph.title}</h2>
               )}
               <HtmlBlock html={designOneLeadParagraph.description} />
-              {paragraphImages.length > 0 && (
+              {designOneLeadParagraphImages.length > 0 && (
                 <div className="space-y-4">
-                  {paragraphImages.map((image, imageIndex) => (
-                    <div key={`${image}-${imageIndex}`} className="overflow-hidden rounded-md bg-[#f8f5ef]">
-                      <img
-                        src={image}
-                        alt={designOneLeadParagraph.title || `Section image ${imageIndex + 1}`}
-                        className="md:h-[300px] w-full object-contain md:object-cover sm:h-[360px]"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-              {/* Bullet Points Section */}
-              {designOneLeadParagraph.bulletPoints && designOneLeadParagraph.bulletPoints.length > 0 && designOneLeadParagraph.bulletPoints.some(point => isFilledText(point)) && (
-                <div className="space-y-3 mt-4">
-                  {designOneLeadParagraph.bulletPoints.map((point, bulletIdx) => (
-                    isFilledText(point) && (
-                      <div key={bulletIdx} className="flex gap-3">
-                        <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
-                        <p className="text-md leading-6 text-gray-600">{point}</p>
+                  <div className={`grid gap-4 ${designOneLeadParagraphImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
+                    {designOneLeadParagraphImages.map((image, index) => (
+                      <div key={`${image}-${index}`} className="overflow-hidden rounded-md bg-[#f8f5ef]">
+                        <img
+                          src={image}
+                          alt={designOneLeadParagraph.title || `Lead image ${index + 1}`}
+                          className="md:h-[300px] w-full object-cover sm:h-[200px]"
+                        />
                       </div>
-                    )
-                  ))}
+                    ))}
+                  </div>
+                  {/* Bullet Points Section */}
+                  {designOneLeadParagraph.bulletPoints && designOneLeadParagraph.bulletPoints.length > 0 && designOneLeadParagraph.bulletPoints.some(point => isFilledText(point)) && (
+                    <div className="space-y-3 mt-4">
+                      {designOneLeadParagraph.bulletPoints.map((point, bulletIdx) => (
+                        isFilledText(point) && (
+                          <div key={bulletIdx} className="flex gap-3">
+                            <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
+                            <p className="text-md leading-6 text-gray-600">{point}</p>
+                          </div>
+                        )
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </section>
@@ -512,41 +485,44 @@ const WebPage = ({ data }) => {
               <>
                 <main className="space-y-10">
                   {contentParagraphs.length > 0 &&
-                    contentParagraphs.map((section, index) => (
-                      <section key={`${section.title}-${index}`} className="space-y-3">
-                        {isFilledText(section.title) && (
-                          <h2 className="text-2xl font-bold leading-tight text-gray-950">{section.title}</h2>
-                        )}
-                        <HtmlBlock html={section.description} />
-                        {paragraphImages.length > 0 && index === 0 && (
-                          <div className={`grid gap-4 ${paragraphImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
-                            {paragraphImages.map((image, imgIndex) => (
-                              <div key={`${image}-${imgIndex}`} className="overflow-hidden rounded-[10px] bg-[#f8f5ef]">
-                                <img
-                                  src={image}
-                                  alt={section.title || `Section image ${imgIndex + 1}`}
-                                  className="h-[180px] w-full object-cover sm:h-[300px]"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {section.bulletPoints &&
-                          section.bulletPoints.length > 0 &&
-                          section.bulletPoints.some((point) => isFilledText(point)) && (
-                            <div className="space-y-3">
-                              {section.bulletPoints.map((point, bulletIdx) => (
-                                isFilledText(point) && (
-                                  <div key={bulletIdx} className="flex gap-3">
-                                    <span className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-[#6156b0]" />
-                                    <p className="text-sm leading-6 text-gray-600">{point}</p>
-                                  </div>
-                                )
+                    contentParagraphs.map((section, index) => {
+                      const sectionImages = getSectionImages(section);
+                      return (
+                        <section key={`${section.title}-${index}`} className="space-y-3">
+                          {isFilledText(section.title) && (
+                            <h2 className="text-2xl font-bold leading-tight text-gray-950">{section.title}</h2>
+                          )}
+                          <HtmlBlock html={section.description} />
+                          {sectionImages.length > 0 && (
+                            <div className={`grid gap-4 ${sectionImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
+                              {sectionImages.map((image, imgIndex) => (
+                                <div key={`${image}-${imgIndex}`} className="overflow-hidden rounded-[10px] bg-[#f8f5ef]">
+                                  <img
+                                    src={image}
+                                    alt={section.title || `Section image ${imgIndex + 1}`}
+                                    className="md:h-[350px] w-full object-cover sm:h-[200px]"
+                                  />
+                                </div>
                               ))}
                             </div>
                           )}
-                      </section>
-                    ))}
+                          {section.bulletPoints &&
+                            section.bulletPoints.length > 0 &&
+                            section.bulletPoints.some((point) => isFilledText(point)) && (
+                              <div className="space-y-3 py-3">
+                                {section.bulletPoints.map((point, bulletIdx) => (
+                                  isFilledText(point) && (
+                                    <div key={bulletIdx} className="flex gap-3">
+                                      <span className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-[#6156b0]" />
+                                      <p className="text-md leading-6 text-gray-600">{point}</p>
+                                    </div>
+                                  )
+                                ))}
+                              </div>
+                            )}
+                        </section>
+                      );
+                    })}
 
                   {tableRows.length > 0 && (
                     <section className="space-y-4">
@@ -556,7 +532,7 @@ const WebPage = ({ data }) => {
                           <tbody>
                             {tableRows.map((row, index) => (
                               <tr key={`${row.column1}-${row.column2}-${index}`} className="border-b border-[#ece7df] last:border-b-0">
-                                <td className="w-1/2 px-4 py-3 font-medium text-gray-700 border-b border-r border-black">{row.column1 || "-"}</td>
+                                <td className="w-1/2 px-4 py-3 text-black border-b border-r border-black">{row.column1 || "-"}</td>
                                 <td className="w-1/2 px-4 py-3 text-gray-600 border-b border-black">{row.column2 || "-"}</td>
                               </tr>
                             ))}
@@ -614,7 +590,7 @@ const WebPage = ({ data }) => {
               </>
             ) : (
               <>
-                <aside className="space-y-5">
+                <aside className="space-y-5 lg:sticky lg:top-20">
                   <StaticSidebarCard data={data} />
                   <AuthorCard data={data} />
                   <ShareCard slug={data.slug} />
@@ -643,14 +619,14 @@ const WebPage = ({ data }) => {
                           ))}
                         </div>
                       )}
-                      {paragraphImages.length > 0 && (
-                        <div className={`grid gap-4 ${paragraphImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
-                          {paragraphImages.map((image, index) => (
+                      {leadParagraphImages.length > 0 && (
+                        <div className={`grid gap-4 ${leadParagraphImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
+                          {leadParagraphImages.map((image, index) => (
                             <div key={`${image}-${index}`} className="overflow-hidden rounded-md bg-[#f8f5ef]">
                               <img
                                 src={image}
                                 alt={leadParagraph.title || `Lead image ${index + 1}`}
-                                className="h-[220px] w-full object-cover sm:h-[260px]"
+                                className="md:h-[300px] w-full object-cover sm:h-[200px]"
                               />
                             </div>
                           ))}
@@ -660,30 +636,45 @@ const WebPage = ({ data }) => {
                   )}
 
                   {(isDesignTwo ? contentParagraphs : designOneRemainingParagraphs).length > 0 &&
-                    (isDesignTwo ? contentParagraphs : designOneRemainingParagraphs).map((section, index) => (
-                      <section key={`${section.title}-${index}`} className="space-y-5">
-                        {isFilledText(section.title) && (
-                          <h2 className={`${isDesignTwo ? "text-2xl" : "text-3xl"} font-bold leading-tight text-gray-950`}>
-                            {section.title}
-                          </h2>
-                        )}
-                        <HtmlBlock html={section.description} />
-
-                        {/* Bullet Points Section */}
-                        {section.bulletPoints && section.bulletPoints.length > 0 && section.bulletPoints.some(point => isFilledText(point)) && (
-                          <div className="space-y-3 mt-4">
-                            {section.bulletPoints.map((point, bulletIdx) => (
-                              isFilledText(point) && (
-                                <div key={bulletIdx} className="flex gap-3">
-                                  <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
-                                  <p className="text-sm leading-6 text-gray-600">{point}</p>
+                    (isDesignTwo ? contentParagraphs : designOneRemainingParagraphs).map((section, index) => {
+                      const sectionImages = getSectionImages(section);
+                      return (
+                        <section key={`${section.title}-${index}`} className="space-y-5">
+                          {isFilledText(section.title) && (
+                            <h2 className={`${isDesignTwo ? "text-2xl" : "text-3xl"} font-bold leading-tight text-gray-950`}>
+                              {section.title}
+                            </h2>
+                          )}
+                          <HtmlBlock html={section.description} />
+                          {sectionImages.length > 0 && (
+                            <div className={`grid gap-4 ${sectionImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
+                              {sectionImages.map((image, imageIndex) => (
+                                <div key={`${image}-${imageIndex}`} className="overflow-hidden rounded-md bg-[#f8f5ef]">
+                                  <img
+                                    src={image}
+                                    alt={section.title || `Section image ${imageIndex + 1}`}
+                                    className="md:h-[300px] w-full object-cover sm:h-[200px]"
+                                  />
                                 </div>
-                              )
-                            ))}
-                          </div>
-                        )}
-                      </section>
-                    ))}
+                              ))}
+                            </div>
+                          )}
+                          {/* Bullet Points Section */}
+                          {section.bulletPoints && section.bulletPoints.length > 0 && section.bulletPoints.some(point => isFilledText(point)) && (
+                            <div className="space-y-3 mt-4">
+                              {section.bulletPoints.map((point, bulletIdx) => (
+                                isFilledText(point) && (
+                                  <div key={bulletIdx} className="flex gap-3">
+                                    <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
+                                    <p className="text-sm leading-6 text-gray-600">{point}</p>
+                                  </div>
+                                )
+                              ))}
+                            </div>
+                          )}
+                        </section>
+                      );
+                    })}
 
                   {tableRows.length > 0 && (
                     <section className="space-y-4">
@@ -748,7 +739,7 @@ const WebPage = ({ data }) => {
 
                   {accordionItems.length > 0 && (
                     <section className="space-y-6">
-                      <h2 className="text-3xl font-bold text-gray-950">Frequently asked</h2>
+                      <h2 className="text-3xl font-bold text-gray-950">Special Note</h2>
                       <div className="space-y-2.5">
                         {accordionItems.map((item, index) => {
                           const isOpen = openAccordion === index;
