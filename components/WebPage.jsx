@@ -44,7 +44,7 @@ const HtmlBlock = ({ html, className = "" }) => {
   if (!isFilledText(html)) return null;
   return (
     <div
-      className={`prose prose-sm max-w-none  leading-7 font-geist font-bold ${className}`}
+      className={`prose prose-sm max-w-none leading-6 text-lg ${className}`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
@@ -379,13 +379,11 @@ const WebPage = ({ data }) => {
   const remainingHighlights = isDesignThree ? highlights.slice(1) : highlights;
 
   return (
-    <div className="min-h-screen bg-white font-recoleta text-gray-900 ">
+    <div className="min-h-screen bg-white font-geist font-semibold text-gray-900 ">
       <div className={`w-full border-b border-[#ece7df] ${!isDesignThree ? "bg-[#efefef]" : "bg-[#f7f3ed]"}`}>
-        <div className="mx-auto max-w-7xl md:px-4 md:py-2 sm:px-6 lg:px-12">
+        <div className="mx-auto max-w-7xl md:px-4 pb-2 md:py-5 sm:px-6 lg:px-8">
           {!isDesignThree && (
-            <div className="flex items-center justify-between py-6 text-gray-600">
-
-              {/* <span className="w-[120px] md:w-[180px]" /> */}
+            <div className="flex items-center justify-between  text-gray-600">
             </div>
           )}
           <div className={`grid gap-2 ${isDesignThree ? "grid-cols-1" : isBannerOnlyTop ? "grid-cols-1" : "lg:grid-cols-[520px_minmax(0,1fr)] lg:items-center"}`}>
@@ -407,22 +405,22 @@ const WebPage = ({ data }) => {
               </div>
             )}
             {!isDesignThree && (
-              <div>
+              <div className="px-5 md:px-2 py-2 md:py-0">
                 {isFilledText(data.firstTitle) && (
-                  <span className="hidden text-md my-5 font-medium text-gray-600 md:block">{data.firstTitle}</span>
+                  <span className="hidden text-md my-3 font-medium text-gray-600 md:block">{data.firstTitle}</span>
                 )}
                 <h1 className="max-w-4xl text-2xl font-geist font-semibold leading-[1.05] tracking-tight text-black sm:text-5xl">
                   {data.title}
                 </h1>
                 {isFilledText(data.secondTitle) && (
-                  <p className="mt-4 max-w-3xl text-md leading-8 text-gray-700">{data.secondTitle}</p>
+                  <p className="mt-2 max-w-3xl text-md leading-8 text-gray-700">{data.secondTitle}</p>
                 )}
                 {tags.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
                     {tags.map((tag, idx) => (
                       <span
                         key={tag + idx}
-                        className="rounded-md border border-[#d4d4d4] bg-[#efefef] px-2 py-2 text-md font-medium text-black"
+                        className="rounded-md border border-[#d4d4d4] bg-[#efefef] px-2 py-1 text-sm font-medium text-black"
                       >
                         {tag}
                       </span>
@@ -434,10 +432,10 @@ const WebPage = ({ data }) => {
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e8e4ff] text-sm font-bold text-[#4f46e5]">
                       {(data.sideThumbName || "E").charAt(0)}
                     </span>
-                    <span>{data.sideThumbName || "Editorial Team"}</span>
+                    <span className="text-sm">{data.sideThumbName || "Editorial Team"}</span>
                   </div>
-                  <span className="h-10 w-px bg-gray-400" />
-                  <span>{formatDate(data.updatedAt || data.createdAt) || ""}</span>
+                  <span className="h-6 w-px bg-gray-400" />
+                  <span className="text-sm">{formatDate(data.updatedAt || data.createdAt) || ""}</span>
                 </div>
               </div>
             )}
@@ -451,7 +449,7 @@ const WebPage = ({ data }) => {
               <div>
                 <h1 className="text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">{data.title}</h1>
                 <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                  <span>{data.postedBy?.admin ? "By Admin" : data.sideThumbName || "Editorial Team"}</span>
+                  <span>{data.postedBy?.admin ? "By Admin" : data.sideThumbName || "By Admin"}</span>
                   <span className="h-1 w-1 rounded-full bg-gray-300" />
                   <span>{formatDate(data.updatedAt || data.createdAt) || ""}</span>
                 </div>
@@ -475,7 +473,7 @@ const WebPage = ({ data }) => {
           )}
 
           {designOneLeadParagraph && (
-            <section className="space-y-5 md:px-5 py-4 md:py-8 sm:px-8">
+            <section className="space-y-5 md:px-5 py-4 md:py-4 sm:px-8">
               {isFilledText(designOneLeadParagraph.title) && (
                 <h2 className="text-3xl font-bold leading-tight text-gray-950">{designOneLeadParagraph.title}</h2>
               )}
@@ -487,7 +485,7 @@ const WebPage = ({ data }) => {
                       <img
                         src={image}
                         alt={designOneLeadParagraph.title || `Section image ${imageIndex + 1}`}
-                        className="md:h-[260px] w-full object-contain md:object-cover sm:h-[360px]"
+                        className="md:h-[300px] w-full object-contain md:object-cover sm:h-[360px]"
                       />
                     </div>
                   ))}
@@ -520,9 +518,6 @@ const WebPage = ({ data }) => {
                           <h2 className="text-2xl font-bold leading-tight text-gray-950">{section.title}</h2>
                         )}
                         <HtmlBlock html={section.description} />
-
-
-
                         {paragraphImages.length > 0 && index === 0 && (
                           <div className={`grid gap-4 ${paragraphImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
                             {paragraphImages.map((image, imgIndex) => (
@@ -536,6 +531,20 @@ const WebPage = ({ data }) => {
                             ))}
                           </div>
                         )}
+                        {section.bulletPoints &&
+                          section.bulletPoints.length > 0 &&
+                          section.bulletPoints.some((point) => isFilledText(point)) && (
+                            <div className="space-y-3">
+                              {section.bulletPoints.map((point, bulletIdx) => (
+                                isFilledText(point) && (
+                                  <div key={bulletIdx} className="flex gap-3">
+                                    <span className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-[#6156b0]" />
+                                    <p className="text-sm leading-6 text-gray-600">{point}</p>
+                                  </div>
+                                )
+                              ))}
+                            </div>
+                          )}
                       </section>
                     ))}
 
@@ -622,7 +631,7 @@ const WebPage = ({ data }) => {
                       )}
 
                       {/* Bullet Points Section */}
-                      {/* {leadParagraph.bulletPoints && leadParagraph.bulletPoints.length > 0 && leadParagraph.bulletPoints.some(point => isFilledText(point)) && (
+                      {leadParagraph.bulletPoints && leadParagraph.bulletPoints.length > 0 && leadParagraph.bulletPoints.some(point => isFilledText(point)) && (
                         <div className="space-y-3 mt-4">
                           {leadParagraph.bulletPoints.map((point, bulletIdx) => (
                             isFilledText(point) && (
@@ -633,13 +642,7 @@ const WebPage = ({ data }) => {
                             )
                           ))}
                         </div>
-                      )} */}
-
-                      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                        <span>{data.postedBy?.admin ? "By Admin" : data.sideThumbName || "Editorial Team"}</span>
-                        <span className="h-1 w-1 rounded-full bg-gray-300" />
-                        <span>{formatDate(data.updatedAt || data.createdAt) || ""}</span>
-                      </div>
+                      )}
                       {paragraphImages.length > 0 && (
                         <div className={`grid gap-4 ${paragraphImages.length > 1 ? "sm:grid-cols-[2fr_1fr]" : "grid-cols-1"}`}>
                           {paragraphImages.map((image, index) => (
@@ -667,7 +670,7 @@ const WebPage = ({ data }) => {
                         <HtmlBlock html={section.description} />
 
                         {/* Bullet Points Section */}
-                        {/* {section.bulletPoints && section.bulletPoints.length > 0 && section.bulletPoints.some(point => isFilledText(point)) && (
+                        {section.bulletPoints && section.bulletPoints.length > 0 && section.bulletPoints.some(point => isFilledText(point)) && (
                           <div className="space-y-3 mt-4">
                             {section.bulletPoints.map((point, bulletIdx) => (
                               isFilledText(point) && (
@@ -678,7 +681,7 @@ const WebPage = ({ data }) => {
                               )
                             ))}
                           </div>
-                        )} */}
+                        )}
                       </section>
                     ))}
 
@@ -690,8 +693,8 @@ const WebPage = ({ data }) => {
                           <tbody>
                             {tableRows.map((row, index) => (
                               <tr key={`${row.column1}-${row.column2}-${index}`} className="border-b border-[#ece7df] last:border-b-0">
-                                <td className="w-1/2 px-4 py-3 font-medium text-gray-700 border-r border-b border-gray-400">{row.column1 || "-"}</td>
-                                <td className="w-1/2 px-4 py-3 text-gray-600 border-b border-gray-400">{row.column2 || "-"}</td>
+                                <td className="w-1/2 px-4 py-3 font-medium text-black border-r border-b border-gray-400">{row.column1 || "-"}</td>
+                                <td className="w-1/2 px-4 py-3 text-black font-medium border-b border-gray-400">{row.column2 || "-"}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -711,15 +714,20 @@ const WebPage = ({ data }) => {
                         )}
                         {isFilledText(data.blockquoteLeftTitle) && <span>{data.blockquoteLeftTitle}</span>}
                       </div>
-                      <div className="px-2">
+                      <div className="px-1">
                         <div className="my-4 text-black">
                           <HtmlBlock html={data.blockquoteDescription} className="!text-black" />
                         </div>
-                        {blockquoteTags.map((tag) => (
-                          <span key={tag} className="rounded-md mx-1 w-fit border border-gray-500 px-3 py-2 text-[12px] text-black">
-                            {tag}
-                          </span>
-                        ))}
+                        <div className="flex flex-wrap gap-2">
+                          {blockquoteTags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-md w-fit border border-gray-500 px-3 py-2 text-[12px] text-black"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </section>
                   )}
@@ -737,20 +745,6 @@ const WebPage = ({ data }) => {
                       </div>
                     </section>
                   )}
-
-                  {/* Bullet Points Section */}
-                  {/* {section.bulletPoints && section.bulletPoints.length > 0 && section.bulletPoints.some(point => isFilledText(point)) && (
-                    <div className="space-y-3 mt-4">
-                      {section.bulletPoints.map((point, bulletIdx) => (
-                        isFilledText(point) && (
-                          <div key={bulletIdx} className="flex gap-3">
-                            <span className="h-2 w-2 rounded-full bg-[#6156b0] mt-2 flex-shrink-0" />
-                            <p className="text-sm leading-6 text-gray-600">{point}</p>
-                          </div>
-                        )
-                      ))}
-                    </div>
-                  )} */}
 
                   {accordionItems.length > 0 && (
                     <section className="space-y-6">
@@ -786,16 +780,16 @@ const WebPage = ({ data }) => {
                                     }`}
                                 />
                               </button>
-                              {isOpen && (
-                                <div
-                                  className="border-t border-[#e6dccf] px-6 py-5 text-sm leading-7 text-gray-700 animate-in fade-in duration-300"
-                                  style={{
-                                    animation: "fadeIn 0.4s ease"
-                                  }}
-                                >
-                                  {item.right || "No details added yet."}
+                              <div
+                                className={`grid transition-all duration-500 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                                  }`}
+                              >
+                                <div className="overflow-hidden">
+                                  <div className="border-t border-[#e6dccf] px-6 py-5 text-sm leading-7 text-gray-700">
+                                    {item.right || "No details added yet."}
+                                  </div>
                                 </div>
-                              )}
+                              </div>
                             </div>
                           );
                         })}
