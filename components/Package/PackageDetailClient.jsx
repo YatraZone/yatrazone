@@ -160,9 +160,9 @@ export default function PackageDetailClient({
   const includePackageData = Array.isArray(packageDetails.includePackage) && packageDetails.includePackage.length > 0
     ? packageDetails.includePackage[0]
     : null;
-  const includedDesc = includePackageData?.selectionDesc || packageDetails.basicDetails?.fullDesc || "";
-  const includedHighlights = includePackageData?.selectionHighlight || basicHighlights;
-  const includedTables = includePackageData?.selectionTable || basicTableData;
+  const includedDesc = includePackageData?.selectionDesc || "";
+  const includedHighlights = includePackageData?.selectionHighlight || "";
+  const includedTables = includePackageData?.selectionTable || "";
 
   return (
     <div className="min-h-screen bg-white font-barlow w-full">
