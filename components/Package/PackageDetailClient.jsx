@@ -27,7 +27,7 @@ export default function PackageDetailClient({
   sanitizedUser,
   formatNumericStr,
 }) {
-  console.log(packageDetails)
+  // console.log(packageDetails)
   const [activeTab, setActiveTab] = useState("overview");
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -572,22 +572,33 @@ export default function PackageDetailClient({
                             </div>
                           )}
                           {item.selectionTable?.length > 0 && (
-                            <div className="mt-4 pt-4 border-t border-gray-100">
+                            <div className="mt-4 pt-4">
                               {item.selectionTable?.map((tbl, tIdx) => (
                                 <div key={tIdx} className="mb-4">
                                   <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                  <table className="w-full text-sm border-collapse">
                                     <tbody>
-                                      {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
-                                        const col1 = tbl.tableDesc[rowIdx * 2];
-                                        const col2 = tbl.tableDesc[rowIdx * 2 + 1];
-                                        return (
-                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-50" : "bg-white" }>
-                                            <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                            <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
-                                          </tr>
-                                        );
-                                      })}
+                                      {Array.from(
+                                        { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
+                                        (_, rowIdx) => {
+                                          const col1 = tbl.tableDesc[rowIdx * 2];
+                                          const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+
+                                          return (
+                                            <tr key={rowIdx}>
+                                              {/* Left column */}
+                                              <td className="w-[35%] px-4 py-3 font-medium text-gray-800 align-top border-b border-gray-300">
+                                                {col1 || "-"}
+                                              </td>
+
+                                              {/* Right column */}
+                                              <td className="w-[65%] px-4 py-3 text-gray-600 align-top border-b border-gray-300 border-l">
+                                                {col2 || "-"}
+                                              </td>
+                                            </tr>
+                                          );
+                                        }
+                                      )}
                                     </tbody>
                                   </table>
                                 </div>
@@ -637,22 +648,33 @@ export default function PackageDetailClient({
                           )}
 
                           {item.selectionTable?.length > 0 && (
-                            <div className="mt-4 pt-4 border-t border-gray-100">
+                            <div className="mt-4 pt-4">
                               {item.selectionTable?.map((tbl, tIdx) => (
                                 <div key={tIdx} className="mb-4">
                                   <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                  <table className="w-full text-sm border-collapse">
                                     <tbody>
-                                      {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
-                                        const col1 = tbl.tableDesc[rowIdx * 2];
-                                        const col2 = tbl.tableDesc[rowIdx * 2 + 1];
-                                        return (
-                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                                            <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                            <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
-                                          </tr>
-                                        );
-                                      })}
+                                      {Array.from(
+                                        { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
+                                        (_, rowIdx) => {
+                                          const col1 = tbl.tableDesc[rowIdx * 2];
+                                          const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+
+                                          return (
+                                            <tr key={rowIdx}>
+                                              {/* Left column */}
+                                              <td className="w-[35%] px-4 py-3 font-medium text-gray-800 align-top border-b border-gray-300">
+                                                {col1 || "-"}
+                                              </td>
+
+                                              {/* Right column */}
+                                              <td className="w-[65%] px-4 py-3 text-gray-600 align-top border-b border-gray-300 border-l">
+                                                {col2 || "-"}
+                                              </td>
+                                            </tr>
+                                          );
+                                        }
+                                      )}
                                     </tbody>
                                   </table>
                                 </div>
