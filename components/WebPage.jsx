@@ -303,7 +303,7 @@ const PopularDestinations = () => {
 };
 
 const WebPage = ({ data }) => {
-  console.log(data)
+  // console.log(data)
   const [openAccordion, setOpenAccordion] = useState(0);
   const isDesignTwo = data.templateType === "design1";
   const isDesignThree = data.templateType === "design3";

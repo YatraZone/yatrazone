@@ -91,7 +91,7 @@ const PackageDetailsPage = async ({ params }) => {
     const session = await getServerSession(authOptions);
     // Try Package first
     let packageDetails = await getPackageBySlug(slug);
-    console.log(packageDetails)
+    // console.log(packageDetails)
     let isComingSoon = false;
     if (!packageDetails) {
         // Try ComingSoon

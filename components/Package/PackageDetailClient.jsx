@@ -299,9 +299,9 @@ export default function PackageDetailClient({
                 {/* Highlights */}
                 {basicHighlights.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
-                    <h5 className="text-md font-bold text-gray-900 mb-3">
+                    {/* <h5 className="text-md font-bold text-gray-900 mb-3">
                       Itinerary Highlights
-                    </h5>
+                    </h5> */}
 
                     <ul className="list-disc pl-5 space-y-2">
                       {basicHighlights.map((hl, hIdx) => (
@@ -475,9 +475,9 @@ export default function PackageDetailClient({
                         {/* Highlights */}
                         {day.selectionHighlight?.length > 0 && (
                           <div className="mt-4 pt-4 border-t border-gray-100">
-                            <h5 className="text-md font-semibold text-gray-900 mb-3">
+                            {/* <h5 className="text-md font-semibold text-gray-900 mb-3">
                               Itinerary Highlights
-                            </h5>
+                            </h5> */}
 
                             <ul className="list-disc pl-5 space-y-2">
                               {day.selectionHighlight.map((hl, hIdx) => (
@@ -813,7 +813,7 @@ export default function PackageDetailClient({
               <div className="bg-yellow-50 border border-yellow-500 rounded-lg p-4">
                 <p className="text-sm text-yellow-800 font-medium flex items-start gap-2">
                   <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
-                  <span>Important Notice - For the 2025 Char Dham Yatra, <strong>registration</strong> is mandatory to obtain e-cards done online through the Uttarakhand Tourism website.</span>
+                  <span>Important Notice - For the 2026 Char Dham Yatra, <a href="https://registrationandtouristcare.uk.gov.in/" target="_blank" rel="noopener noreferrer" className="underline text-black">registration</a> is mandatory to obtain e-cards done online through the <a href="https://registrationandtouristcare.uk.gov.in/" target="_blank" className="underline text-black">Uttarakhand Tourism website</a></span>
                 </p>
               </div>
             </div>
