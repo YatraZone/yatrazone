@@ -27,7 +27,7 @@ export default function PackageDetailClient({
   sanitizedUser,
   formatNumericStr,
 }) {
-  // console.log(packageDetails)
+  console.log(packageDetails)
   const [activeTab, setActiveTab] = useState("overview");
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -548,6 +548,52 @@ export default function PackageDetailClient({
                           ) : (
                             <p>No description available</p>
                           )}
+
+                          {item.selectionHighlight?.length > 0 && (
+                            <div className="mt-4 pt-4 border-t border-green-200 not-prose">
+                              <ul className="list-disc pl-5 space-y-2">
+                                {item.selectionHighlight.map((hl, hIdx) => (
+                                  <li key={hIdx}>
+                                    <p className="text-md font-bold text-black">
+                                      {hl.highlightName}
+                                    </p>
+                                    {hl.highlightDesc?.length > 0 && (
+                                      <ul className="list-disc pl-5 mt-1 space-y-1">
+                                        {hl.highlightDesc.map((desc, dIdx) => (
+                                          <li key={dIdx} className="text-md text-black">
+                                            {desc}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {item.selectionTable?.length > 0 && (
+                            <div className="mt-4 pt-4 border-t border-gray-100">
+                              {item.selectionTable?.map((tbl, tIdx) => (
+                                <div key={tIdx} className="mb-4">
+                                  <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
+                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                    <tbody>
+                                      {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                                        const col1 = tbl.tableDesc[rowIdx * 2];
+                                        const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                                        return (
+                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-50" : "bg-white" }>
+                                            <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
+                                            <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                          </tr>
+                                        );
+                                      })}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -565,6 +611,53 @@ export default function PackageDetailClient({
                             <div dangerouslySetInnerHTML={{ __html: item.selectionDesc }} />
                           ) : (
                             <p>No description available</p>
+                          )}
+
+                          {item.selectionHighlight?.length > 0 && (
+                            <div className="mt-4 pt-4 border-t border-red-200 not-prose">
+                              <ul className="list-disc pl-5 space-y-2">
+                                {item.selectionHighlight.map((hl, hIdx) => (
+                                  <li key={hIdx}>
+                                    <p className="text-md font-bold text-black">
+                                      {hl.highlightName}
+                                    </p>
+                                    {hl.highlightDesc?.length > 0 && (
+                                      <ul className="list-disc pl-5 mt-1 space-y-1">
+                                        {hl.highlightDesc.map((desc, dIdx) => (
+                                          <li key={dIdx} className="text-md text-black">
+                                            {desc}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {item.selectionTable?.length > 0 && (
+                            <div className="mt-4 pt-4 border-t border-gray-100">
+                              {item.selectionTable?.map((tbl, tIdx) => (
+                                <div key={tIdx} className="mb-4">
+                                  <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
+                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                    <tbody>
+                                      {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                                        const col1 = tbl.tableDesc[rowIdx * 2];
+                                        const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                                        return (
+                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                                            <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
+                                            <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                          </tr>
+                                        );
+                                      })}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              ))}
+                            </div>
                           )}
                         </div>
                       ))}
@@ -726,13 +819,13 @@ export default function PackageDetailClient({
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-0 md:divide-x md:divide-gray-400">
                                 {row.map((desc, di) => (
                                   <div key={di} className="flex items-start gap-3 px-2">
-                                      <Image
-                                        className="w-6 h-6"
-                                        src="/square.png"
-                                        alt="Check"
-                                        width={20}
-                                        height={20}
-                                      />
+                                    <Image
+                                      className="w-6 h-6"
+                                      src="/square.png"
+                                      alt="Check"
+                                      width={20}
+                                      height={20}
+                                    />
                                     <span className="text-sm text-gray-700">{desc}</span>
                                   </div>
                                 ))}

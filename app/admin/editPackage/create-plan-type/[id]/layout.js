@@ -14,6 +14,7 @@ export default async function RootLayout({
 
     const packages = await Package.findById(id).lean()
     packages._id = packages._id.toString();
+    packages.slug = packages.slug.toString();
     packages.info = packages.info.map(info => {
         info._id = info._id.toString();
         return info;
@@ -42,7 +43,7 @@ export default async function RootLayout({
                     <h1 className="text-4xl px-12 font-semibold">Edit Package: <span className="font-bold text-blue-600">{packages.packageName}</span></h1>
                     <div className='flex xl:flex-row flex-col gap-8 xl:gap-32 p-12'>
                         <div className="flex xl:flex-col flex-wrap gap-2 my-20 font-semibold items-center">
-                            <Sidebar id={id} />
+                            <Sidebar id={id} slug={packages.slug}/>
                         </div>
                         {children}
                     </div>
