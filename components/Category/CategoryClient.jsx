@@ -35,13 +35,6 @@ const CategoryClient = ({ packages, reviews = {}, menuItems = [], currentCategor
   const [checkOutDate, setCheckOutDate] = useState(queryCheckOut);
   const [yatraType, setYatraType] = useState(queryYatraType);
 
-  const yatraTypes = [
-    { value: "Solo", label: "Solo" },
-    { value: "Family", label: "Family" },
-    { value: "Group", label: "Group" },
-    { value: "Helicopter", label: "Helicopter" },
-    { value: "Cruise", label: "Cruise" },
-  ];
 
   // Main category options
   const mainCategoryOptions = useMemo(() => {
@@ -167,7 +160,7 @@ const CategoryClient = ({ packages, reviews = {}, menuItems = [], currentCategor
 
   const formatNumber = (number) => new Intl.NumberFormat("en-IN").format(number);
   return (
-    <div className="container mx-auto px-2 md:px-4 md:py-3">
+    <div className="md:w-[80%] mx-auto px-2 py-5 md:px-4 lg:mt-5">
       {/* ===== Filter Bar ===== */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-2 md:p-4 mb-6">
         {/* Search Row */}

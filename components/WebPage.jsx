@@ -352,21 +352,17 @@ const WebPage = ({ data }) => {
   return (
     <div className="min-h-screen bg-white font-geist font-semibold text-gray-900">
       <div className={`w-full border-b border-[#ece7df] ${!isDesignThree ? "bg-[#efefef]" : "bg-[#f7f3ed]"}`}>
-        <div className="mx-auto max-w-7xl md:px-4 pb-2 md:py-5 sm:px-6 lg:px-8">
-          {!isDesignThree && (
-            <div className="flex items-center justify-between  text-gray-600">
-            </div>
-          )}
+        <div className="mx-auto max-w-7xl md:px-4 md:py-5 sm:px-6 lg:px-8">
           <div className={`grid gap-2 ${isDesignThree ? "grid-cols-1" : isBannerOnlyTop ? "grid-cols-1" : "lg:grid-cols-[520px_minmax(0,1fr)] lg:items-center"}`}>
             {isDesignThree ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 {designThreeHeroImages[0] && (
-                  <img src={designThreeHeroImages[0]} alt={data.title} className="md:h-[300px] w-full object-contain" />
+                  <img src={designThreeHeroImages[0]} alt={data.title} className="md:h-[350px] w-full object-contain" />
                 )}
               </div>
             ) : isBannerOnlyTop ? (
-              <div className="overflow-hidden rounded-md">
-                <img src={data.bannerImage.url} alt={data.title} className="h-[240px] md:h-[360px] w-full object-cover" />
+              <div className="overflow-hidden">
+                <img src={data.bannerImage.url} alt={data.title} className="h-[240px] md:h-[350px] w-full object-cover" />
               </div>
             ) : (
               <div className="overflow-hidden">
@@ -500,7 +496,7 @@ const WebPage = ({ data }) => {
                                   <img
                                     src={image}
                                     alt={section.title || `Section image ${imgIndex + 1}`}
-                                    className="md:h-[350px] w-full object-cover sm:h-[200px]"
+                                    className="md:h-[300px] w-full object-cover h-fit"
                                   />
                                 </div>
                               ))}
@@ -527,13 +523,21 @@ const WebPage = ({ data }) => {
                   {tableRows.length > 0 && (
                     <section className="space-y-4">
                       <h2 className="text-xl font-bold text-gray-950">{data.tableTitle || "Table Information"}</h2>
-                      <div className="overflow-hidden rounded-[8px] bg-white">
+                      <div className="overflow-hidden bg-white">
                         <table className="w-full text-left text-sm">
                           <tbody>
                             {tableRows.map((row, index) => (
-                              <tr key={`${row.column1}-${row.column2}-${index}`} className="border-b border-[#ece7df] last:border-b-0">
-                                <td className="w-1/2 px-4 py-3 text-black border-b border-r border-black">{row.column1 || "-"}</td>
-                                <td className="w-1/2 px-4 py-3 text-gray-600 border-b border-black">{row.column2 || "-"}</td>
+                              <tr
+                                key={`${row.column1}-${row.column2}-${index}`}
+                                className={`border-b border-[#ece7df] last:border-b-0 ${index % 2 === 0 ? "bg-gray-200" : "bg-gray-50"
+                                  }`}
+                              >
+                                <td className="w-1/2 px-4 py-3 text-black border-b border-r border-black">
+                                  {row.column1 || "-"}
+                                </td>
+                                <td className="w-1/2 px-4 py-3 text-gray-600 border-b border-black">
+                                  {row.column2 || "-"}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -543,20 +547,32 @@ const WebPage = ({ data }) => {
                   )}
 
                   {(isFilledText(data.blockquoteDescription) || isFilledText(data.blockquoteMainTitle)) && (
-                    <section className="rounded-[16px] bg-[linear-gradient(135deg,#3f3a7a,#4c4489,#6156b0)] px-6 py-7 text-white shadow-[0_25px_60px_rgba(79,70,229,0.2)]">
-                      <Quote className="h-7 w-7 text-white/80" />
-                      {isFilledText(data.blockquoteMainTitle) && (
-                        <h2 className="mt-3 text-2xl font-bold leading-tight">{data.blockquoteMainTitle}</h2>
-                      )}
-                      <div className="mt-4 text-white/95">
-                        <HtmlBlock html={data.blockquoteDescription} className="!text-white [&_*]:!text-white" />
+                    <section className={`rounded bg-gray-100 px-2 gap-2 flex flex-col py-5 text-black ${isDesignTwo ? "max-w-3xl" : ""}`}>
+                      <div className={`rounded-[24px] bg-[linear-gradient(135deg,#3f3a7a,#4c4489,#6156b0)] px-6 py-7 text-white shadow-[0_25px_60px_rgba(79,70,229,0.2)]`}>
+
+                        <Quote className="h-7 w-7 text-white/80" />
+                        {isFilledText(data.blockquoteMainTitle) && (
+                          <h2 className="mt-3 text-2xl font-bold leading-tight mb-2">{data.blockquoteMainTitle}</h2>
+                        )}
+                        {isFilledText(data.blockquoteLeftTitle) && <span>{data.blockquoteLeftTitle}</span>}
                       </div>
-                      {isFilledText(data.blockquoteLeftTitle) && (
-                        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">{data.blockquoteLeftTitle}</p>
-                      )}
+                      <div className="px-1">
+                        <div className="my-4 text-black">
+                          <HtmlBlock html={data.blockquoteDescription} className="!text-black" />
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {blockquoteTags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-md w-fit border border-gray-500 px-3 py-2 text-[12px] text-black"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </section>
                   )}
-
                   {remainingHighlights.length > 0 && (
                     <section className="space-y-5">
                       {introHighlight && (
@@ -569,7 +585,7 @@ const WebPage = ({ data }) => {
                           )}
                         </div>
                       )}
-                      <div className="grid gap-4">
+                      <div className="flex flex-col gap-4">
                         {remainingHighlights.map((item, index) => (
                           <div
                             key={`${item.title}-${index}`}
@@ -683,7 +699,11 @@ const WebPage = ({ data }) => {
                         <table className="w-full text-left text-sm">
                           <tbody>
                             {tableRows.map((row, index) => (
-                              <tr key={`${row.column1}-${row.column2}-${index}`} className="border-b border-[#ece7df] last:border-b-0">
+                              <tr
+                                key={`${row.column1}-${row.column2}-${index}`}
+                                className={`border-b border-[#ece7df] last:border-b-0 ${index % 2 === 0 ? "bg-gray-200" : "bg-gray-50"
+                                  }`}
+                              >
                                 <td className="w-1/2 px-4 py-3 font-medium text-black border-r border-b border-gray-400">{row.column1 || "-"}</td>
                                 <td className="w-1/2 px-4 py-3 text-black font-medium border-b border-gray-400">{row.column2 || "-"}</td>
                               </tr>
@@ -726,9 +746,9 @@ const WebPage = ({ data }) => {
                   {highlights.length > 0 && (
                     <section className="space-y-4">
                       <h2 className="text-2xl font-bold text-gray-950">More details</h2>
-                      <div className="grid gap-4 md:grid-cols-2">
+                      <div className="grid gap-4 md:grid-cols-1">
                         {highlights.map((item, index) => (
-                          <div key={`${item.title}-${index}`} className="rounded-md border border-[#ece7df] bg-[#fcfaf6] p-5">
+                          <div key={`${item.title}-${index}`} className="rounded-md border border-gray-800 bg-[#fcfaf6] p-5">
                             {isFilledText(item.title) && <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>}
                             {isFilledText(item.point) && <p className="mt-2 text-sm leading-7 text-gray-600">{item.point}</p>}
                           </div>
