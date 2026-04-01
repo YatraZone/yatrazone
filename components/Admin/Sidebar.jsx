@@ -22,6 +22,9 @@ const Sidebar = ({ id, slug }) => {
             <Link href={`/admin/editPackage/summary/${id}`} className='w-52'>
                 <button className={`${pathname.includes('/summary') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Summary</button>
             </Link>
+            <Link href={`/admin/editPackage/include-package/${id}`} className='w-52'>
+                <button className={`${pathname.includes('/include-package') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Include Package</button>
+            </Link>
             <Link href={`/admin/editPackage/create-plan-type/${id}`} className={`w-52`}>
                 <button className={`${pathname.includes('/create-plan-type') ? 'bg-blue-600 text-white' : ''} bg-blue-100 border-2 p-3 rounded-lg w-full border-blue-600`}>Create Plan Type</button>
             </Link>

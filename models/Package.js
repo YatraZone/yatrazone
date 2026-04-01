@@ -68,6 +68,22 @@ const PackageSchema = new Schema({
         days: { type: String },
         description: [{ type: String }],
     }],
+    includePackage: [{
+        selectionTable: [
+            {
+                tableName: { type: String },
+                tableDesc: [{ type: String }],
+            }
+        ],
+        selectionHighlight: [
+            {
+                highlightName: { type: String },
+                highlightDesc: [{ type: String }],
+            }
+        ],
+        selectionDesc: { type: String },
+        order: { type: Number },
+    }],
     createPlanType: [{
         day: { type: String },
         state: { type: String },

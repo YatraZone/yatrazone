@@ -27,7 +27,7 @@ export default function PackageDetailClient({
   sanitizedUser,
   formatNumericStr,
 }) {
-  // console.log(packageDetails)
+  console.log(packageDetails)
   const [activeTab, setActiveTab] = useState("overview");
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -157,6 +157,12 @@ export default function PackageDetailClient({
   const basicTableData = Array.isArray(packageDetails.basicDetails?.tableData)
     ? packageDetails.basicDetails.tableData
     : [];
+  const includePackageData = Array.isArray(packageDetails.includePackage) && packageDetails.includePackage.length > 0
+    ? packageDetails.includePackage[0]
+    : null;
+  const includedDesc = includePackageData?.selectionDesc || packageDetails.basicDetails?.fullDesc || "";
+  const includedHighlights = includePackageData?.selectionHighlight || basicHighlights;
+  const includedTables = includePackageData?.selectionTable || basicTableData;
 
   return (
     <div className="min-h-screen bg-white font-barlow w-full">
@@ -239,7 +245,23 @@ export default function PackageDetailClient({
 
           {/* ===== LEFT CONTENT (75%) ===== */}
           <div className="w-full lg:w-[72%]">
-
+            {/* ========== SUMMARY BANNER ========== */}
+            <div className="my-1 border border-gray-500 rounded-xl p-6 md:p-8">
+              {packageDetails.basicDetails?.notice && packageDetails.basicDetails.notice.trim() !== "" && (
+                <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-sm text-red-700 font-medium flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+                    <span>Availability Notice - "No booking hold, rates are tentative & a matter of subject to availability."</span>
+                  </p>
+                </div>
+              )}
+              <div className="bg-yellow-50 border border-yellow-500 rounded-lg p-4">
+                <p className="text-sm text-yellow-800 font-medium flex items-start gap-2">
+                  <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+                  <span>Important Notice - For the 2026 Char Dham Yatra, <a href="https://registrationandtouristcare.uk.gov.in/" target="_blank" rel="noopener noreferrer" className="underline text-black">registration</a> is mandatory to obtain e-cards done online through the <a href="https://registrationandtouristcare.uk.gov.in/" target="_blank" className="underline text-black">Uttarakhand Tourism website</a></span>
+                </p>
+              </div>
+            </div>
             {/* Tabs Navigation */}
             <div className="sticky top-0 z-30 bg-white border-b border-gray-200 mb-6">
               <div className="flex overflow-x-auto gap-0 no-scrollbar">
@@ -281,12 +303,73 @@ export default function PackageDetailClient({
 
                 {/* Included in this package */}
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">Included in this Package</h4>
-                  <div className="flex flex-wrap gap-3">
-                    <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-700">
-                      <Users className="h-4 w-4 text-gray-500" />
-                      Tour Manager Service →
-                    </div>
+                  <h4 className="text-md font-semibold text-bold mb-3 uppercase tracking-wide">Included in this Package</h4>
+                  <div className="bg-sky-50 border border-sky-200 rounded-xl p-5">
+                    {/* Description */}
+                    {includedDesc && (
+                      <div className="prose max-w-none leading-relaxed custom-desc-list text-gray-700">
+                        <div dangerouslySetInnerHTML={{ __html: includedDesc }} />
+                      </div>
+                    )}
+
+                    {/* Highlights */}
+                    {includedHighlights.length > 0 && (
+                      <div className="mt-4 pt-4 border-t border-sky-200">
+                        <ul className="list-disc pl-5 space-y-2">
+                          {includedHighlights.map((hl, hIdx) => (
+                            <li key={hIdx}>
+                              <p className="text-xl font-semibold text-gray-800">{hl.highlightName}</p>
+                              {hl.highlightDesc?.length > 0 && (
+                                <ul className="list-disc pl-5 mt-1 space-y-1">
+                                  {hl.highlightDesc.map((desc, dIdx) => (
+                                    <li key={dIdx} className="text-md text-gray-700">{desc}</li>
+                                  ))}
+                                </ul>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Table */}
+                    {includedTables.length > 0 && (
+                      <div className="mt-4 pt-4">
+                        {includedTables.map((tbl, tIdx) => (
+                          <div key={tIdx} className="mb-4">
+                            <h5 className="text-md font-semibold text-gray-900 mb-2">{tbl.tableName}</h5>
+                            <table className="w-full text-sm border-collapse">
+                              <tbody>
+                                {Array.from(
+                                  { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
+                                  (_, rowIdx) => {
+                                    const col1 = tbl.tableDesc[rowIdx * 2];
+                                    const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+
+                                    return (
+                                      <tr
+                                        key={rowIdx}
+                                        className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}
+                                      >
+                                        {/* Left */}
+                                        <td className="w-[32%] px-6 py-4 text-gray-700 font-semibold border-b border-r border-gray-900">
+                                          {col1 || "-"}
+                                        </td>
+
+                                        {/* Right */}
+                                        <td className="w-[68%] px-6 py-4 text-gray-700 font-medium border-b border-gray-900">
+                                          {col2 || "-"}
+                                        </td>
+                                      </tr>
+                                    );
+                                  }
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -360,6 +443,75 @@ export default function PackageDetailClient({
                     />
                   </div>
                 )}
+
+                {faqs.length > 0 && (
+                  <div>
+                    <h3 className="text-2xl font-bold mb-4">❓ Frequently Asked Questions</h3>
+                    <div className="space-y-3">
+                      {faqs.map((faq, i) => (
+                        <details key={i} className="group border border-gray-200 rounded-lg overflow-hidden">
+                          <summary className="cursor-pointer px-5 py-3.5 text-md font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 flex items-center justify-between">
+                            {faq.selectionTitle}
+                            <ChevronRight className="h-4 w-4 text-gray-400 group-open:rotate-90 transition-transform" />
+                          </summary>
+                          <div className="px-5 py-4 text-sm text-gray-600 prose prose-sm max-w-none custom-desc-list">
+                            {faq.selectionDesc ? (
+                              <div dangerouslySetInnerHTML={{ __html: faq.selectionDesc }} />
+                            ) : (
+                              <p>No description available</p>
+                            )}
+                            {faq.selectionHighlight?.length > 0 && (
+                              <div className="mt-4 pt-4 border-t border-green-200 not-prose">
+                                <ul className="list-disc pl-5 space-y-2">
+                                  {faq.selectionHighlight.map((hl, hIdx) => (
+                                    <li key={hIdx}>
+                                      <p className="text-md font-bold text-black">
+                                        {hl.highlightName}
+                                      </p>
+                                      {hl.highlightDesc?.length > 0 && (
+                                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                                          {hl.highlightDesc.map((desc, dIdx) => (
+                                            <li key={dIdx} className="text-md text-black">
+                                              {desc}
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {faq.selectionTable?.length > 0 && (
+                              <div className="mt-4 pt-4 not-prose">
+                                {faq.selectionTable.map((tbl, tIdx) => (
+                                  <div key={tIdx} className="mb-4">
+                                    <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
+                                    <table className="w-full text-sm border border-gray-300 overflow-hidden">
+                                      <tbody>
+                                        {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                                          const col1 = tbl.tableDesc[rowIdx * 2];
+                                          const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                                          return (
+                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
+                                              <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
+                                              <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                            </tr>
+                                          );
+                                        })}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -388,6 +540,7 @@ export default function PackageDetailClient({
               return (
                 <div className="flex gap-6">
                   {/* Day plan sidebar - vertical timeline with dates */}
+
                   <div className="hidden md:block w-48 shrink-0" ref={sidebarRef}>
                     <div className="sticky top-16">
                       {/* Title */}
@@ -435,12 +588,8 @@ export default function PackageDetailClient({
                   {/* Day plan content */}
                   <div className="flex-1 space-y-6">
                     {/* Summary bar */}
-                    <div className="flex items-center gap-5 text-xs text-gray-500 pb-4 border-b border-gray-200 flex-wrap">
+                    <div className="flex items-center justify-end mx-2 gap-5 text-xs text-gray-500 pb-4 border-b border-gray-200 flex-wrap">
                       <span className="bg-gray-100 px-2.5 py-1 rounded font-semibold text-gray-800 text-sm">{totalDays} DAY PLAN</span>
-                      {/* <span>{totalTransfers} TRANSFERS</span>
-                      <span>{totalHotels} HOTELS</span>
-                      <span>{totalActivities} ACTIVITIES</span>
-                      <span>{totalMeals} MEALS</span> */}
                     </div>
 
                     {dayPlans.map((day, index) => (
@@ -531,7 +680,6 @@ export default function PackageDetailClient({
                 </div>
               );
             })()}
-
             {/* ---- INCLUDE/EXCLUDE TAB ---- */}
             {activeTab === "include" && (
               <div className="space-y-8">
@@ -576,29 +724,18 @@ export default function PackageDetailClient({
                               {item.selectionTable?.map((tbl, tIdx) => (
                                 <div key={tIdx} className="mb-4">
                                   <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                  <table className="w-full text-sm border-collapse">
+                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
                                     <tbody>
-                                      {Array.from(
-                                        { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
-                                        (_, rowIdx) => {
-                                          const col1 = tbl.tableDesc[rowIdx * 2];
-                                          const col2 = tbl.tableDesc[rowIdx * 2 + 1];
-
-                                          return (
-                                            <tr key={rowIdx}>
-                                              {/* Left column */}
-                                              <td className="w-[35%] px-4 py-3 font-medium text-gray-800 align-top border-b border-gray-300">
-                                                {col1 || "-"}
-                                              </td>
-
-                                              {/* Right column */}
-                                              <td className="w-[65%] px-4 py-3 text-gray-600 align-top border-b border-gray-300 border-l">
-                                                {col2 || "-"}
-                                              </td>
-                                            </tr>
-                                          );
-                                        }
-                                      )}
+                                      {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                                        const col1 = tbl.tableDesc[rowIdx * 2];
+                                        const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                                        return (
+                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
+                                            <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
+                                            <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                          </tr>
+                                        );
+                                      })}
                                     </tbody>
                                   </table>
                                 </div>
@@ -652,29 +789,18 @@ export default function PackageDetailClient({
                               {item.selectionTable?.map((tbl, tIdx) => (
                                 <div key={tIdx} className="mb-4">
                                   <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                  <table className="w-full text-sm border-collapse">
+                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
                                     <tbody>
-                                      {Array.from(
-                                        { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
-                                        (_, rowIdx) => {
-                                          const col1 = tbl.tableDesc[rowIdx * 2];
-                                          const col2 = tbl.tableDesc[rowIdx * 2 + 1];
-
-                                          return (
-                                            <tr key={rowIdx}>
-                                              {/* Left column */}
-                                              <td className="w-[35%] px-4 py-3 font-medium text-gray-800 align-top border-b border-gray-300">
-                                                {col1 || "-"}
-                                              </td>
-
-                                              {/* Right column */}
-                                              <td className="w-[65%] px-4 py-3 text-gray-600 align-top border-b border-gray-300 border-l">
-                                                {col2 || "-"}
-                                              </td>
-                                            </tr>
-                                          );
-                                        }
-                                      )}
+                                      {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                                        const col1 = tbl.tableDesc[rowIdx * 2];
+                                        const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                                        return (
+                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
+                                            <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
+                                            <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                          </tr>
+                                        );
+                                      })}
                                     </tbody>
                                   </table>
                                 </div>
@@ -692,28 +818,7 @@ export default function PackageDetailClient({
             {/* ---- ADDITIONAL INFO TAB ---- */}
             {activeTab === "additional" && (
               <div className="space-y-6">
-                {faqs.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-bold mb-4">❓ Frequently Asked Questions</h3>
-                    <div className="space-y-3">
-                      {faqs.map((faq, i) => (
-                        <details key={i} className="group border border-gray-200 rounded-lg overflow-hidden">
-                          <summary className="cursor-pointer px-5 py-3.5 text-sm font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 flex items-center justify-between">
-                            {faq.selectionTitle}
-                            <ChevronRight className="h-4 w-4 text-gray-400 group-open:rotate-90 transition-transform" />
-                          </summary>
-                          <div className="px-5 py-4 text-sm text-gray-600 prose prose-sm max-w-none custom-desc-list">
-                            {faq.selectionDesc ? (
-                              <div dangerouslySetInnerHTML={{ __html: faq.selectionDesc }} />
-                            ) : (
-                              <p>No description available</p>
-                            )}
-                          </div>
-                        </details>
-                      ))}
-                    </div>
-                  </div>
-                )}
+
                 {importantInfo.length > 0 && (
                   <div>
                     <h3 className="text-xl font-bold mb-4">⚠️ Important Information</h3>
@@ -729,6 +834,68 @@ export default function PackageDetailClient({
                               <div dangerouslySetInnerHTML={{ __html: info.selectionDesc }} />
                             ) : (
                               <p>No description available</p>
+                            )}
+
+                            {info.selectionHighlight?.length > 0 && (
+                              <div className="mt-4 pt-4 border-t border-green-200 not-prose">
+                                <ul className="list-disc pl-5 space-y-2">
+                                  {info.selectionHighlight.map((hl, hIdx) => (
+                                    <li key={hIdx}>
+                                      <p className="text-md font-bold text-black">
+                                        {hl.highlightName}
+                                      </p>
+                                      {hl.highlightDesc?.length > 0 && (
+                                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                                          {hl.highlightDesc.map((desc, dIdx) => (
+                                            <li key={dIdx} className="text-md text-black">
+                                              {desc}
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {info.selectionTable?.length > 0 && (
+                              <div className="mt-4 pt-4 not-prose custom-table-reset">
+                                {info.selectionTable.map((tbl, tIdx) => (
+                                  <div key={tIdx} className="mb-4">
+                                    <h5 className="text-md font-bold text-gray-900 mb-3">{tbl.tableName}</h5>
+                                    <table className="w-full text-sm border-collapse">
+                                      <tbody>
+                                        {Array.from(
+                                          { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
+                                          (_, rowIdx) => {
+                                            const col1 = tbl.tableDesc[rowIdx * 2];
+                                            const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+
+                                            return (
+                                              <tr
+                                                key={rowIdx}
+                                                className={`${rowIdx % 2 === 0 ? "bg-gray-100" : ""
+                                                  } hover:bg-gray-100`}
+                                              >
+                                                {/* Left */}
+                                                <td className="w-[32%] px-6 py-4 text-gray-700 font-semibold border-b">
+                                                  {col1 || "-"}
+                                                </td>
+
+                                                {/* Right */}
+                                                <td className="w-[68%] px-6 py-4 text-gray-700 font-medium border-b border-l border-gray-900">
+                                                  {col2 || "-"}
+                                                </td>
+                                              </tr>
+                                            );
+                                          }
+                                        )}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                ))}
+                              </div>
                             )}
                           </div>
                         </details>
@@ -751,6 +918,53 @@ export default function PackageDetailClient({
                               <div dangerouslySetInnerHTML={{ __html: info.selectionDesc }} />
                             ) : (
                               <p>No description available</p>
+                            )}
+
+                            {info.selectionHighlight?.length > 0 && (
+                              <div className="mt-4 pt-4 border-t border-green-200 not-prose">
+                                <ul className="list-disc pl-5 space-y-2">
+                                  {info.selectionHighlight.map((hl, hIdx) => (
+                                    <li key={hIdx}>
+                                      <p className="text-md font-bold text-black">
+                                        {hl.highlightName}
+                                      </p>
+                                      {hl.highlightDesc?.length > 0 && (
+                                        <ul className="list-disc pl-5 mt-1 space-y-1">
+                                          {hl.highlightDesc.map((desc, dIdx) => (
+                                            <li key={dIdx} className="text-md text-black">
+                                              {desc}
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {info.selectionTable?.length > 0 && (
+                              <div className="mt-4 pt-4 not-prose">
+                                {info.selectionTable.map((tbl, tIdx) => (
+                                  <div key={tIdx} className="mb-4">
+                                    <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
+                                    <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                      <tbody>
+                                        {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                                          const col1 = tbl.tableDesc[rowIdx * 2];
+                                          const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                                          return (
+                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
+                                              <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
+                                              <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                            </tr>
+                                          );
+                                        })}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                ))}
+                              </div>
                             )}
                           </div>
                         </details>
@@ -776,16 +990,78 @@ export default function PackageDetailClient({
                         ) : <br key={li} />
                       ))}
                     </div>
+                    {/* Highlights */}
+                    {policy.selectionHighlight?.length > 0 && (
+                      <div className="mt-4 pt-4">
+                        <ul className="list-disc pl-5 space-y-2">
+                          {policy.selectionHighlight.map((hl, hIdx) => (
+                            <li key={hIdx}>
+                              <p className="text-md font-semibold text-gray-800">
+                                {hl.highlightName}
+                              </p>
+
+                              {hl.highlightDesc?.length > 0 && (
+                                <ul className="list-disc pl-5 mt-1 space-y-1">
+                                  {hl.highlightDesc.map((desc, dIdx) => (
+                                    <li key={dIdx} className="text-md text-gray-600">
+                                      {desc}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Table */}
+                    {policy.selectionTable?.length > 0 && (
+                      <div className="mt-4 pt-4 ">
+                        {policy.selectionTable.map((tbl, tIdx) => (
+                          <div key={tIdx} className="mb-4">
+                            <h5 className="text-md font-semibold text-gray-900 mb-2">{tbl.tableName}</h5>
+                            <table className="w-full text-sm border-collapse">
+                              <tbody>
+                                {Array.from(
+                                  { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
+                                  (_, rowIdx) => {
+                                    const col1 = tbl.tableDesc[rowIdx * 2];
+                                    const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+
+                                    return (
+                                      <tr key={rowIdx} className="align-top">
+                                        {/* Left */}
+                                        <td className="w-[32%] bg-gray-100 px-6 py-4 text-gray-700 font-semibold border-b border-r border-gray-900">
+                                          {col1 || "-"}
+                                        </td>
+
+                                        {/* Right */}
+                                        <td className="w-[68%] bg-gray-100 px-6 py-4 text-gray-700 font-medium border-b border-gray-900">
+                                          {col2 || "-"}
+                                        </td>
+                                      </tr>
+                                    );
+                                  }
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
+
                 )) : (
                   <p className="text-gray-500">No policies available.</p>
                 )}
+
               </div>
             )}
 
             {/* ---- HOTELS TAB ---- */}
             {activeTab === "hotels" && (
-              <div className="space-y-0">
+              <div className="space-y-5">
                 {hotels.length > 0 ? hotels.map((hotel, i) => (
                   <div key={i} className="flex items-center border border-gray-200 px-2 py-4 gap-0">
                     {/* Day Badge */}
@@ -808,6 +1084,30 @@ export default function PackageDetailClient({
                 )) : (
                   <p className="text-gray-500 py-4">No hotels available.</p>
                 )}
+                {/* Important Notes & Accommodation Policy */}
+                <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-5">
+                  <h4 className="font-bold text-xl text-yellow-900 mb-4 flex items-center gap-2">
+                    📋 Important Notes & Accommodation Policy
+                  </h4>
+                  <div className="space-y-3 text-md text-gray-700">
+                    <div>
+                      <p className="font-bold  text-gray-800 mb-1">Property Substitution:</p>
+                      <p className="">In the event of unforeseen circumstances or operational constraints, the company reserves the right to change the designated hotel to another property of a similar category, subject to availability.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold  text-gray-800 mb-1">Room Configuration:</p>
+                      <p>All tour packages are based on double-sharing accommodation only.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold  text-gray-800 mb-1">Single Occupancy Surcharge:</p>
+                      <p>Guests requesting a private room (single occupancy) will incur an additional supplement of ₹35,000 per person (Inclusive of all taxes) for the entire circuit.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold  text-gray-800 mb-1">Force Majeure Stays:</p>
+                      <p>In the event of flight cancellations or delays caused by adverse weather, technical snags, or other unavoidable situations, any costs arising from additional accommodation or meals beyond the scheduled itinerary must be borne directly by the guest at the location.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -915,23 +1215,6 @@ export default function PackageDetailClient({
               </div>
             )}
 
-            {/* ========== SUMMARY BANNER ========== */}
-            <div className="mt-12 border border-gray-200 rounded-xl p-6 md:p-8">
-              {packageDetails.basicDetails?.notice && packageDetails.basicDetails.notice.trim() !== "" && (
-                <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
-                  <p className="text-sm text-red-700 font-medium flex items-start gap-2">
-                    <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
-                    <span>Availability Notice - "No booking hold, rates are tentative & a matter of subject to availability."</span>
-                  </p>
-                </div>
-              )}
-              <div className="bg-yellow-50 border border-yellow-500 rounded-lg p-4">
-                <p className="text-sm text-yellow-800 font-medium flex items-start gap-2">
-                  <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
-                  <span>Important Notice - For the 2026 Char Dham Yatra, <a href="https://registrationandtouristcare.uk.gov.in/" target="_blank" rel="noopener noreferrer" className="underline text-black">registration</a> is mandatory to obtain e-cards done online through the <a href="https://registrationandtouristcare.uk.gov.in/" target="_blank" className="underline text-black">Uttarakhand Tourism website</a></span>
-                </p>
-              </div>
-            </div>
             {/* ========== SPIRITUAL JOURNEY ========== */}
             {/* <section className="mt-12 mb-8">
               <h3 className="font-bold text-2xl text-center mb-4">Be a part of a spiritual journey.</h3>
@@ -948,7 +1231,7 @@ export default function PackageDetailClient({
           {/* ===== RIGHT SIDEBAR (28%) ===== */}
           <div className="w-full lg:w-[28%]">
             {/* Price Card - Sticky */}
-            <div className="sticky top-4 space-y-4">
+            <div className="sticky top-14 space-y-4">
               {/* Main Price Card */}
               <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                 {/* Discount badge */}
