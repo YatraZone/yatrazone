@@ -331,7 +331,6 @@ export default function PackageDetailClient({
                         </ul>
                       </div>
                     )}
-
                     {/* Table */}
                     {includedTables.length > 0 && (
                       <div className="mt-4 pt-4">
@@ -349,7 +348,7 @@ export default function PackageDetailClient({
                                     return (
                                       <tr
                                         key={rowIdx}
-                                        className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}
+                                        className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200 " : "bg-white hover:bg-gray-100"}
                                       >
                                         {/* Left */}
                                         <td className="w-[32%] px-6 py-4 text-gray-700 font-semibold border-b border-r border-gray-900">
@@ -382,10 +381,6 @@ export default function PackageDetailClient({
                 {/* Highlights */}
                 {basicHighlights.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
-                    {/* <h5 className="text-md font-bold text-gray-900 mb-3">
-                      Itinerary Highlights
-                    </h5> */}
-
                     <ul className="list-disc pl-5 space-y-2">
                       {basicHighlights.map((hl, hIdx) => (
                         <li key={hIdx}>
@@ -396,7 +391,7 @@ export default function PackageDetailClient({
                           {hl.highlightDesc?.length > 0 && (
                             <ul className="list-disc pl-5 mt-1 space-y-1">
                               {hl.highlightDesc.map((desc, dIdx) => (
-                                <li key={dIdx} className="text-sm text-gray-600">
+                                <li key={dIdx} className="text-md text-gray-600">
                                   {desc}
                                 </li>
                               ))}
@@ -484,19 +479,19 @@ export default function PackageDetailClient({
                             )}
 
                             {faq.selectionTable?.length > 0 && (
-                              <div className="mt-4 pt-4 not-prose">
-                                {faq.selectionTable.map((tbl, tIdx) => (
-                                  <div key={tIdx} className="mb-4">
+                              <div className="mt-4 pt-4">
+                                {faq.selectionTable?.map((tbl, tIdx) => (
+                                  <div key={tIdx} className="mb-4 not-prose">
                                     <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                    <table className="w-full text-sm border border-gray-300 overflow-hidden">
+                                    <table className="w-full text-sm border-collapse border border-gray-300 rounded overflow-hidden">
                                       <tbody>
                                         {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
                                           const col1 = tbl.tableDesc[rowIdx * 2];
                                           const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                           return (
-                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
-                                              <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                              <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-100" : "bg-white hover:bg-gray-100"}>
+                                              <td className="w-[32%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-sm">{col1 || "-"}</td>
+                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm">{col2 || "-"}</td>
                                             </tr>
                                           );
                                         })}
@@ -722,17 +717,17 @@ export default function PackageDetailClient({
                           {item.selectionTable?.length > 0 && (
                             <div className="mt-4 pt-4">
                               {item.selectionTable?.map((tbl, tIdx) => (
-                                <div key={tIdx} className="mb-4">
+                                <div key={tIdx} className="mb-4 not-prose">
                                   <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                  <table className="w-full text-sm border-collapse border border-gray-500 rounded overflow-hidden">
                                     <tbody>
                                       {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
                                         const col1 = tbl.tableDesc[rowIdx * 2];
                                         const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                         return (
-                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
-                                            <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                            <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-100" : "bg-white hover:bg-gray-100"}>
+                                            <td className="w-[32%] md:!px-6 !px-4 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900">{col1 || "-"}</td>
+                                            <td className="w-[68%] md:!px-6 !px-4 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900">{col2 || "-"}</td>
                                           </tr>
                                         );
                                       })}
@@ -787,17 +782,17 @@ export default function PackageDetailClient({
                           {item.selectionTable?.length > 0 && (
                             <div className="mt-4 pt-4">
                               {item.selectionTable?.map((tbl, tIdx) => (
-                                <div key={tIdx} className="mb-4">
+                                <div key={tIdx} className="mb-4 not-prose">
                                   <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                  <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                  <table className="w-full text-sm border-collapse border border-gray-300 rounded overflow-hidden">
                                     <tbody>
                                       {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
                                         const col1 = tbl.tableDesc[rowIdx * 2];
                                         const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                         return (
-                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
-                                            <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                            <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                          <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}>
+                                            <td className="w-[32%] !px-6 !py-4 text-gray-700 font-semibold border-b border-r border-gray-900">{col1 || "-"}</td>
+                                            <td className="w-[68%] !px-6 !py-4 text-gray-700 font-medium border-b border-gray-900">{col2 || "-"}</td>
                                           </tr>
                                         );
                                       })}
@@ -860,37 +855,22 @@ export default function PackageDetailClient({
                             )}
 
                             {info.selectionTable?.length > 0 && (
-                              <div className="mt-4 pt-4 not-prose custom-table-reset">
-                                {info.selectionTable.map((tbl, tIdx) => (
-                                  <div key={tIdx} className="mb-4">
-                                    <h5 className="text-md font-bold text-gray-900 mb-3">{tbl.tableName}</h5>
-                                    <table className="w-full text-sm border-collapse">
+                              <div className="mt-4 pt-4">
+                                {info.selectionTable?.map((tbl, tIdx) => (
+                                  <div key={tIdx} className="mb-4 not-prose">
+                                    <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
+                                    <table className="w-full text-sm border-collapse border border-gray-300 rounded overflow-hidden">
                                       <tbody>
-                                        {Array.from(
-                                          { length: Math.ceil((tbl.tableDesc?.length || 0) / 2) },
-                                          (_, rowIdx) => {
-                                            const col1 = tbl.tableDesc[rowIdx * 2];
-                                            const col2 = tbl.tableDesc[rowIdx * 2 + 1];
-
-                                            return (
-                                              <tr
-                                                key={rowIdx}
-                                                className={`${rowIdx % 2 === 0 ? "bg-gray-100" : ""
-                                                  } hover:bg-gray-100`}
-                                              >
-                                                {/* Left */}
-                                                <td className="w-[32%] px-6 py-4 text-gray-700 font-semibold border-b">
-                                                  {col1 || "-"}
-                                                </td>
-
-                                                {/* Right */}
-                                                <td className="w-[68%] px-6 py-4 text-gray-700 font-medium border-b border-l border-gray-900">
-                                                  {col2 || "-"}
-                                                </td>
-                                              </tr>
-                                            );
-                                          }
-                                        )}
+                                        {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
+                                          const col1 = tbl.tableDesc[rowIdx * 2];
+                                          const col2 = tbl.tableDesc[rowIdx * 2 + 1];
+                                          return (
+                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}>
+                                              <td className="w-[32%] md:!px-6 !px-1 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-xs md:text-sm">{col1 || "-"}</td>
+                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm md:text-sm">{col2 || "-"}</td>
+                                            </tr>
+                                          );
+                                        })}
                                       </tbody>
                                     </table>
                                   </div>
@@ -944,19 +924,19 @@ export default function PackageDetailClient({
                             )}
 
                             {info.selectionTable?.length > 0 && (
-                              <div className="mt-4 pt-4 not-prose">
-                                {info.selectionTable.map((tbl, tIdx) => (
-                                  <div key={tIdx} className="mb-4">
+                              <div className="mt-4 pt-4">
+                                {info.selectionTable?.map((tbl, tIdx) => (
+                                  <div key={tIdx} className="mb-4 not-prose">
                                     <h5 className="text-md font-bold text-gray-900 mb-2">{tbl.tableName}</h5>
-                                    <table className="w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
+                                    <table className="w-full text-sm border-collapse border border-gray-300 rounded overflow-hidden">
                                       <tbody>
                                         {Array.from({ length: Math.ceil((tbl.tableDesc?.length || 0) / 2) }, (_, rowIdx) => {
                                           const col1 = tbl.tableDesc[rowIdx * 2];
                                           const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                           return (
-                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100" : ""}>
-                                              <td className="border border-gray-100 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                              <td className="border border-gray-100 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                            <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}>
+                                              <td className="w-[32%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-sm">{col1 || "-"}</td>
+                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm">{col2 || "-"}</td>
                                             </tr>
                                           );
                                         })}
@@ -1065,20 +1045,20 @@ export default function PackageDetailClient({
                 {hotels.length > 0 ? hotels.map((hotel, i) => (
                   <div key={i} className="flex items-center border border-gray-200 px-2 py-4 gap-0">
                     {/* Day Badge */}
-                    <div className="w-28 shrink-0">
+                    <div className="md:w-28 w-20 shrink-0">
                       <span className="bg-gradient-to-r from-orange-400 to-orange-500 text-white text-xs font-bold px-4 py-2 rounded-full">
                         {hotel.days}
                       </span>
                     </div>
                     {/* City */}
-                    <div className="flex-1 flex items-center gap-2 px-4 border-l-2 border-gray-300">
-                      <span className="font-bold text-gray-900">City :-</span>
-                      <span className="text-gray-700">{hotel.cityName}</span>
+                    <div className="flex-1 flex flex-col  md:flex-row items-center gap-2 px-4 border-l-2 border-gray-300">
+                      <span className="font-bold text-gray-900 text-xs">City :-</span>
+                      <span className="text-gray-700 text-xs md:text-md">{hotel.cityName}</span>
                     </div>
                     {/* Hotel */}
-                    <div className="flex-1 flex items-center gap-2 px-4 border-l-2 border-gray-300">
-                      <span className="font-bold text-gray-900">Hotel :-</span>
-                      <span className="text-gray-700">{hotel.hotelName}</span>
+                    <div className="flex-1 flex flex-col md:flex-row items-center gap-1 md:gap-2 px-1 md:px-4 border-l-2 border-gray-300">
+                      <span className="font-bold text-gray-900 text-xs md:text-sm">Hotel :-</span>
+                      <span className="text-gray-700 text-xs md:text-md text-center">{hotel.hotelName}</span>
                     </div>
                   </div>
                 )) : (
