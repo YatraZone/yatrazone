@@ -1052,13 +1052,13 @@ export default function PackageDetailClient({
                     </div>
                     {/* City */}
                     <div className="flex-1 flex flex-col  md:flex-row items-center gap-2 px-4 border-l-2 border-gray-300">
-                      <span className="font-bold text-gray-900 text-xs">City :-</span>
-                      <span className="text-gray-700 text-xs md:text-md">{hotel.cityName}</span>
+                      <span className="font-bold text-gray-900 text-xs md:text-[15px]">City :-</span>
+                      <span className="text-gray-700 text-xs md:text-[15px]">{hotel.cityName}</span>
                     </div>
                     {/* Hotel */}
                     <div className="flex-1 flex flex-col md:flex-row items-center gap-1 md:gap-2 px-1 md:px-4 border-l-2 border-gray-300">
-                      <span className="font-bold text-gray-900 text-xs md:text-sm">Hotel :-</span>
-                      <span className="text-gray-700 text-xs md:text-md text-center">{hotel.hotelName}</span>
+                      <span className="font-bold text-gray-900 text-xs md:text-[15px]">Hotel :-</span>
+                      <span className="text-gray-700 text-xs md:text-[15px] text-center">{hotel.hotelName}</span>
                     </div>
                   </div>
                 )) : (
@@ -1277,9 +1277,9 @@ export default function PackageDetailClient({
               </div>
 
               {/* Category Type Card */}
-              <div className="bg-white border border-gray-200 rounded-xl p-4">
-                <h4 className="text-base font-bold text-gray-800 mb-2">Category Type :</h4>
-                <p className="text-sm text-gray-500">
+              <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+                <h4 className="text-base font-bold text-gray-800 ">Category Type :</h4>
+                <p className="text-sm text-black text-wrap">
                   {packageDetails.basicDetails?.tourType || "Group Package"}
                 </p>
               </div>
