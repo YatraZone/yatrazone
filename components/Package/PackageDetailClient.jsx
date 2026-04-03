@@ -1041,27 +1041,41 @@ export default function PackageDetailClient({
 
             {/* ---- HOTELS TAB ---- */}
             {activeTab === "hotels" && (
-              <div className="space-y-5">
-                {hotels.length > 0 ? hotels.map((hotel, i) => (
-                  <div key={i} className="flex items-center border border-gray-200 px-2 py-4 gap-0">
-                    {/* Day Badge */}
-                    <div className="md:w-28 w-20 shrink-0">
-                      <span className="bg-gradient-to-r from-orange-400 to-orange-500 text-white text-xs font-bold px-4 py-2 rounded-full">
-                        {hotel.days}
-                      </span>
+              <div className="space-y-2 md:space-y-5">
+                {hotels.length > 0 ? (
+                  <>
+                    <div className="flex items-start px-2 gap-0">
+                      <div className="md:w-28 w-20 shrink-0">
+                        <span className="font-bold text-gray-900 text-sm md:text-[15px]">Tag :-</span>
+                      </div>
+                      <div className="flex-1 px-4 border-l-2 border-transparent">
+                        <span className="font-bold text-gray-900 text-sm md:text-[15px]">City :-</span>
+                      </div>
+                      <div className="flex-1 px-1 md:px-4 border-l-2 border-transparent">
+                        <span className="font-bold text-gray-900 text-sm md:text-[15px]">Hotel :-</span>
+                      </div>
                     </div>
-                    {/* City */}
-                    <div className="flex-1 flex flex-col  md:flex-row items-center gap-2 px-4 border-l-2 border-gray-300">
-                      <span className="font-bold text-gray-900 text-xs md:text-[15px]">City :-</span>
-                      <span className="text-gray-700 text-xs md:text-[15px]">{hotel.cityName}</span>
-                    </div>
-                    {/* Hotel */}
-                    <div className="flex-1 flex flex-col md:flex-row items-center gap-1 md:gap-2 px-1 md:px-4 border-l-2 border-gray-300">
-                      <span className="font-bold text-gray-900 text-xs md:text-[15px]">Hotel :-</span>
-                      <span className="text-gray-700 text-xs md:text-[15px] text-center">{hotel.hotelName}</span>
-                    </div>
-                  </div>
-                )) : (
+
+                    {hotels.map((hotel, i) => (
+                      <div key={i} className="flex items-center border border-gray-200 px-2 py-2 gap-0">
+                        {/* Day Badge */}
+                        <div className="md:w-28 w-20 shrink-0">
+                          <span className="bg-gradient-to-r from-orange-400 to-orange-500 text-white text-xs font-bold px-4 py-2 rounded-full">
+                            {hotel.days}
+                          </span>
+                        </div>
+                        {/* City */}
+                        <div className="flex-1 flex flex-col md:flex-row items-center gap-2 px-4 border-l-2 border-gray-300">
+                          <span className="text-gray-700 text-xs md:text-[15px]">{hotel.cityName}</span>
+                        </div>
+                        {/* Hotel */}
+                        <div className="flex-1 flex flex-col md:flex-row items-center gap-1 md:gap-2 px-2 md:px-4 border-l-2 border-gray-300">
+                          <span className="text-gray-700 text-xs md:text-[15px] text-start md:text-center">{hotel.hotelName}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                ) : (
                   <p className="text-gray-500 py-4">No hotels available.</p>
                 )}
                 {/* Important Notes & Accommodation Policy */}
@@ -1080,7 +1094,7 @@ export default function PackageDetailClient({
                     </div>
                     <div>
                       <p className="font-bold  text-gray-800 mb-1">Single Occupancy Surcharge:</p>
-                      <p>Guests requesting a private room (single occupancy) will incur an additional supplement of ₹35,000 per person (Inclusive of all taxes) for the entire circuit.</p>
+                      <p>Guests requesting a private room (single occupancy) will incur a single supplement fee. The total amount is subject to availability and includes all applicable taxes for the duration of the stay</p>
                     </div>
                     <div>
                       <p className="font-bold  text-gray-800 mb-1">Force Majeure Stays:</p>
