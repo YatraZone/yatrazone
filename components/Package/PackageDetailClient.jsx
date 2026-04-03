@@ -169,7 +169,7 @@ export default function PackageDetailClient({
       {/* ========== HEADER: Package Name + Tags + Itinerary ========== */}
       <div className="w-full bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-5">
-          <h1 className="text-2xl font-recoleta md:text-3xl font-bold text-gray-900 mb-3">
+          <h1 className="text-2xl font-giest md:text-3xl font-bold text-gray-900 mb-3">
             {packageDetails.packageName}
           </h1>
 
@@ -302,11 +302,12 @@ export default function PackageDetailClient({
                 </div>
 
                 {/* Included in this package */}
-                <div>
-                  <h4 className="text-md font-semibold text-bold mb-3 uppercase tracking-wide">Included in this Package</h4>
-                  <div className="bg-sky-50 border border-sky-200 rounded-xl p-5">
-                    {/* Description */}
-                    {includedDesc && (
+                {includePackageData && (
+                  <div>
+                    <h4 className="text-md font-semibold text-bold mb-3 uppercase tracking-wide">Included in this Package</h4>
+                    <div className="bg-sky-50 border border-sky-200 rounded-xl p-5">
+                      {/* Description */}
+                      {includedDesc && (
                       <div className="prose max-w-none leading-relaxed custom-desc-list text-gray-700">
                         <div dangerouslySetInnerHTML={{ __html: includedDesc }} />
                       </div>
@@ -371,7 +372,7 @@ export default function PackageDetailClient({
                     )}
                   </div>
                 </div>
-
+                )}
                 {/* Description */}
                 {packageDetails.basicDetails?.fullDesc && (
                   <div className="prose max-w-none leading-relaxed custom-desc-list">
