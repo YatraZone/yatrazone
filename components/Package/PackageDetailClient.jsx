@@ -27,7 +27,7 @@ export default function PackageDetailClient({
   sanitizedUser,
   formatNumericStr,
 }) {
-  console.log(packageDetails)
+  // console.log(packageDetails)
   const [activeTab, setActiveTab] = useState("overview");
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -353,12 +353,12 @@ export default function PackageDetailClient({
                                       >
                                         {/* Left */}
                                         <td className="w-[32%] px-6 py-4 text-gray-700 font-semibold border-b border-r border-gray-900">
-                                          {col1 || "-"}
+                                          {col1 || ""}
                                         </td>
 
                                         {/* Right */}
                                         <td className="w-[68%] px-6 py-4 text-gray-700 font-medium border-b border-gray-900">
-                                          {col2 || "-"}
+                                          {col2 || ""}
                                         </td>
                                       </tr>
                                     );
@@ -417,8 +417,8 @@ export default function PackageDetailClient({
                               const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                               return (
                                 <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                                  <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                  <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                  <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || ""}</td>
+                                  <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || ""}</td>
                                 </tr>
                               );
                             })}
@@ -491,8 +491,8 @@ export default function PackageDetailClient({
                                           const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                           return (
                                             <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-100" : "bg-white hover:bg-gray-100"}>
-                                              <td className="w-[32%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-sm">{col1 || "-"}</td>
-                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm">{col2 || "-"}</td>
+                                              <td className="w-[32%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-sm">{col1 || ""}</td>
+                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm">{col2 || ""}</td>
                                             </tr>
                                           );
                                         })}
@@ -659,8 +659,8 @@ export default function PackageDetailClient({
                                       const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                       return (
                                         <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                                          <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || "-"}</td>
-                                          <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || "-"}</td>
+                                          <td className="border border-gray-500 px-3 py-2 text-gray-700 font-medium">{col1 || ""}</td>
+                                          <td className="border border-gray-500 font-medium px-3 py-2 text-gray-600">{col2 || ""}</td>
                                         </tr>
                                       );
                                     })}
@@ -727,8 +727,8 @@ export default function PackageDetailClient({
                                         const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                         return (
                                           <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-100" : "bg-white hover:bg-gray-100"}>
-                                            <td className="w-[32%] md:!px-6 !px-4 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900">{col1 || "-"}</td>
-                                            <td className="w-[68%] md:!px-6 !px-4 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900">{col2 || "-"}</td>
+                                            <td className="w-[32%] md:!px-6 !px-4 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900">{col1 || ""}</td>
+                                            <td className="w-[68%] md:!px-6 !px-4 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900">{col2 || ""}</td>
                                           </tr>
                                         );
                                       })}
@@ -792,8 +792,8 @@ export default function PackageDetailClient({
                                         const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                         return (
                                           <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}>
-                                            <td className="w-[32%] !px-6 !py-4 text-gray-700 font-semibold border-b border-r border-gray-900">{col1 || "-"}</td>
-                                            <td className="w-[68%] !px-6 !py-4 text-gray-700 font-medium border-b border-gray-900">{col2 || "-"}</td>
+                                            <td className="w-[32%] !px-6 !py-4 text-gray-700 font-semibold border-b border-r border-gray-900">{col1 || ""}</td>
+                                            <td className="w-[68%] !px-6 !py-4 text-gray-700 font-medium border-b border-gray-900">{col2 || ""}</td>
                                           </tr>
                                         );
                                       })}
@@ -867,8 +867,8 @@ export default function PackageDetailClient({
                                           const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                           return (
                                             <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}>
-                                              <td className="w-[32%] md:!px-6 !px-1 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-xs md:text-sm">{col1 || "-"}</td>
-                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm md:text-sm">{col2 || "-"}</td>
+                                              <td className="w-[32%] md:!px-6 !px-1 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-xs md:text-sm">{col1 || ""}</td>
+                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm md:text-sm">{col2 || ""}</td>
                                             </tr>
                                           );
                                         })}
@@ -936,8 +936,8 @@ export default function PackageDetailClient({
                                           const col2 = tbl.tableDesc[rowIdx * 2 + 1];
                                           return (
                                             <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-200"}>
-                                              <td className="w-[32%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-sm">{col1 || "-"}</td>
-                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm">{col2 || "-"}</td>
+                                              <td className="w-[32%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-semibold border-b border-r border-gray-900 text-sm">{col1 || ""}</td>
+                                              <td className="w-[68%] md:!px-6 !px-2 !py-4 text-gray-700 text-wrap font-medium border-b border-gray-900 text-sm">{col2 || ""}</td>
                                             </tr>
                                           );
                                         })}
@@ -1014,12 +1014,12 @@ export default function PackageDetailClient({
                                       <tr key={rowIdx} className="align-top">
                                         {/* Left */}
                                         <td className="w-[32%] bg-gray-100 px-6 py-4 text-gray-700 font-semibold border-b border-r border-gray-900">
-                                          {col1 || "-"}
+                                          {col1 || ""}
                                         </td>
 
                                         {/* Right */}
                                         <td className="w-[68%] bg-gray-100 px-6 py-4 text-gray-700 font-medium border-b border-gray-900">
-                                          {col2 || "-"}
+                                          {col2 || ""}
                                         </td>
                                       </tr>
                                     );

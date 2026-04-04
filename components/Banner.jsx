@@ -156,6 +156,7 @@ const Banner = () => {
         )}
 
         {/* ===== Popular Destination SECTION ===== */}
+        {hotels&&hotels.length > 0 && (
         <div className="w-full px-4 md:px-20 py-10">
           <h2 className="font-recoleta text-2xl md:text-3xl font-bold text-gray-900 mb-1">
             Your style. These stays. A perfect match.
@@ -237,7 +238,7 @@ const Banner = () => {
             <p className="text-gray-400 text-center py-8">No popular destinations found in this category.</p>
           )}
         </div>
-
+        )}
       </div>
     </>
 

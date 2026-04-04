@@ -14,29 +14,14 @@ const ResponsiveCarousel = ({ packages, formatNumericStr }) => {
     // Convert the formatNumeric string back to a function
     const formatNumeric = new Function('return ' + formatNumericStr)();
 
-    // Get sidebar state from the sidebar context
-    const sidebarContext = useSidebar();
-    const sidebarOpen = sidebarContext?.open ?? false;
-
-    // Number of packages to display based on sidebar state
-    const packagesToShow = sidebarOpen ? 3 : 4;
-
-    // Container width based on sidebar state
-    const containerWidth = sidebarOpen ? 'xl:max-w-5xl' : 'xl:max-w-7xl';
-
-    // Item width classes based on sidebar state
-    const itemWidthClasses = sidebarOpen
-        ? "md:basis-1/3 lg:basis-1/3 xl:basis-1/3"
-        : "md:basis-1/2 lg:basis-1/3 xl:basis-1/4";
-
     return (
         <div className="flex flex-col items-center">
-            <Carousel className={`max-w-xl lg:max-w-3xl ${containerWidth} mx-auto my-6 md:my-10 w-full md:w-full`}>
+            <Carousel className={`max-w-xl xl:max-w-7xl mx-auto my-6 md:my-10 w-full md:w-full`}>
                 <CarouselContent className="-ml-1 w-full">
                     {packages.map((item, index) => (
                         <CarouselItem
                             key={index}
-                            className={`pl-1 ${itemWidthClasses}`}
+                            className={`pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4`}
                         >
                             <div className="p-1">
                                 <Card>
