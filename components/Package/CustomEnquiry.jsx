@@ -18,6 +18,7 @@ const CustomEnquiry = ({ packages = [] }) => {
     const pathname = usePathname();
     const router = useRouter();
     const { data: session } = useSession();
+    const sessionUserId = session?.user?.id;
     const [user, setUser] = useState({});
     const [step, setStep] = useState("form")
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,10 +42,15 @@ const CustomEnquiry = ({ packages = [] }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            if (session && session.user.isAdmin === false) {
+            if (sessionUserId && session && session.user.isAdmin === false) {
                 try {
-                    const res = await fetch(`/api/getUserById/${session.user.id}`);
+                    const res = await fetch(`/api/getUserById/${sessionUserId}`);
                     const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.message || "Failed to load user details");
+                    }
+
                     setUser(data);
 
                     // Auto-fill the form with user data
@@ -65,7 +71,7 @@ const CustomEnquiry = ({ packages = [] }) => {
         };
 
         fetchUser();
-    }, [session]);
+    }, [session, sessionUserId]);
 
 
     const [isFormDirty, setIsFormDirty] = useState(false);
@@ -130,7 +136,7 @@ const CustomEnquiry = ({ packages = [] }) => {
             travelDate: bookingDetails.travelDate,
             pickupLocation: bookingDetails.pickupLocation,
             packageId: packages._id,
-            userId: user._id,
+            userId: sessionUserId,
             id: enquiryId
         };
 

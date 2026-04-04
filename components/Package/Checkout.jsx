@@ -21,6 +21,7 @@ const Checkout = ({ packages }) => {
     const pathname = usePathname();
     const router = useRouter();
     const { data: session } = useSession();
+    const sessionUserId = session?.user?.id;
     const [user, setUser] = useState({});
     const [step, setStep] = useState("form")
     const [formData, setFormData] = useState({
@@ -79,10 +80,15 @@ const Checkout = ({ packages }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            if (session && session.user.isAdmin === false) {
+            if (sessionUserId && session && session.user.isAdmin === false) {
                 try {
-                    const res = await fetch(`/api/getUserById/${session.user.id}`);
+                    const res = await fetch(`/api/getUserById/${sessionUserId}`);
                     const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.message || "Failed to load user details");
+                    }
+
                     setUser(data);
 
                     // Auto-fill the form with user data
@@ -103,7 +109,7 @@ const Checkout = ({ packages }) => {
         };
 
         fetchUser();
-    }, [session]);
+    }, [session, sessionUserId]);
 
     const [isFormDirty, setIsFormDirty] = useState(false);
 
@@ -200,6 +206,12 @@ const Checkout = ({ packages }) => {
     const advancePayment = Math.ceil(totalPrice * 0.25)
 
     const handlePayment = async () => {
+        if (!sessionUserId) {
+            return toast.error("Your session is missing a valid user id. Please sign out and sign in again.", {
+                style: { borderRadius: "10px", border: "2px solid red" },
+            });
+        }
+
         if (!formData.fullName || !formData.email || !formData.mobile || !formData.address || !formData.city || !formData.state || !formData.pincode) {
             return toast.error("Please fill all the required fields", {
                 style: { borderRadius: "10px", border: "2px solid red" },
@@ -230,7 +242,7 @@ const Checkout = ({ packages }) => {
         try {
             // Create a Razorpay order
             const orderResponse = await axios.post("/api/razorpay", {
-                userId: user._id,
+                userId: sessionUserId,
                 packageId: packages._id,
                 amount: advancePayment,
                 totalAmount: totalPrice,

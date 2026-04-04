@@ -35,6 +35,7 @@ const accommodationPlans = [
 export default function TourPackageCalculator({ packages, plans }) {
     const { data: session } = useSession()
     const router = useRouter();
+    const sessionUserId = session?.user?.id
 
     const [date, setDate] = useState(() => {
         return new Date()
@@ -143,10 +144,15 @@ export default function TourPackageCalculator({ packages, plans }) {
 
     useEffect(() => {
         const fetchUser = async () => {
-            if (session && session.user.isAdmin === false) {
+            if (sessionUserId && session && session.user.isAdmin === false) {
                 try {
-                    const res = await fetch(`/api/getUserById/${session.user.id}`);
+                    const res = await fetch(`/api/getUserById/${sessionUserId}`);
                     const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.message || "Failed to load user details");
+                    }
+
                     setUser(data);
 
                     // Auto-fill the form with user data
@@ -167,7 +173,7 @@ export default function TourPackageCalculator({ packages, plans }) {
         };
 
         fetchUser();
-    }, [session]);
+    }, [session, sessionUserId]);
 
     useEffect(() => {
         const handleBeforeUnload = (event) => {
@@ -512,6 +518,12 @@ export default function TourPackageCalculator({ packages, plans }) {
     const formatNumber = (num) => new Intl.NumberFormat('en-IN').format(num)
 
     const handlePayment = async () => {
+        if (!sessionUserId) {
+            return toast.error("Your session is missing a valid user id. Please sign out and sign in again.", {
+                style: { borderRadius: "10px", border: "2px solid red" },
+            })
+        }
+
         if (!formData.fullName || !formData.email || !formData.mobile || !formData.address || !formData.city || !formData.state || !formData.pincode) {
             return toast.error("Please fill all the required fields", {
                 style: { borderRadius: "10px", border: "2px solid red" },
@@ -536,7 +548,7 @@ export default function TourPackageCalculator({ packages, plans }) {
         }
         try {
             const orderResponse = await axios.post("/api/razorpay-package-calculator", {
-                userId: user._id,
+                userId: sessionUserId,
                 packageId: packages._id,
                 totalAmount: totalPrice,
                 amount: advancePay,
