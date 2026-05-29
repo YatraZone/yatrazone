@@ -1300,7 +1300,7 @@ export default function PackageDetailClient({
               </div>
 
               {/* Coupons & Offers Card */}
-              <div className="bg-white border border-gray-200 rounded-xl p-4">
+              {/* <div className="bg-white border border-gray-200 rounded-xl p-4">
                 <h4 className="text-base font-bold text-gray-800 mb-3">Coupons & Offers</h4>
                 <div className="flex items-center gap-2 mb-3">
                   <input
@@ -1326,7 +1326,7 @@ export default function PackageDetailClient({
                     <span className="text-sm font-bold text-green-700">-₹6,517</span>
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {/* Share Section */}
               <div className="bg-white border border-gray-200 rounded-xl p-4">
